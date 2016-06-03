@@ -1,0 +1,58 @@
+---
+- name: "Load variables"
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tags: [ always ]
+  tasks:
+    - include_vars: vars/global.yaml
+    - include_vars: vars/vault.yaml
+
+- name: "Setup Digital Ocean SSH Keys"
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tags: [ digitalocean ]
+  tasks:
+    - name: "Setup SSH keys"
+      digital_ocean:
+        command: ssh
+        name: "{{ item.key }}"
+        ssh_pub_key: "{{ item.value.key }}"
+        api_token: "{{ do_api_token }}"
+      with_dict: "{{ ssh_keys }}"
+      register: do_keys
+
+    - name: "Save SSH Key IDs"
+      set_fact:
+        do_ssh_key_ids: "{{ do_keys.results |map(attribute='ssh_key')|map(attribute='id')|list }}"
+
+- name: "Setup falcon.fnord.net droplet"
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tags: [ digitalocean ]
+  tasks:
+    - name: "Create instance"
+      digital_ocean:
+        state: active
+        name: falcon
+        unique_name: yes
+        ssh_key_ids: "{{ do_ssh_key_ids }}"
+        size_id: 512mb
+        image_id: ubuntu-16-04-x64
+        region_id: nyc2
+        api_token: "{{ do_api_token }}"
+      register: do_falcon
+    - name: "Save public IP"
+      set_fact:
+        falcon_ip: "{{ do_falcon['droplet']['networks']['v4'][0]['ip_address'] }}"
+    - name: "Create DNS entry for falcon.fnord.net"
+      dnsmadeeasy:
+        domain: fnord.net
+        record_name: falcon
+        record_type: A
+        record_value: "{{ falcon_ip }}"
+        state: present
+        account_key: "{{ dme_api_key }}"
+        account_secret: "{{ dme_secret_key }}"
