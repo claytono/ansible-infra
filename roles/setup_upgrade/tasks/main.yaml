@@ -1,0 +1,10 @@
+---
+- name: "Install python"
+  raw: "apt-get install --no-install-recommends python -y"
+
+- name: "Dist upgrade"
+  apt:
+    update_cache: yes
+    install_recommends: no
+    autoremove: yes
+    upgrade: dist

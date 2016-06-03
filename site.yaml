@@ -1,0 +1,10 @@
+---
+- hosts: all
+  gather_facts: no
+  roles:
+    - { role: setup_upgrade, when: "setup_upgrade | default(false) | bool" }
+
+- hosts: all
+  roles:
+    - common
+    - docker

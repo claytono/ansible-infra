@@ -1,0 +1,9 @@
+---
+packages_to_remove:
+  - lxd
+  - screen
+packages_to_install:
+  - bc
+  - tmux
+  - fail2ban
+
