@@ -53,6 +53,7 @@
         record_name: falcon
         record_type: A
         record_value: "{{ falcon_ip }}"
+        record_ttl: "{{ dns_ttl |default(3600) }}"
         state: present
         account_key: "{{ dme_api_key }}"
         account_secret: "{{ dme_secret_key }}"
