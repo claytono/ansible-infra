@@ -1,3 +1,10 @@
 ssh_keys:
   jezebel:
     key: "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA5XY/Pltocwc8sAZwewrhgInrrDDuw89wJ0I1bx6wR16x650iifiSnIZlD+elk2zyu+AqMwJ74URZgshz02W6HMnFmx6CXfvXC6DmEpSnyY4/WThmP2WyNE/A9nJaLBbBb/LnfJoA+Knb8XzJHWFtpFcNmP9Ltlm1Q9VoFFeCrIG04xmXR4WO2AtTa/Bj0WAPa2whfSiCluFrFLMqqXsXw51Myj6RUahNbQdjwOwFQAwzMEegrEINOKYSlojTyV7mdJ6e3oepf5+3GhttMUVjqFHSxG/HK9WB4xxUaQXdMadNhivJKfHKVFxheW+FWae4WBPV31VHqRQuWrUEEamhUQ== coneill@jezebel"
+
+docker_opts: "--storage-driver aufs"
+install_kernel_extras: true
+pip_install_pip: false
+pip_install_setuptools: false
+pip_install_docker_py: false
+pip_install_docker_compose: false
