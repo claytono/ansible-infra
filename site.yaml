@@ -8,4 +8,7 @@
   roles:
     - common
     - resmo.ntp
+
+- hosts: docker
+  roles:
     - angstwad.docker_ubuntu

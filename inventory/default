@@ -1,2 +1,4 @@
-falcon.fnord.net
+falcon ansible_host=falcon.fnord.net
 
+[docker]
+falcon

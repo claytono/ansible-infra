@@ -17,6 +17,9 @@ Vagrant.configure(2) do |config|
     ansible.raw_arguments = [
       '--become',
     ]
+    ansible.groups = {
+      'docker' => ['falcon'],
+    }
   end
 
   config.vm.define :falcon do |host|
