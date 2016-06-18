@@ -1,6 +1,11 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+
+Vagrant.require_version ">= 1.8.4"
+# Vagrant 1.8.4 or higher is needed to work around the following bug
+# https://bugs.launchpad.net/ubuntu/+source/livecd-rootfs/+bug/1561250
+
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/xenial64"
 
@@ -23,9 +28,6 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define :falcon do |host|
-    # Setting hostname isn't working properly with the xenial boxes at the
-    # moment.  See below for details:
-    # https://bugs.launchpad.net/ubuntu/+source/livecd-rootfs/+bug/1561250
-    #host.vm.hostname = 'falcon'
+    host.vm.hostname = 'falcon'
   end
 end
