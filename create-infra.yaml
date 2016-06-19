@@ -5,7 +5,6 @@
   gather_facts: no
   tags: [ always ]
   tasks:
-    - include_vars: vars/global.yaml
     - include_vars: vars/vault.yaml
 
 - name: "Setup Digital Ocean SSH Keys"
