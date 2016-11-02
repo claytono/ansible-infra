@@ -13,6 +13,14 @@
   become: no
   tasks:
     - name: "Destroy falcon.fnord.net"
+      ec2:
+        region: "{{ ec2_region }}"
+        # Image id here is bogus since we're removing the instance
+        image: ami-f652979b
+        count_tag:
+          Name: falcon
+        exact_count: 0
+    - name: "Destroy falcon.fnord.net"
       digital_ocean: 
         state: deleted
         name: falcon
