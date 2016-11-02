@@ -1,6 +1,9 @@
 ---
 - hosts: all
   gather_facts: no
+  tasks:
+    - include_vars: vars/vault.yaml
+
   roles:
     - { role: install_python, when: "setup_upgrade | default(false) | bool" }
 
@@ -11,6 +14,7 @@
 - hosts: all
   roles:
     - common
+    - ANXS.generic-users
     - resmo.ntp
 
 - hosts: docker
