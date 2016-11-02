@@ -1,6 +1,7 @@
 ---
-- name: "Install python"
-  raw: "apt-get install --no-install-recommends python -y"
+- name: "Set hostname"
+  hostname:
+    name: "{{ inventory_hostname }}"
 
 - name: "Dist upgrade"
   apt:

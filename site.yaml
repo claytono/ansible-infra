@@ -2,6 +2,10 @@
 - hosts: all
   gather_facts: no
   roles:
+    - { role: install_python, when: "setup_upgrade | default(false) | bool" }
+
+- hosts: all
+  roles:
     - { role: setup_upgrade, when: "setup_upgrade | default(false) | bool" }
 
 - hosts: all
