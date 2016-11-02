@@ -1,9 +1,12 @@
 ---
 packages_to_remove:
+  - gvfs
   - lxd
   - screen
+  - xscreensaver
 packages_to_install:
   - bc
-  - tmux
+  - dstat
   - fail2ban
+  - tmux
 

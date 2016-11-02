@@ -1,0 +1,38 @@
+---
+- name: "Add PHT repo GPG key"
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 211EB6FDFB7990099C97FF165CB313A0EB7DFFFB
+
+- name: "Add PHT repo"
+  apt_repository:
+    repo: "deb http://ppa.launchpad.net/plexapp/plexht/ubuntu trusty main"
+
+- name: "Add PHT src repo"
+  apt_repository:
+    repo: "deb-src http://ppa.launchpad.net/plexapp/plexht/ubuntu trusty main"
+
+- name: "Add Intel APT repo"
+  apt_repository:
+    repo: "deb https://download.01.org/gfx/ubuntu/14.04/main trusty main"
+  when: intel | default(False)
+
+- name: "Update apt cache"
+  apt: update_cache=yes
+
+- name: "Install plexhometheater package"
+  apt:
+    name: plexhometheater
+    state: present
+  notify: "restart pht"
+
+  # This won't start until x11 is running   
+- name: "Install PHT upstart file"
+  copy:
+    src: roles/plex-client/files/pht.conf
+    dest: /etc/init/pht.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: "restart pht"
+

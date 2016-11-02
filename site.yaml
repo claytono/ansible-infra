@@ -20,3 +20,7 @@
 - hosts: docker
   roles:
     - angstwad.docker_ubuntu
+
+- hosts: plex-client
+  roles:
+    - role: plex-client

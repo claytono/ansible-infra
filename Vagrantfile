@@ -24,10 +24,15 @@ Vagrant.configure(2) do |config|
     ]
     ansible.groups = {
       'docker' => ['falcon'],
+      'plex-client' => ['plex-client'],
     }
   end
 
   config.vm.define :falcon do |host|
     host.vm.hostname = 'falcon'
+  end
+  config.vm.define 'plex-client' do |host|
+    host.vm.hostname = 'plex-client'
+    host.vm.box = "ubuntu/trusty64"
   end
 end

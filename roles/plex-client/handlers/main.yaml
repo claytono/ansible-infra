@@ -1,0 +1,10 @@
+---
+- name: "restart lxdm"
+  service: 
+    name: lxdm
+    state: restarted
+
+- name: "restart pht"
+  service:
+    name: pht
+    state: restarted

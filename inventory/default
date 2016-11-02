@@ -1,4 +1,8 @@
 falcon ansible_host=falcon.fnord.net
+plex2 ansible_host=plex2.oneill.net intel=1
 
 [docker]
 falcon
+
+[plex-client]
+plex2
