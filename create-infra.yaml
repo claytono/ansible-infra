@@ -12,6 +12,7 @@
   connection: local
   gather_facts: no
   tags: [ digitalocean ]
+  become: no
   tasks:
     - name: "Setup SSH keys"
       digital_ocean:
@@ -31,6 +32,7 @@
   connection: local
   gather_facts: no
   tags: [ digitalocean ]
+  become: no
   tasks:
     - name: "Create instance"
       digital_ocean:

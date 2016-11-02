@@ -10,6 +10,7 @@
 - hosts: localhost
   connection: local
   gather_facts: no
+  become: no
   tasks:
     - name: "Destroy falcon.fnord.net"
       digital_ocean: 
