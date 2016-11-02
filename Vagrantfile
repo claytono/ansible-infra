@@ -18,6 +18,7 @@ Vagrant.configure(2) do |config|
     ansible.force_remote_user = true
     ansible.extra_vars = {
       :setup_upgrade => true,
+      :domain => 'oneill.net',
     }
     ansible.raw_arguments = [
       '--become',
