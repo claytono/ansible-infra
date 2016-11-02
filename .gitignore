@@ -1,5 +1,4 @@
 venv
-ansible-digital_ocean.cache
 *.retry
 .vagrant
 ansible-vault-password
