@@ -10,8 +10,9 @@
     state: absent
   with_items: "{{ packages_to_remove }}"
 
-- name: "Remove unwanted packages"
+- name: "Install wanted packages"
   apt:
     name: "{{ item }}"
     state: present
+    autoremove: yes
   with_items: "{{ packages_to_install }}"
