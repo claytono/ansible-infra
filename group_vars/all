@@ -9,7 +9,7 @@ genericusers_users:
  - name: coneill
    comment: "Clayton O'Neill"
    uid: 10001
-   groups: []
+   groups: [ 'sudo', 'audio', 'video' ]
    ssh_keys:
     - *jezebel_rsa
 

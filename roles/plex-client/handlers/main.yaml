@@ -8,3 +8,8 @@
   service:
     name: pht
     state: restarted
+
+- name: "restart openpht"
+  service:
+    name: openpht
+    state: restarted
