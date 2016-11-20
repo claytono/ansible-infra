@@ -1,0 +1,33 @@
+---
+- name: "Add NFS share to fstab" 
+  mount:
+    name: /fs1
+    opts: soft
+    src: fs1:/volume1/shared
+    fstype: nfs
+    state: present
+  when: is_vagrant is undefined or not is_vagrant
+
+- name: "Mount NFS share if not already mounted"
+  mount:
+    name: /fs1
+    opts: soft
+    src: fs1:/volume1/shared
+    fstype: nfs
+    state: mounted
+  when: is_vagrant is undefined or not is_vagrant
+
+- name: "Fetch Plex Media Server deb package"
+  get_url: 
+    url: "https://downloads.plex.tv/plex-media-server/{{pms_version}}/plexmediaserver_{{ pms_version }}_amd64.deb"
+    dest: "/root/plexmediaserver_{{ pms_version }}_amd64.deb"
+
+- name: "Install Plex Media Server deb package"
+  apt:
+    deb: "/root/plexmediaserver_{{ pms_version }}_amd64.deb"
+
+- name: "Add plex user to users group"
+  user:
+    name: plex
+    group: plex
+    groups: users

@@ -1,7 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-
 Vagrant.require_version ">= 1.8.4"
 # Vagrant 1.8.4 or higher is needed to work around the following bug
 # https://bugs.launchpad.net/ubuntu/+source/livecd-rootfs/+bug/1561250
@@ -19,6 +18,7 @@ Vagrant.configure(2) do |config|
     ansible.extra_vars = {
       :setup_upgrade => true,
       :domain => 'oneill.net',
+      :is_vagrant => true,
     }
     ansible.raw_arguments = [
       '--become',
@@ -26,11 +26,16 @@ Vagrant.configure(2) do |config|
     ansible.groups = {
       'docker' => ['falcon'],
       'plex-client' => ['plex-client'],
+      'plex-server' => ['plex-server'],
     }
   end
 
   config.vm.define :falcon do |host|
     host.vm.hostname = 'falcon'
+  end
+  config.vm.define 'plex-server' do |host|
+    host.vm.hostname = 'plex-server'
+    host.vm.box = "ubuntu/trusty64"
   end
   config.vm.define 'plex-client' do |host|
     host.vm.hostname = 'plex-client'
