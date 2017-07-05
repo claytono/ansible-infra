@@ -95,7 +95,7 @@
 - name: "Setup x11vnc password"
   command: "x11vnc -storepasswd {{ x11vnc_password | mandatory}} /etc/x11vnc.pass"
   args:
-    creates: /etc/x11vnc.pass"
+    creates: "/etc/x11vnc.pass"
 
 - name: "Put x11vnc.conf upstart config in place"
   copy:
