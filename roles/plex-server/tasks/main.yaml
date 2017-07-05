@@ -1,4 +1,8 @@
 ---
+- name: "Install NFS packages"
+  apt:
+    name: nfs-client
+
 - name: "Add NFS share to fstab" 
   mount:
     name: /fs1
