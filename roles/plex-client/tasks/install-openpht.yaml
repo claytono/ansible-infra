@@ -1,9 +1,4 @@
 ---
-- name: "Add Intel APT repo"
-  apt_repository:
-    repo: "deb https://download.01.org/gfx/ubuntu/14.04/main trusty main"
-  when: intel | default(False)
-
 - name: "Download OpenPHT package"
   get_url:
     url: "https://github.com/RasPlex/OpenPHT/releases/download/v{{ openpht_version }}/openpht_{{ openpht_version }}-{{ ansible_distribution_release }}_amd64.deb"
