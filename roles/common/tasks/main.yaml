@@ -16,3 +16,10 @@
     state: present
     autoremove: yes
   with_items: "{{ packages_to_install }}"
+
+- name: "Turn on passwordless sudo for sudo group"
+  lineinfile:
+      dest: /etc/sudoers
+      state: present
+      regexp: '^%sudo'
+      line: '%sudo ALL=(ALL) NOPASSWD: ALL'
