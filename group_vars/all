@@ -12,6 +12,12 @@ genericusers_users:
    groups: [ 'sudo', 'audio', 'video' ]
    ssh_keys:
     - *jezebel_rsa
+ - name: ansible
+   comment: "Ansible role user"
+   uid: 9000
+   groups: [ 'sudo' ]
+   ssh_keys:
+    - *jezebel_rsa
 
 docker_opts: "--storage-driver aufs"
 install_kernel_extras: true
