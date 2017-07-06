@@ -30,6 +30,7 @@ pip_install_docker_compose: false
 
 # relaymail
 relaymail_smtp_host: smtp.gmail.com
+relaymail_smtp_port: 587
 relaymail_smtp_user: clayton.oneill@gmail.com
 relaymail_smtp_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
