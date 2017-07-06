@@ -16,6 +16,7 @@
     - common
     - ANXS.generic-users
     - resmo.ntp
+    - Yannik.relaymail
 
 - hosts: docker
   roles:
