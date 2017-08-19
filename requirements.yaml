@@ -7,3 +7,4 @@
   version: v1.1.0
 - src: Yannik.relaymail
   version: v1.2.1
+- src: SphericalElephant.borgbackup

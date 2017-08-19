@@ -17,6 +17,7 @@
     - ANXS.generic-users
     - resmo.ntp
     - Yannik.relaymail
+    - SphericalElephant.borgbackup
 
 - hosts: docker
   roles:

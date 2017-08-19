@@ -11,3 +11,6 @@ plex2
 
 [plex-server]
 plex-server
+
+[borgbackup-server]
+luser
