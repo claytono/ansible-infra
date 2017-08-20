@@ -1,8 +1,9 @@
 ---
 - src: resmo.ntp
   version: '0.4.0'
-- src: angstwad.docker_ubuntu
-  version: v2.4.2
+- src: https://github.com/mongrelion/ansible-role-docker
+  version: 5d3d1000484f7cb3ecaab3d8ca8180d9a7064c0e
+  name: mongrelion.docker
 - src: ANXS.generic-users
   version: v1.1.0
 - src: Yannik.relaymail

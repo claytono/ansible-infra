@@ -22,7 +22,7 @@
 
 - hosts: docker
   roles:
-    - angstwad.docker_ubuntu
+    - mongrelion.docker
 
 - hosts: plex-client
   roles:

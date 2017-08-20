@@ -21,12 +21,8 @@ genericusers_users:
     - *jezebel_rsa
     - *jezebel_ed25519
 
-docker_opts: "--storage-driver aufs"
-install_kernel_extras: true
-pip_install_pip: false
-pip_install_setuptools: false
-pip_install_docker_py: false
-pip_install_docker_compose: false
+docker_config:
+  storage-driver: aufs
 
 # relaymail
 relaymail_smtp_host: smtp.gmail.com
