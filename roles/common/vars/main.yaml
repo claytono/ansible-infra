@@ -9,4 +9,5 @@ packages_to_install:
   - dstat
   - fail2ban
   - tmux
+  - silversearcher-ag
 
