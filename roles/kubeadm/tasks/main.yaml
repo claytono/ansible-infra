@@ -1,0 +1,8 @@
+---
+- include: common.yaml
+
+- include: master.yaml
+  when: kubernetes_master
+
+- include: nodes.yaml
+  when: kubernetes_node

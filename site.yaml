@@ -25,6 +25,10 @@
   roles:
     - mongrelion.docker
 
+- hosts: kubernetes
+  roles:
+    - kubeadm
+
 - hosts: plex-client
   roles:
     - role: plex-client

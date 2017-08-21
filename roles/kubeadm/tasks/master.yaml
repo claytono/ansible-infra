@@ -1,0 +1,60 @@
+---
+- name: "Reset kubeadm if requested"
+  command: "kubeadm reset"
+  when: "kubeadm_reset |default(false) |bool"
+
+- name: "Copy over kubeadm config file"
+  template:
+    src: "templates/kubeadm.conf.j2"
+    dest: "/root/kubeadm.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: "kubeadm init"
+  command: "kubeadm init --config /root/kubeadm.conf"
+  args:
+    creates: "/etc/kubernetes/admin.conf"
+
+- name: "Set KUBECONFIG for root"
+  lineinfile:
+    path: "/root/.bashrc"
+    line: "export KUBECONFIG=/etc/kubernetes/admin.conf"
+    regexp: "^export KUBECONFIG="
+
+- name: "Retrieve flannel rbac config"
+  get_url:
+    url: "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml"
+    dest: "/root"
+
+- name: "Retrieve flannel config"
+  get_url:
+    url: "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
+    dest: "/root"
+
+- name: "Combine flannel configs"
+  shell: "cat kube-flannel-rbac.yml kube-flannel.yml > kube-flannel-combined.yml"
+  args:
+    creates: "kube-flannel-combined.yml"
+    chdir: "/root"
+
+- name: "Install flannel + config"
+  command: "kubectl apply -f /root/kube-flannel-combined.yml"
+  args:
+    creates: "/etc/cni/net.d/10-flannel.conf"
+  environment:
+    KUBECONFIG: "/etc/kubernetes/admin.conf"
+
+- name: "Fixup admin.conf to use fqdn"
+  lineinfile:
+    path: "/etc/kubernetes/admin.conf"
+    regexp: "^(\\s+)server:\\s+"
+    backrefs: yes
+    line: "\\1server: https://{{ ansible_fqdn }}:6443"
+
+- name: "Fetch admin.conf for local use"
+  fetch:
+    src: "/etc/kubernetes/admin.conf"
+    dest: "{{ playbook_dir }}/"
+    flat: yes
+

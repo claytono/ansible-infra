@@ -1,0 +1,8 @@
+- name: "Reset kubeadm if requested"
+  command: "kubeadm reset"
+  when: "kubeadm_reset |default(false) |bool"
+
+- name: "Run kubeadm join to master"
+  command: "kubeadm join --token {{ kubeadm_bootstrap_token }} {{ hostvars[groups['kubernetes-master'][0]].ansible_fqdn }}:6443"
+  args:
+    creates: "/etc/kubernetes/kubelet.conf"

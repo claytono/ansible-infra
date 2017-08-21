@@ -24,7 +24,10 @@ Vagrant.configure(2) do |config|
       '--become',
     ]
     ansible.groups = {
-      'docker' => ['falcon'],
+      'docker' => ['falcon', 'k1'],
+      'kubernetes' => ['k1', 'k2', 'k3'],
+      'kubernetes-master' => ['k1'],
+      'kubernetes-nodes' => ['k2', 'k3'],
       'plex-client' => ['plex-client'],
       'plex-server' => ['plex-server'],
     }
@@ -32,6 +35,15 @@ Vagrant.configure(2) do |config|
 
   config.vm.define :falcon do |host|
     host.vm.hostname = 'falcon'
+  end
+  config.vm.define :k1 do |host|
+    host.vm.hostname = 'k1'
+  end
+  config.vm.define :k2 do |host|
+    host.vm.hostname = 'k2'
+  end
+  config.vm.define :k3 do |host|
+    host.vm.hostname = 'k3'
   end
   config.vm.define 'plex-server' do |host|
     host.vm.hostname = 'plex-server'
