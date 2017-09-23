@@ -24,12 +24,12 @@
 
 - name: "Retrieve flannel rbac config"
   get_url:
-    url: "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml"
+    url: "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/k8s-manifests/kube-flannel-rbac.yml"
     dest: "/root"
 
 - name: "Retrieve flannel config"
   get_url:
-    url: "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
+    url: "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/k8s-manifests/kube-flannel-legacy.yml"
     dest: "/root"
 
 - name: "Combine flannel configs"
