@@ -8,3 +8,5 @@ controllerManagerExtraArgs:
   cloud-provider: external
   cluster-cidr: "10.244.0.0/16"
   pod-eviction-timeout: "1m0s"
+apiServerCertSANs:
+ - {{ ansible_fqdn }}
