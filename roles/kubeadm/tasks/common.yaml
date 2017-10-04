@@ -37,7 +37,7 @@
     dest: "/etc/apt/preferences.d/kubeadm"
     content: |
       Package: kubeadm
-      Pin: {{ kubeadm_version }}
+      Pin: version {{ kubeadm_version }}
       Pin-Priority: 900
   when: kubeadm_version is defined
 
