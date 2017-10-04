@@ -1,0 +1,3 @@
+---
+kubernetes_master: true
+kubernetes_node: false
