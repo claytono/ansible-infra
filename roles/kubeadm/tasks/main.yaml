@@ -1,5 +1,6 @@
 ---
 - include: common.yaml
+- include: iscsi.yaml
 
 - include: master.yaml
   when: kubernetes_master

@@ -1,0 +1,32 @@
+---
+- name: "Install iscsi package"
+  apt:
+    name: "open-iscsi"
+
+- name: "Set iscsi node.startup to automatic"
+  lineinfile:
+    path: "/etc/iscsi/iscsid.conf"
+    line: "node.startup = automatic"
+    regexp: "^node.startup.*="
+  notify: "Restart iscsid"
+
+- name: "Set iscsi auth method to CHAP"
+  lineinfile:
+    path: "/etc/iscsi/iscsid.conf"
+    line: "node.session.auth.authmethod = CHAP"
+    regexp: "^node.session.auth.authmethod.*="
+  notify: "Restart iscsid"
+
+- name: "Set iscsi username"
+  lineinfile:
+    path: "/etc/iscsi/iscsid.conf"
+    line: "node.session.auth.username = {{ iscsi_chap_username }}"
+    regexp: "^node.session.auth.username*="
+  notify: "Restart iscsid"
+
+- name: "Set iscsi password"
+  lineinfile:
+    path: "/etc/iscsi/iscsid.conf"
+    line: "node.session.auth.password = {{ iscsi_chap_password }}"
+    regexp: "^node.session.auth.password*="
+  notify: "Restart iscsid"
