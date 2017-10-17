@@ -22,24 +22,13 @@
     line: "export KUBECONFIG=/etc/kubernetes/admin.conf"
     regexp: "^export KUBECONFIG="
 
-- name: "Retrieve flannel rbac config"
-  get_url:
-    url: "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/k8s-manifests/kube-flannel-rbac.yml"
-    dest: "/root"
-
 - name: "Retrieve flannel config"
   get_url:
-    url: "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/k8s-manifests/kube-flannel-legacy.yml"
+    url: "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
     dest: "/root"
 
-- name: "Combine flannel configs"
-  shell: "cat kube-flannel-rbac.yml kube-flannel.yml > kube-flannel-combined.yml"
-  args:
-    creates: "kube-flannel-combined.yml"
-    chdir: "/root"
-
 - name: "Install flannel + config"
-  command: "kubectl apply -f /root/kube-flannel-combined.yml"
+  command: "kubectl apply -f /root/kube-flannel.yml"
   args:
     creates: "/etc/cni/net.d/10-flannel.conf"
   environment:
