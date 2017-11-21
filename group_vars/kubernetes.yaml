@@ -2,7 +2,7 @@
 docker_version: 1.12.6
 setup_script_md5_sum: 72a8d7aab1b637fdbb8de81781381492
 
-kubeadm_version: "1.8.1-01"
+kubeadm_version: "1.8.4-00"
 
 kubeadm_bootstrap_token: !vault |
           $ANSIBLE_VAULT;1.1;AES256
