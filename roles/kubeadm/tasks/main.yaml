@@ -1,9 +1,9 @@
 ---
-- include: common.yaml
-- include: iscsi.yaml
+- include_tasks: common.yaml
+- include_tasks: iscsi.yaml
 
-- include: master.yaml
+- include_tasks: master.yaml
   when: kubernetes_master
 
-- include: nodes.yaml
+- include_tasks: nodes.yaml
   when: kubernetes_node
