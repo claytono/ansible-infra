@@ -36,3 +36,8 @@
 - hosts: plex-server
   roles:
     - role: plex-server
+
+- hosts: all
+  roles:
+    - role: UnderGreen.prometheus-node-exporter
+      when: "node_exporter_enabled | default(false)"
