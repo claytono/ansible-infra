@@ -3,3 +3,4 @@ venv
 .vagrant
 ansible-vault-password
 roles/galaxy
+*.swp
