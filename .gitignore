@@ -4,3 +4,4 @@ venv
 ansible-vault-password
 roles/galaxy
 *.swp
+.terraform
