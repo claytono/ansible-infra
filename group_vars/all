@@ -8,6 +8,7 @@ ssh_keys:
 genericusers_users:
  - name: coneill
    comment: "Clayton O'Neill"
+   shell: "/bin/bash"
    uid: 10001
    groups: [ 'sudo', 'audio', 'video' ]
    pass: !vault |
