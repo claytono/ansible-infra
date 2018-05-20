@@ -1,7 +1,7 @@
 ---
 - name: "Set hostname"
   hostname:
-    name: "{{ inventory_hostname }}.{{ domain }}"
+    name: "{{ inventory_hostname }}"
 
 - name: "Dist upgrade"
   apt:
