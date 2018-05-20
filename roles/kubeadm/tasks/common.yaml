@@ -42,6 +42,24 @@
       Pin-Priority: 900
   when: kubeadm_version is defined
 
+- name: "Create kubelet package pin for version"
+  copy:
+    dest: "/etc/apt/preferences.d/kubelet"
+    content: |
+      Package: kubelet
+      Pin: version {{ kubelet_version }}
+      Pin-Priority: 900
+  when: kubelet_version is defined
+
+- name: "Create kubectl package pin for version"
+  copy:
+    dest: "/etc/apt/preferences.d/kubectl"
+    content: |
+      Package: kubectl
+      Pin: version {{ kubectl_version }}
+      Pin-Priority: 900
+  when: kubectl_version is defined
+
 - name: "Create docker-engine package pin for version"
   copy:
     dest: "/etc/apt/preferences.d/docker"
@@ -54,6 +72,7 @@
 - name: "Install packages"
   apt:
     name: "{{ item }}"
+    state: latest
   with_items:
     - "kubelet"
     - "kubeadm"
