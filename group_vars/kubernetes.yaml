@@ -4,9 +4,9 @@ setup_script_md5_sum: 72a8d7aab1b637fdbb8de81781381492
 
 node_exporter_enabled: true
 
-kubeadm_version: "1.9.7-00"
-kubelet_version: "1.9.7-00"
-kubectl_version: "1.9.7-00"
+kubeadm_version: "1.10.2-00"
+kubelet_version: "1.10.2-00"
+kubectl_version: "1.10.2-00"
 
 kubeadm_bootstrap_token: !vault |
           $ANSIBLE_VAULT;1.1;AES256
