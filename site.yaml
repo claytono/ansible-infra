@@ -5,11 +5,15 @@
     - include_vars: vars/vault.yaml
 
   roles:
-    - { role: install_python, when: "setup_upgrade | default(false) | bool" }
+    - role: install_python
+      when: "setup_upgrade | default(false) | bool"
+      tags: setup_upgrade
 
 - hosts: all
   roles:
-    - { role: setup_upgrade, when: "setup_upgrade | default(false) | bool" }
+    - role: setup_upgrade
+      when: "setup_upgrade | default(false) | bool"
+      tags: setup_upgrade
 
 - hosts: all
   roles:
@@ -23,11 +27,13 @@
 
 - hosts: docker
   roles:
-    - mongrelion.docker
+    - role: mongrelion.docker
+      tags: docker
 
 - hosts: kubernetes
   roles:
-    - kubeadm
+    - role: kubeadm
+      tags: kubernetes
 
 - hosts: plex-client
   roles:
