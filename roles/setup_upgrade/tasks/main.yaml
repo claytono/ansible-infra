@@ -12,6 +12,10 @@
   notify:
     - "Update grub"
 
+- name: "Autoremove unneeded apt packages"
+  apt:
+    autoremove: yes
+
 - name: "Set grub kernel parameters"
   lineinfile:
     path: '/etc/default/grub'
