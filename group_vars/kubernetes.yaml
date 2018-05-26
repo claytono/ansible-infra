@@ -6,9 +6,9 @@ kernel_parameters: "nofb vga=normal"
 
 node_exporter_enabled: true
 
-kubeadm_version: "1.10.2-00"
-kubelet_version: "1.10.2-00"
-kubectl_version: "1.10.2-00"
+kubeadm_version: "1.10.3-00"
+kubelet_version: "1.10.3-00"
+kubectl_version: "1.10.3-00"
 
 kubeadm_bootstrap_token: !vault |
           $ANSIBLE_VAULT;1.1;AES256
