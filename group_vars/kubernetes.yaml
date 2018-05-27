@@ -1,6 +1,6 @@
 ---
-docker_version: 1.12.6
-setup_script_md5_sum: 72a8d7aab1b637fdbb8de81781381492
+docker_version: 17.09
+setup_script_md5_sum: fcfb06407c50e5998820abed1038b848.
 
 kernel_parameters: "nofb vga=normal"
 

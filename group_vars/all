@@ -36,6 +36,7 @@ genericusers_users:
 
 docker_config:
   storage-driver: aufs
+docker_compose: false
 
 # relaymail
 relaymail_smtp_host: smtp.gmail.com

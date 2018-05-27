@@ -60,11 +60,11 @@
       Pin-Priority: 900
   when: kubectl_version is defined
 
-- name: "Create docker-engine package pin for version"
+- name: "Create docker-ce package pin for version"
   copy:
     dest: "/etc/apt/preferences.d/docker"
     content: |
-      Package: docker-engine
+      Package: docker-ce
       Pin: version {{ docker_version }}*
       Pin-Priority: 900
   when: docker_version is defined
