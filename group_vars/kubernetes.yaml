@@ -10,6 +10,8 @@ kubeadm_version: "1.10.3-00"
 kubelet_version: "1.10.3-00"
 kubectl_version: "1.10.3-00"
 
+kubernetes_master: "k1.oneill.net"
+
 kubeadm_bootstrap_token: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           37393365336231633462663537343639376433383634653964303735353734373034346532303963
