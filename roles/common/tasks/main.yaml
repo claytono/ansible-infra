@@ -6,16 +6,14 @@
 
 - name: "Remove unwanted packages"
   apt:
-    name: "{{ item }}"
+    name: "{{ packages_to_remove }}"
     state: absent
-  with_items: "{{ packages_to_remove }}"
 
 - name: "Install wanted packages"
   apt:
-    name: "{{ item }}"
+    name: "{{ packages_to_install }}"
     state: present
     autoremove: yes
-  with_items: "{{ packages_to_install }}"
 
 - name: "Turn on passwordless sudo for sudo group"
   lineinfile:
