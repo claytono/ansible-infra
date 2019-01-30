@@ -34,3 +34,10 @@ plex-server
 
 [borgbackup-server]
 luser
+
+[nut-hosts]
+luser
+k1
+k2
+k3
+

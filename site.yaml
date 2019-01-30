@@ -43,7 +43,9 @@
   roles:
     - role: plex-server
 
-- hosts: all
+- hosts: nut-hosts
   roles:
     - role: UnderGreen.prometheus-node-exporter
       when: "node_exporter_enabled | default(false)"
+    - role: ntd.nut
+
