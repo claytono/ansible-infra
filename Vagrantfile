@@ -9,7 +9,7 @@ Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/xenial64"
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "512"
+    vb.memory = "768"
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on" ]
   end
 
