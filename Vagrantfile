@@ -20,6 +20,7 @@ Vagrant.configure(2) do |config|
       :setup_upgrade => true,
       :domain => 'oneill.net',
       :is_vagrant => true,
+      :borgbackup_client => false,
     }
     ansible.raw_arguments = [
       '--become',
