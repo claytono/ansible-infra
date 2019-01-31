@@ -10,6 +10,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "512"
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on" ]
   end
 
   config.vm.provision "ansible" do |ansible|
