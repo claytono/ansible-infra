@@ -1,8 +1,7 @@
 ---
 - name: "Install prereq packages"
   apt:
-    name: "{{ item }}"
-  with_items:
+    name:
     - "nfs-common"
 
 - name: "Disabling accepting ICMP redirects"
@@ -71,11 +70,9 @@
 
 - name: "Install packages"
   apt:
-    name: "{{ item }}"
-    state: latest
-  with_items:
+    name:
     - "kubelet"
     - "kubeadm"
     - "kubectl"
     - "kubernetes-cni"
-
+    state: latest
