@@ -2,7 +2,7 @@
 - src: resmo.ntp
   version: '0.4.0'
 - src: https://github.com/mongrelion/ansible-role-docker
-  version: 'f7547a01420fbfa91233a7aefda9e0f61359d8eb'
+  version: '0.2.1'
   name: mongrelion.docker
 - src: ANXS.generic-users
   version: v1.1.0
