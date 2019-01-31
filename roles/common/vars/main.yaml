@@ -8,6 +8,7 @@ packages_to_install:
   - bc
   - dstat
   - fail2ban
+  - htop
   - silversearcher-ag
   - tmux
   - vim
