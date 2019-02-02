@@ -1,3 +1,4 @@
 ---
-kubernetes_master: true
-kubernetes_node: false
+is_kubernetes_master: true
+is_kubernetes_node: false
+api_advertise_address: 0.0.0.0

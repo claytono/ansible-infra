@@ -8,3 +8,5 @@ controllerManagerExtraArgs:
   pod-eviction-timeout: "1m0s"
 apiServerCertSANs:
  - {{ ansible_fqdn }}
+api:
+  advertiseAddress: {{ api_advertise_address }}

@@ -5,8 +5,15 @@ Vagrant.require_version ">= 1.8.4"
 # Vagrant 1.8.4 or higher is needed to work around the following bug
 # https://bugs.launchpad.net/ubuntu/+source/livecd-rootfs/+bug/1561250
 
+unless Vagrant.has_plugin?('vagrant-hostmanager')
+  raise "Vagrant file requires vagrant-hostmanager plugin to work properly"
+end
+
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/xenial64"
+
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_guest = true
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "768"
@@ -22,14 +29,17 @@ Vagrant.configure(2) do |config|
       :is_vagrant => true,
       :borgbackup_client => false,
     }
+    ansible.host_vars = {
+      'k1' => { "api_advertise_address" => "172.19.19.10" },
+    }
     ansible.raw_arguments = [
       '--become',
     ]
     ansible.groups = {
-      'docker' => ['falcon', 'k1'],
+      'docker' => ['falcon', 'k1', 'k2', 'k3'],
       'kubernetes' => ['k1', 'k2', 'k3'],
       'kubernetes-master' => ['k1'],
-      'kubernetes-nodes' => ['k2', 'k3'],
+      'kubernetes-node' => ['k2', 'k3'],
       'plex-client' => ['plex-client'],
       'plex-server' => ['plex-server'],
     }
@@ -39,13 +49,19 @@ Vagrant.configure(2) do |config|
     host.vm.hostname = 'falcon'
   end
   config.vm.define :k1 do |host|
-    host.vm.hostname = 'k1'
+    host.vm.hostname = 'k1.oneill.net'
+    host.vm.network "private_network", ip: "172.19.19.10"
+    host.hostmanager.aliases = %w(k1)
   end
   config.vm.define :k2 do |host|
-    host.vm.hostname = 'k2'
+    host.vm.hostname = 'k2.oneill.net'
+    host.vm.network "private_network", ip: "172.19.19.11"
+    host.hostmanager.aliases = %w(k2)
   end
   config.vm.define :k3 do |host|
-    host.vm.hostname = 'k3'
+    host.vm.hostname = 'k3.oneill.net'
+    host.vm.network "private_network", ip: "172.19.19.12"
+    host.hostmanager.aliases = %w(k3)
   end
   config.vm.define 'plex-server' do |host|
     host.vm.hostname = 'plex-server'

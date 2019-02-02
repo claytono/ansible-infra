@@ -3,7 +3,7 @@
 - include_tasks: iscsi.yaml
 
 - include_tasks: master.yaml
-  when: kubernetes_master
+  when: is_kubernetes_master
 
 - include_tasks: nodes.yaml
-  when: kubernetes_node
+  when: is_kubernetes_node

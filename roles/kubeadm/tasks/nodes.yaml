@@ -3,6 +3,6 @@
   when: "kubeadm_reset |default(false) |bool"
 
 - name: "Run kubeadm join to master"
-  command: "kubeadm join --token {{ kubeadm_bootstrap_token }} {{ kubernetes_master }}:6443"
+  command: "kubeadm join --token {{ kubeadm_bootstrap_token }} --discovery-token-unsafe-skip-ca-verification {{ kubernetes_master }}:6443"
   args:
     creates: "/etc/kubernetes/kubelet.conf"
