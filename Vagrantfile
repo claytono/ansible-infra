@@ -16,7 +16,7 @@ Vagrant.configure(2) do |config|
   config.hostmanager.manage_guest = true
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "768"
+    vb.memory = "1024"
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on" ]
   end
 
