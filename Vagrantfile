@@ -21,6 +21,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provision "ansible" do |ansible|
+    ansible.compatibility_mode = '2.0'
     ansible.playbook = "site.yaml"
     ansible.force_remote_user = true
     ansible.extra_vars = {
