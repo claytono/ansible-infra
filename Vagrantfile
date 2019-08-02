@@ -39,10 +39,10 @@ Vagrant.configure(2) do |config|
     ansible.groups = {
       'docker' => ['falcon', 'k1', 'k2', 'k3'],
       'kubernetes' => ['k1', 'k2', 'k3'],
-      'kubernetes-master' => ['k1'],
-      'kubernetes-node' => ['k2', 'k3'],
-      'plex-client' => ['plex-client'],
-      'plex-server' => ['plex-server'],
+      'kubernetes_master' => ['k1'],
+      'kubernetes_node' => ['k2', 'k3'],
+      'plex_client' => ['plex-client'],
+      'plex_server' => ['plex-server'],
     }
   end
 

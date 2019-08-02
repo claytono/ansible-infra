@@ -12,10 +12,10 @@ k1
 k2
 k3
 
-[kubernetes-master]
+[kubernetes_master]
 k1
 
-[kubernetes-node]
+[kubernetes_node]
 k2
 k3
 
@@ -25,12 +25,11 @@ k1
 k2
 k3
 
-
-[plex-client]
+[plex_client]
 plex2
 
-[plex-server]
+[plex_server]
 plex-server
 
-[borgbackup-server]
+[borgbackup_server]
 luser
