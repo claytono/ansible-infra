@@ -1,18 +1,21 @@
 ---
-apiVersion: kubeadm.k8s.io/v1alpha3
+apiVersion: kubeadm.k8s.io/v1beta1
 kind: ClusterConfiguration
-apiServerCertSANs:
- - {{ ansible_fqdn }}
-controllerManagerExtraArgs:
-  allocate-node-cidrs: "true"
-  cloud-provider: external
-  pod-eviction-timeout: "1m0s"
+apiServer:
+  certSANs:
+  - {{ ansible_fqdn }}
+  - k1.oneill.net
+controllerManager:
+  extraArgs:
+    allocate-node-cidrs: "true"
+    cloud-provider: external
+    pod-eviction-timeout: "1m0s"
 networking:
   podSubnet: "10.244.0.0/16"
 ---
-apiVersion: kubeadm.k8s.io/v1alpha3
+apiVersion: kubeadm.k8s.io/v1beta1
 kind: InitConfiguration
-apiEndpoint:
+localAPIEndpoint:
   advertiseAddress: {{ api_advertise_address }}
 bootstrapTokens:
 - groups:
