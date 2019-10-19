@@ -6,6 +6,8 @@ figment ansible_host=figment.fnord.net domain=oneill.net
 k1 ansible_host=k1.oneill.net domain=oneill.net
 k2 ansible_host=k2.oneill.net domain=oneill.net
 k3 ansible_host=k3.oneill.net domain=oneill.net
+pizero-main ansible_host=pizero-main.oneill.net domain=oneill.net
+octopi ansible_host=octopi.oneill.net domain=oneill.net
 
 [kubernetes]
 k1
@@ -33,3 +35,7 @@ plex-server
 
 [borgbackup_server]
 luser
+
+[pi]
+pizero-main
+octopi

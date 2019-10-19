@@ -21,6 +21,6 @@
     path: '/etc/default/grub'
     line: 'GRUB_CMDLINE_LINUX_DEFAULT="{{ kernel_parameters }}"'
     regexp: '^GRUB_CMDLINE_LINUX_DEFAULT\s*='
-  when: kernel_parameters is defined
+  when: kernel_parameters is defined and ansible_architecture == "x86_64"
   notify:
     - "Update grub"

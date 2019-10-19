@@ -1,3 +1,4 @@
 ---
 - name: "Update grub"
   command: "update-grub"
+  when: ansible_architecture == "x86_64"
