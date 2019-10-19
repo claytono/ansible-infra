@@ -1,3 +1,8 @@
+- name: "Install ipvsadm for debugging"
+  apt:
+    name: "ipvsadm"
+    state: "latest"
+
 - name: "Reset kubeadm if requested"
   command: "kubeadm reset"
   when: "kubeadm_reset |default(false) |bool"
