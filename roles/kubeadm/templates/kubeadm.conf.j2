@@ -1,9 +1,19 @@
-apiVersion: kubeadm.k8s.io/v1alpha2
-kind: MasterConfiguration
-api:
-  advertiseAddress: {{ api_advertise_address }}
+---
+apiVersion: kubeadm.k8s.io/v1alpha3
+kind: ClusterConfiguration
 apiServerCertSANs:
  - {{ ansible_fqdn }}
+controllerManagerExtraArgs:
+  allocate-node-cidrs: "true"
+  cloud-provider: external
+  pod-eviction-timeout: "1m0s"
+networking:
+  podSubnet: "10.244.0.0/16"
+---
+apiVersion: kubeadm.k8s.io/v1alpha3
+kind: InitConfiguration
+apiEndpoint:
+  advertiseAddress: {{ api_advertise_address }}
 bootstrapTokens:
 - groups:
   - system:bootstrappers:kubeadm:default-node-token
@@ -12,10 +22,3 @@ bootstrapTokens:
   usages:
   - signing
   - authentication
-certificatesDir: /etc/kubernetes/pki
-controllerManagerExtraArgs:
-  allocate-node-cidrs: "true"
-  cloud-provider: external
-  pod-eviction-timeout: "1m0s"
-networking:
-  podSubnet: "10.244.0.0/16"
