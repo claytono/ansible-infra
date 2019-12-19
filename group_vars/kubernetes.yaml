@@ -1,5 +1,5 @@
 ---
-docker_version: "17.09.1~ce-0~ubuntu"
+docker_version: "18.06.3~ce~3-0~ubuntu"
 docker_package: "docker-{{ docker_edition }}={{ docker_version }}"
 
 kernel_parameters: "nofb vga=normal"

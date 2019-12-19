@@ -30,7 +30,7 @@
 - name: "Install flannel + config"
   command: "kubectl apply -f /root/kube-flannel.yml"
   args:
-    creates: "/etc/cni/net.d/10-flannel.conf"
+    creates: "10-flannel.conflist"
   environment:
     KUBECONFIG: "/etc/kubernetes/admin.conf"
 
