@@ -27,7 +27,7 @@
 
 - hosts: docker
   roles:
-    - role: mongrelion.docker
+    - role: geerlingguy.docker
       tags: docker
 
 - hosts: kubernetes

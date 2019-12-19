@@ -1,6 +1,6 @@
 ---
-docker_version: "17.03.2"
-setup_script_md5_sum: fcfb06407c50e5998820abed1038b848.
+docker_version: "17.09.1~ce-0~ubuntu"
+docker_package: "docker-{{ docker_edition }}={{ docker_version }}"
 
 kernel_parameters: "nofb vga=normal"
 

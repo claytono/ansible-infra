@@ -1,9 +1,8 @@
 ---
 - src: resmo.ntp
   version: '0.4.0'
-- src: https://github.com/mongrelion/ansible-role-docker
-  version: '0.2.1'
-  name: mongrelion.docker
+- src: geerlingguy.docker
+  version: '2.5.4'
 - src: ANXS.generic-users
   version: v1.1.0
 - src: Yannik.relaymail

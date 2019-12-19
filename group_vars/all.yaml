@@ -34,9 +34,7 @@ genericusers_users:
     - *jezebel_rsa
     - *jezebel_ed25519
 
-docker_config:
-  storage-driver: overlay2
-docker_compose: false
+docker_install_compose: false
 
 # relaymail
 relaymail_smtp_host: smtp.gmail.com
