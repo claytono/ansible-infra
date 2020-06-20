@@ -28,7 +28,7 @@
 
 - name: "Add Kubernetes APT repo"
   apt_repository:
-    repo: "deb http://apt.kubernetes.io/ kubernetes-{{ ansible_distribution_release }} main"
+    repo: "deb http://apt.kubernetes.io/ kubernetes-xenial main"
     filename: "kubernetes"
     update_cache: yes
 
