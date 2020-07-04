@@ -6,6 +6,8 @@ packages_to_remove:
   - xscreensaver
 packages_to_install:
   - bc
+  - ca-certificates
+  - curl
   - dstat
   - fail2ban
   - htop
