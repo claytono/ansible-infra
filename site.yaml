@@ -47,4 +47,5 @@
 - hosts: all
   roles:
     - role: UnderGreen.prometheus-node-exporter
+      tags: prom
       when: "node_exporter_enabled | default(false)"

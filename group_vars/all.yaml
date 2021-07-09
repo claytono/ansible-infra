@@ -1,6 +1,12 @@
 ec2_region: us-east-1
 falcon_eip: 50.16.92.207
 
+prometheus_node_exporter_version: 1.0.1
+prometheus_node_exporter_config_flags:
+  'collector.textfile.directory': '/var/lib/node_exporter/textfile_collector'
+  'web.listen-address': '0.0.0.0:9100'
+  'log.level': 'info'
+
 enable_ufw: false
 
 ssh_keys:
@@ -12,7 +18,7 @@ genericusers_users:
    comment: "Clayton O'Neill"
    shell: "/bin/bash"
    uid: 10001
-   groups: [ 'sudo', 'audio', 'video' ]
+   groups: [ 'sudo', 'audio', 'video', 'dialout' ]
    pass: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           31623865666436383432373566303765326238656334323163363735393337303064316137313761
