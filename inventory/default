@@ -1,18 +1,21 @@
-falcon ansible_host=falcon.fnord.net domain=fnord.net
-plex2 ansible_host=plex2.oneill.net domain=oneill.net intel=1
-plex-server ansible_host=plex-server.oneill.net domain=oneill.net
 luser ansible_host=luser.fnord.net domain=oneill.net
-figment ansible_host=figment.fnord.net domain=oneill.net
 k1 ansible_host=k1.oneill.net domain=oneill.net
 k2 ansible_host=k2.oneill.net domain=oneill.net
 k3 ansible_host=k3.oneill.net domain=oneill.net
+k4 ansible_host=k4.oneill.net domain=oneill.net
+k5 ansible_host=k5.oneill.net domain=oneill.net
 pizero-main ansible_host=pizero-main.oneill.net domain=oneill.net
 octopi ansible_host=octopi.oneill.net domain=oneill.net
+voron2 ansible_host=voron2.oneill.net domain=oneill.net
+voron2-pizero ansible_host=voron2-pizero.oneill.net domain=oneill.net
+voron0 ansible_host=voron0.oneill.net domain=oneill.net
 
 [kubernetes]
 k1
 k2
 k3
+k4
+k5
 
 [kubernetes_master]
 k1
@@ -20,22 +23,22 @@ k1
 [kubernetes_node]
 k2
 k3
+k4
+k5
 
 [docker]
-falcon
 k1
 k2
 k3
+k4
+k5
 
-[plex_client]
-plex2
-
-[plex_server]
-plex-server
-
-[borgbackup_server]
+[borgbackup_servers]
 luser
 
 [pi]
 pizero-main
 octopi
+voron2-pizero
+voron0
+
