@@ -1,6 +1,6 @@
 ---
-- src: resmo.ntp
-  version: '0.4.0'
+- src: tbaczynski.chrony
+  version: 'v1.0.4'
 - src: geerlingguy.docker
   version: '2.5.4'
 - src: ANXS.generic-users

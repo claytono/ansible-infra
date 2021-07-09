@@ -1,7 +1,6 @@
 ec2_region: us-east-1
 falcon_eip: 50.16.92.207
 
-ntp_pkg_state: present
 
 ssh_keys:
   jezebel:
