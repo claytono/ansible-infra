@@ -27,6 +27,13 @@
     url: "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
     dest: "/root"
 
+- name: "Switch config from vxlan to host-gw"
+  lineinfile:
+    path: "/root/kube-flannel.yml"
+    regexp: '^(\s+)*"Type"\s*:\s*"vxlan"'
+    line: '\1"Type": "host-gw"'
+    backrefs: yes
+
 - name: "Install flannel + config"
   command: "kubectl apply -f /root/kube-flannel.yml"
   args:
