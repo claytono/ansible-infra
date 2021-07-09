@@ -6,12 +6,14 @@ packages_to_remove:
   - xscreensaver
 packages_to_install:
   - bc
+  - bind9-host
   - ca-certificates
   - curl
+  - dnsutils
   - dstat
   - fail2ban
   - htop
-  - silversearcher-ag
+  - lsb-release
   - tmux
   - vim
 
