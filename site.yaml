@@ -22,7 +22,8 @@
     - resmo.ntp
     - role: Yannik.relaymail
       when: is_vagrant is undefined or not is_vagrant
-    - role: SphericalElephant.borgbackup
+    - role: fiaasco.borgbackup
+      tags: borg
       when: "borg_client_enabled | default(true)"
 
 - hosts: docker

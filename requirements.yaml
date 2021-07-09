@@ -8,8 +8,9 @@
 - name: Yannik.relaymail
   src: https://github.com/Yannik/ansible-role-relaymail.git
   version: d0d7201b1b4a84ad358a4bccbbfa2232f80e6eac
-- name: SphericalElephant.borgbackup
-  src: https://github.com/claytono/ansible-role-borgbackup
 - src: https://github.com/UnderGreen/ansible-prometheus-node-exporter
   name: UnderGreen.prometheus-node-exporter
   version: 'v1.4.0'
+- name: fiaasco.borgbackup
+  src: https://github.com/claytono/borgbackup
+  version: v0.0.2

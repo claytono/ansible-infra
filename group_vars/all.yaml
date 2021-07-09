@@ -52,9 +52,20 @@ relaymail_smtp_password: !vault |
 relaymail_overwrite_to_target: clayton.oneill@gmail.com
 
 # borgbackup
-borgbackup_client: True
-borgbackup_client_backup_server: luser.fnord.net
-borgbackup_encryption_mode: repokey
+borgbackup_servers:
+  - id: luser
+    fqdn: luser.fnord.net
+    user: borgbackup
+    type: normal
+    home: /backups/borg/
+    pool: repos
+    options: ""
+
+# gross way to stuff more args into create call.
+borgbackup_compression: "lz4 --one-file-system"
+borgbackup_include:
+  - "/"
+
 borgbackup_passphrase: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           66633634343430396265343131613131636165656662346264316363353438306266383838363435
@@ -65,19 +76,3 @@ borgbackup_passphrase: !vault |
           34353438376466316336613430363337643830303630376239336331366566343063643266376530
           63613030303232353536313434356239323062393333386339393231313639663033323463353530
           31353732313365656563
-borgbackup_binary_version: 1.1.5
-borgbackup_server_home: /backups/borg
-borgbackup_client_jobs:
- - name: system
-   day: "*"
-   hour: "{{ 11 |random(seed=inventory_hostname) }}"
-   minute: "{{ 59 |random(seed=inventory_hostname) }}"
-   directories: "/"
-   options: "--one-file-system --compression lz4 $@"
-   excludes: []
-borgbackup_prune_jobs:
-  - name: system
-    prune_options: "--keep-daily=7 --keep-weekly=4 --keep-monthly=6 --keep-yearly=1"
-    day: "*"
-    hour: "{{ 23 | random(12, 16, seed=inventory_hostname) }}"
-    minute: "{{ 59 | random(seed=inventory_hostname) }}"

@@ -1,26 +1,3 @@
-borgbackup_client_jobs:
- - name: system
-   day: "*"
-   hour: "{{ 11 |random(seed=inventory_hostname) }}"
-   minute: "{{ 59 |random(seed=inventory_hostname) }}"
-   directories: "/"
-   options: "--one-file-system --compression auto,zstd $@"
-   excludes: []
- - name: k8s-pv
-   day: "*"
-   hour: "{{ 21 |random(seed=inventory_hostname) }}"
-   minute: "{{ 59 |random(seed=inventory_hostname) }}"
-   directories: ["/k8s-pv"]
-   options: "--one-file-system --compression auto,zstd $@"
-   excludes: []
-borgbackup_prune_jobs:
-  - name: system
-    prune_options: "--keep-daily=7 --keep-weekly=4 --keep-monthly=6 --keep-yearly=1"
-    day: "*"
-    hour: "{{ 23 | random(12, 16, seed=inventory_hostname) }}"
-    minute: "{{ 59 | random(seed=inventory_hostname) }}"
-  - name: k8s-pv
-    prune_options: "--keep-daily=7 --keep-weekly=4 --keep-monthly=6 --keep-yearly=1"
-    day: "*"
-    hour: "{{ 13 | random(12, 16, seed=inventory_hostname) }}"
-    minute: "{{ 59 | random(seed=inventory_hostname) }}"
+borgbackup_include:
+  - "/"
+  - "/k8s-pv"
