@@ -1,6 +1,7 @@
 ec2_region: us-east-1
 falcon_eip: 50.16.92.207
 
+enable_ufw: false
 
 ssh_keys:
   jezebel:
