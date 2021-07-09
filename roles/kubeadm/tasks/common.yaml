@@ -35,9 +35,9 @@
      name: apt-transport-https
      state: latest
 
-- name: "Add old Kubernetes APT key"
+- name: "Add Kubernetes APT key"
   apt_key:
-    id: "6A030B21BA07F4FB"
+    id: "8B57C5C2836F4BEB"
     url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
 
 - name: "Add Kubernetes APT repo"
