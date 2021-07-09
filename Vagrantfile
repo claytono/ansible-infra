@@ -14,6 +14,7 @@ Vagrant.configure(2) do |config|
 
   config.hostmanager.enabled = true
   config.hostmanager.manage_guest = true
+  config.ssh.forward_agent = true
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
@@ -46,16 +47,22 @@ Vagrant.configure(2) do |config|
     }
   end
 
+  config.vm.define :controller do |host|
+    host.vm.hostname = 'controller'
+  end
   config.vm.define :falcon do |host|
     host.vm.hostname = 'falcon'
+    host.vm.box = "debian/buster64"
   end
   config.vm.define :k1 do |host|
     host.vm.hostname = 'k1.oneill.net'
+    host.vm.box = "debian/buster64"
     host.vm.network "private_network", ip: "172.19.19.10"
     host.hostmanager.aliases = %w(k1)
   end
   config.vm.define :k2 do |host|
     host.vm.hostname = 'k2.oneill.net'
+    host.vm.box = "debian/buster64"
     host.vm.network "private_network", ip: "172.19.19.11"
     host.hostmanager.aliases = %w(k2)
   end
