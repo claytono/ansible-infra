@@ -1,5 +1,5 @@
 node_exporter_enabled: true
 prometheus_node_exporter_release_name: "node_exporter-{{ prometheus_node_exporter_version }}.linux-armv6"
 
-borgbackup_download_url: https://dl.bintray.com/borg-binary-builder/borg-binaries/borg-{{ borgbackup_version}}-armv6
+borgbackup_download_url: https://borg.bauerj.eu/bin/borg-{{ borgbackup_version }}-armv6
 borgbackup_checksum: "sha256:05d8dad1d1ac03d41c5848dfa0cf095c0344ca0a280058498583543f257aa731"
