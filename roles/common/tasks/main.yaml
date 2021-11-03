@@ -21,3 +21,9 @@
       state: present
       regexp: '^%sudo'
       line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+
+- name: "Setup ssh authorized keys for root"
+  authorized_key:
+    user: root
+    key: "{{ item }}"
+  loop: "{{ ssh_keys }}"

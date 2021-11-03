@@ -10,8 +10,8 @@ prometheus_node_exporter_config_flags:
 enable_ufw: false
 
 ssh_keys:
-  jezebel:
-    key: &jezebel_rsa "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA5XY/Pltocwc8sAZwewrhgInrrDDuw89wJ0I1bx6wR16x650iifiSnIZlD+elk2zyu+AqMwJ74URZgshz02W6HMnFmx6CXfvXC6DmEpSnyY4/WThmP2WyNE/A9nJaLBbBb/LnfJoA+Knb8XzJHWFtpFcNmP9Ltlm1Q9VoFFeCrIG04xmXR4WO2AtTa/Bj0WAPa2whfSiCluFrFLMqqXsXw51Myj6RUahNbQdjwOwFQAwzMEegrEINOKYSlojTyV7mdJ6e3oepf5+3GhttMUVjqFHSxG/HK9WB4xxUaQXdMadNhivJKfHKVFxheW+FWae4WBPV31VHqRQuWrUEEamhUQ== coneill@jezebel"
+  - &jezebel_rsa "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA5XY/Pltocwc8sAZwewrhgInrrDDuw89wJ0I1bx6wR16x650iifiSnIZlD+elk2zyu+AqMwJ74URZgshz02W6HMnFmx6CXfvXC6DmEpSnyY4/WThmP2WyNE/A9nJaLBbBb/LnfJoA+Knb8XzJHWFtpFcNmP9Ltlm1Q9VoFFeCrIG04xmXR4WO2AtTa/Bj0WAPa2whfSiCluFrFLMqqXsXw51Myj6RUahNbQdjwOwFQAwzMEegrEINOKYSlojTyV7mdJ6e3oepf5+3GhttMUVjqFHSxG/HK9WB4xxUaQXdMadNhivJKfHKVFxheW+FWae4WBPV31VHqRQuWrUEEamhUQ== coneill@jezebel"
+  - &xtal_ed25519 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB3URIT9ojo8mqsEjxmFu1C+Bxa3jdcKkUzM++IfDVmu coneill@xtal.oneill.net"
 
 genericusers_users:
  - name: coneill
@@ -34,6 +34,7 @@ genericusers_users:
    ssh_keys:
     - *jezebel_rsa
     - &jezebel_ed25519 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJCMCD7OnhZIJvdUhHhYGIoH7fN5fWLXHPijB60vp21t coneill@jezebel"
+    - *xtal_ed25519
  - name: ansible
    comment: "Ansible role user"
    uid: 9000
