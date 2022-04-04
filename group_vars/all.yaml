@@ -42,6 +42,7 @@ genericusers_users:
    ssh_keys:
     - *jezebel_rsa
     - *jezebel_ed25519
+    - *xtal_ed25519
 
 docker_install_compose: false
 
