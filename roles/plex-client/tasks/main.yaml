@@ -1,3 +1,0 @@
----
-- include_tasks: install-openpht.yaml
-- include_tasks: install-x11.yaml

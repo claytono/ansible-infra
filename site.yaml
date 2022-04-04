@@ -41,14 +41,6 @@
     - role: kubeadm
       tags: kubernetes
 
-- hosts: plex-client
-  roles:
-    - role: plex-client
-
-- hosts: plex-server
-  roles:
-    - role: plex-server
-
 - hosts: all
   roles:
     - role: UnderGreen.prometheus-node-exporter
