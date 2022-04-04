@@ -10,6 +10,9 @@ gasherbrum-dispay ansible_host=gasherbrum-display.oneill.net domain=oneill.net
 mpmd ansible_host=mpmd.oneill.net domain=oneill.net
 zwavejs ansible_host=zwavejs.oneill.net domain=oneill.net
 
+[tailscale]
+luser
+
 [kubernetes]
 k1
 k2

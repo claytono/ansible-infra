@@ -1,3 +1,4 @@
 borgbackup_include:
   - "/"
   - "/k8s-pv"
+tailscale_args: --advertise-routes=172.19.74.0/23

@@ -31,6 +31,11 @@
     - role: geerlingguy.docker
       tags: docker
 
+- hosts: all
+  roles:
+    - role: artis3n.tailscale
+      tags: tailscale
+
 - hosts: kubernetes
   roles:
     - role: kubeadm
