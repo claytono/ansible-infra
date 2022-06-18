@@ -30,6 +30,18 @@
     path: /usr/sbin/iptables-legacy
   when: ansible_facts['distribution'] == "Debian"
 
+- name: "Disable systemd-resolved"
+  systemd:
+    name: systemd-resolved
+    enabled: no
+    state: stopped
+
+- name: "Disable systemd-resolved dhclient integration"
+  file:
+    path: /etc/dhcp/dhclient-enter-hooks.d/resolved
+    state: absent
+  register: dhclient_resolved_file
+
 - name: "Install apt-transport-https"
   apt:
      name: apt-transport-https
