@@ -6,9 +6,9 @@ kernel_parameters: "nofb vga=normal"
 
 node_exporter_enabled: true
 
-kubeadm_version: "1.22.10-00"
-kubelet_version: "1.21.13-00"
-kubectl_version: "1.21.13-00"
+kubeadm_version: "1.22.11-00"
+kubelet_version: "1.22.11-00"
+kubectl_version: "1.22.11-00"
 kubernetes_cni_version: "0.8.7-00"
 
 kubernetes_master: "k1.oneill.net"
