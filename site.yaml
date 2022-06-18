@@ -18,7 +18,23 @@
 - hosts: all
   roles:
     - common
+
+- hosts: all
+  roles:
     - ANXS.generic-users
+  tasks:
+    - name: Get user groups
+      getent:
+        database: group
+
+    - name: Add coneill to groups if they exist
+      user: name="coneill" groups="{{item}}" append=yes
+      when: item in ansible_facts.getent_group
+      with_items:
+       - libvirt
+
+- hosts: all
+  roles:
     - tbaczynski.chrony
     - role: Yannik.relaymail
       when: is_vagrant is undefined or not is_vagrant
