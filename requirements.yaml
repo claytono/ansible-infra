@@ -3,6 +3,8 @@
   version: 'v1.0.4'
 - src: geerlingguy.docker
   version: '3.1.2'
+- src: mprahl.lets-encrypt-route-53
+  version: 'v5.1.2'
 - src: ANXS.generic-users
   version: v1.1.0
 - name: Yannik.relaymail

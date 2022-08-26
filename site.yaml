@@ -42,6 +42,12 @@
       tags: borg
       when: "borg_client_enabled | default(true)"
 
+- hosts: certbot
+  become: yes
+  roles:
+    - role: certbot
+      tags: certbot
+
 - hosts: docker
   roles:
     - role: geerlingguy.docker

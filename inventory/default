@@ -33,6 +33,10 @@ k2
 k4
 k5
 
+[certbot]
+gasherbrum
+voron2
+
 [borgbackup_servers]
 luser
 
