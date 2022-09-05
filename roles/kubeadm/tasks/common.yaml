@@ -106,8 +106,9 @@
 - name: "Install packages"
   apt:
     name:
-    - "kubelet"
-    - "kubeadm"
-    - "kubectl"
-    - "kubernetes-cni"
-    state: latest
+    - "kubelet={{ kubelet_version }}"
+    - "kubeadm={{ kubeadm_version }}"
+    - "kubectl={{ kubectl_version }}"
+    - "kubernetes-cni={{ kubernetes_cni_version }}"
+    state: present
+    allow_downgrade: yes
