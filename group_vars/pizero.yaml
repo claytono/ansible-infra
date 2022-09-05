@@ -1,0 +1,4 @@
+---
+restic_config:
+  default:
+    repository: sftp:restic@luser.fnord.net:/repos/{{ ansible_hostname }}

@@ -1,0 +1,2 @@
+---
+{{ restic_default_config |default({}) | combine(restic_config, recursive=True) | to_nice_yaml }}

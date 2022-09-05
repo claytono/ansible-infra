@@ -41,6 +41,8 @@
     - role: fiaasco.borgbackup
       tags: borg
       when: "borg_client_enabled | default(true)"
+    - role: resticprofile
+      tags: restic
 
 - hosts: certbot
   become: yes
@@ -53,7 +55,7 @@
     - role: geerlingguy.docker
       tags: docker
 
-- hosts: all
+- hosts: all,!pizero
   roles:
     - role: artis3n.tailscale
       tags: tailscale

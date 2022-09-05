@@ -1,0 +1,112 @@
+---
+
+# Check if restic is installed and is the desired version
+- name: Check if restic is installed
+  stat:
+    path: "{{ bin_dir }}/restic"
+  register: restic_bin
+
+- name: Register restic installation needed
+  set_fact:
+    install_restic: "{{ not restic_bin.stat.exists }}"
+
+- name: Check restic installed version
+  command: restic version
+  register: restic_current
+  when: restic_bin.stat.exists
+  changed_when: False
+
+- name: Compare restic versions
+  set_fact:
+    install_restic: "{{ restic_version != restic_current_version }}"
+  vars:
+    restic_current_version: "{{ restic_current.stdout | regex_replace('^restic (\\d+\\.\\d+\\.\\d+) .+$', '\\1') }}"
+  when: restic_bin.stat.exists
+
+# Gathering facts on resticprofile
+
+- name: Check if resticprofile is installed
+  stat:
+    path: "{{ bin_dir }}/resticprofile"
+  register: resticprofile_bin
+
+- name: Register resticprofile installation needed
+  set_fact:
+    install_resticprofile: "{{ not resticprofile_bin.stat.exists }}"
+
+- name: Check resticprofile installed version
+  command: resticprofile version
+  register: resticprofile_current
+  when: resticprofile_bin.stat.exists
+  changed_when: False
+
+- name: Compare resticprofile versions
+  set_fact:
+    install_resticprofile: "{{ resticprofile_version!= resticprofile_current_version }}"
+  vars:
+    resticprofile_current_version: "{{ resticprofile_current.stdout | regex_replace('^resticprofile version (\\d+\\.\\d+\\.\\d+) .+$', '\\1') }}"
+  when: resticprofile_bin.stat.exists
+
+# Create an empty temp directory
+
+- name: Remove temp directory
+  file:
+    path: "{{ tmp_dir }}"
+    state: absent
+  when: install_restic or install_resticprofile
+
+- name: Create a temp directory if it does not exist
+  file:
+    path: "{{ tmp_dir }}"
+    state: directory
+    mode: '0755'
+  when: install_restic or install_resticprofile
+
+# Install restic
+
+- name: Download restic
+  get_url:
+    url: "https://github.com/restic/restic/releases/download/v{{ restic_version }}/restic_{{ restic_version }}_{{restic_os}}_{{ restic_arch }}.bz2"
+    dest: "{{ tmp_dir }}/restic.bz2"
+    mode: '0640'
+  vars:
+    restic_os: "{{ ansible_system | lower }}"
+  when: install_restic
+
+- name: Extract restic
+  command: "bunzip2 {{ tmp_dir }}/restic.bz2"
+  when: install_restic
+
+- name: Install restic
+  command: "install {{ tmp_dir }}/restic {{ bin_dir }}/"
+  when: install_restic
+
+# Install resticprofile
+
+- name: Download resticprofile
+  get_url:
+    url: "https://github.com/creativeprojects/resticprofile/releases/download/v{{ resticprofile_version }}/resticprofile_{{ resticprofile_version }}_{{restic_os}}_{{ resticprofile_arch }}.tar.gz"
+    dest: "{{ tmp_dir }}/resticprofile.tar.gz"
+    mode: '0640'
+  vars:
+    restic_os: "{{ ansible_system | lower }}"
+  when: install_resticprofile
+
+- name: Extract resticprofile.tgz
+  unarchive:
+    src: "{{ tmp_dir }}/resticprofile.tar.gz"
+    dest: "{{ tmp_dir }}/"
+    remote_src: yes
+  when: install_resticprofile
+
+- name: Install resticprofile
+  command: "install {{ tmp_dir }}/resticprofile {{ bin_dir }}/"
+  when: install_resticprofile
+
+# Cleanup
+
+- name: Remove temporary directory
+  file:
+    path: "{{ tmp_dir }}"
+    state: absent
+  when: install_restic or install_resticprofile

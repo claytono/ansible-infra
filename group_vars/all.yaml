@@ -85,6 +85,75 @@ borgbackup_passphrase: !vault |
           63613030303232353536313434356239323062393333386339393231313639663033323463353530
           31353732313365656563
 
+restic_sftp_client: true
+restic_sftp_servers:
+  - id: luser
+    fqdn: luser.fnord.net
+    user: restic
+    home: /backups/restic/
+    pool: repos
+
+restic_default_config:
+  default:
+    repository: sftp:restic@luser.fnord.net:/repos/main
+    password-file: passphrase.txt
+
+    prometheus-push: "https://pushgateway.k.oneill.net/"
+    prometheus-labels:
+      - host: '{% raw %}{{ .Hostname }}{% endraw %}'
+
+    run-after-fail: |
+        {% raw %}/usr/lib/sendmail clayton@oneill.net <<EOF
+        From: clayton@oneill.net
+        Subject: {{ .Hostname }} backup failed
+
+        Backup on {{ .Hostname }} failed
+
+        $ERROR_COMMANDLINE failed with exit code $ERROR_EXIT_CODE
+
+        stdout:
+        $ERROR
+
+        stderr:
+        $ERROR_STDERR
+        EOF
+        {% endraw %}
+
+    backup:
+      #no-error-on-warning: true
+      one-file-system: true
+
+      schedule: "*-*-* {{ 23 | random(seed=inventory_hostname) }}:{{ 60 | random(seed=inventory_hostname) }}:00"
+      schedule-permission: "system"
+      schedule-lock-wait: "23h"
+
+      source:
+       - /
+
+    # Configure forget and retention policy so that we'll automatically forget at the end of a backup, but we can also manually forget.
+    forget: &forget_config
+      keep-daily: 14
+      keep-weekly: 12
+      keep-monthly: 24
+      prune: true
+
+    retention:
+      << : *forget_config
+      after-backup: true
+      host: true
+
+# To be overridden by hosts/groups
+restic_config: {}
+
+restic_passphrase: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          31386466306334343030376139306166306531353631313537643062613331656665656539303461
+          6662643635373737613765363035636461633138366666320a633037653664653530306263663265
+          34646366656437323531316133393638326130303138313132623461306563613361656138623237
+          6537336363386639310a346139396534316435623162663839656435383363336637353636666462
+          39363438663138343135373933663834346465633837333262633433313739353434636564623132
+          6637356466643137366133313862373464303037663366323461
+
 tailscale_auth_key: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           65383664333164383631393034393235353665373966383937313633396338653138666331363535

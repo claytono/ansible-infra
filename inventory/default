@@ -40,9 +40,21 @@ voron2
 [borgbackup_servers]
 luser
 
+[restic_servers]
+luser
+
 [pi]
 voron2-pizero
 gasherbrum
 gasherbrum-display
 mpmd
 zwavejs
+
+[pizero]
+voron2-pizero
+gasherbrum-display
+
+
+[tailscale_disabled]
+voron2-pizero
+gasherbrum-display

@@ -1,0 +1,33 @@
+#restic_passphrase: <set password in config>
+
+restic_version: "0.14.0"
+resticprofile_version: "0.18.0"
+
+restic_sftp_server: false
+restic_sftp_client: false
+restic_rclone_client: false
+
+# override for non-amd64 hosts
+restic_arch: amd64
+resticprofile_arch: amd64
+
+bin_dir: "/usr/local/bin"
+tmp_dir: "/tmp/resticprofile-ansible"
+
+restic_sftp_servers: []
+
+# description: backup user on the client
+# type: string
+restic_client_user: root
+
+# description: ssh key on the backup client to connect to the backup server
+# type: string
+restic_ssh_key: "~{{ restic_client_user }}/.ssh/id_restic_{{ restic_ssh_key_type }}"
+
+# description: ssh key bits number to use when generating new keys
+# type: integer
+restic_ssh_key_bits: 2048
+
+# description: ssh key type to use when generating new keys
+# type: string
+restic_ssh_key_type: "ed25519"
