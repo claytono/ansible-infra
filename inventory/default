@@ -6,7 +6,7 @@ k5 ansible_host=k5.oneill.net domain=oneill.net
 voron2 ansible_host=voron2.oneill.net domain=oneill.net
 voron2-pizero ansible_host=voron2-pizero.oneill.net domain=oneill.net
 gasherbrum ansible_host=gasherbrum.oneill.net domain=oneill.net
-gasherbrum-dispay ansible_host=gasherbrum-display.oneill.net domain=oneill.net
+gasherbrum-display ansible_host=gasherbrum-display.oneill.net domain=oneill.net
 mpmd ansible_host=mpmd.oneill.net domain=oneill.net
 zwavejs ansible_host=zwavejs.oneill.net domain=oneill.net
 
