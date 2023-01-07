@@ -1,5 +1,5 @@
 ---
-apiVersion: kubeadm.k8s.io/v1beta1
+apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
 apiServer:
   certSANs:
@@ -9,11 +9,11 @@ controllerManager:
   extraArgs:
     allocate-node-cidrs: "true"
     cloud-provider: external
-    pod-eviction-timeout: "1m0s"
+    pod-eviction-timeout: 1m0s
 networking:
   podSubnet: "10.244.0.0/16"
 ---
-apiVersion: kubeadm.k8s.io/v1beta1
+apiVersion: kubeadm.k8s.io/v1beta2
 kind: InitConfiguration
 localAPIEndpoint:
   advertiseAddress: {{ api_advertise_address }}

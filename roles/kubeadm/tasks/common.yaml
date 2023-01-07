@@ -49,7 +49,7 @@
 
 - name: "Add Kubernetes APT key"
   apt_key:
-    id: "8B57C5C2836F4BEB"
+    id: "2D38FEEA9169307EA071"
     url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
 
 - name: "Add Kubernetes APT repo"
