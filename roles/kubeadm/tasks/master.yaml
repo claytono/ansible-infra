@@ -24,7 +24,7 @@
 
 - name: "Retrieve flannel config"
   get_url:
-    url: "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
+    url: "https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml"
     dest: "/root"
 
 - name: "Switch config from vxlan to host-gw"
@@ -37,7 +37,7 @@
 - name: "Install flannel + config"
   command: "kubectl apply -f /root/kube-flannel.yml"
   args:
-    creates: "10-flannel.conflist"
+    creates: "/etc/cni/net.d/10-flannel.conflist"
   environment:
     KUBECONFIG: "/etc/kubernetes/admin.conf"
 
