@@ -1,4 +1,5 @@
 ---
+node_exporter_enabled: false
 restic_config:
   default:
     repository: sftp:restic@luser.fnord.net:/repos/{{ ansible_hostname }}
