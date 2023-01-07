@@ -113,22 +113,22 @@ restic_default_config:
       source:
        - /
 
-      run-before: &run_before |
-          {% raw %}curl -s https://healthchecks.io/api/v1/checks/  \
+      run-before: &run_before |-
+          {% raw %}curl -sf https://healthchecks.io/api/v1/checks/  \
               -d '{ "api_key": "{{ $healthcheck_management_key }}", "name": "restic-{{ .Hostname }}-{{ .Profile.Name }}", "timeout": 259200, "channels": "*", "unique": ["name"] }' \
-            && curl -s "https://hc-ping.com/{{ $healthcheck_ping_key }}/restic-{{ .Hostname }}-{{ .Profile.Name }}/start?rid=$(cat /proc/sys/kernel/random/uuid)" -d "Profile: $PROFILE_NAME
-            Command: $PROFILE_COMMAND
+            && curl -sf "https://hc-ping.com/{{ $healthcheck_ping_key }}/restic-{{ .Hostname }}-{{ .Profile.Name }}/start" -d "Profile: $PROFILE_NAME \
+            Command: $PROFILE_COMMAND \
             "
           {% endraw %}
-      run-finally: &run_finally |
-          {% raw %}curl -s https://healthchecks.io/api/v1/checks/  \
+      run-finally: &run_finally |-
+          {% raw %}curl -sf https://healthchecks.io/api/v1/checks/  \
               -d '{ "api_key": "{{ $healthcheck_management_key }}", "name": "restic-{{ .Hostname }}-{{ .Profile.Name }}", "timeout": 259200, "channels": "*", "unique": ["name"] }' \
             && rc="${ERROR_EXIT_CODE:-0}" \
-            && curl -s "https://hc-ping.com/{{ $healthcheck_ping_key }}/restic-{{ .Hostname }}-{{ .Profile.Name }}/${rc}?rid=$(cat /proc/sys/kernel/random/uuid)" -d "Profile: $PROFILE_NAME
-            Command: $PROFILE_COMMAND
-            Message: $ERROR_MESSAGE
-            Command-line: $ERROR_COMANDLINE
-            Stderr: $ERROR_STDERR
+            && curl -sf "https://hc-ping.com/{{ $healthcheck_ping_key }}/restic-{{ .Hostname }}-{{ .Profile.Name }}/${rc}" -d "Profile: $PROFILE_NAME \
+            Command: $PROFILE_COMMAND \
+            Message: $ERROR_MESSAGE \
+            Command-line: $ERROR_COMANDLINE \
+            Stderr: $ERROR_STDERR \
             "
           {% endraw %}
 
