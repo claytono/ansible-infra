@@ -171,6 +171,7 @@ tailscale_auth_key: !vault |
           32393464666434313938383239653039353237346632303163323839623936636535613166383330
           313236636661393930316138323237653863
 
+ler53_cert_remaining_days_before_renewal: 32
 ler53_account_email: clayton@oneill.net
 ler53_aws_access_key: AKIAJKAXEQX5E3OWSFHQ
 ler53_aws_secret_key: !vault |
