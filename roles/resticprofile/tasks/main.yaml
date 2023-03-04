@@ -1,7 +1,7 @@
 ---
 - name: "Setup restic servers"
   include_tasks: sftp-server.yaml
-  when: inventory_hostname in borgbackup_servers_group
+  when: restic_sftp_server|bool
 
 - name: "Install restic, resticprofile and rclone"
   include_tasks: install.yaml
