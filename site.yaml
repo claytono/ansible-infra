@@ -51,15 +51,22 @@
       tags: borg
 
 - hosts: certbot
-  become: yes
+  become: True
   roles:
     - role: certbot
       tags: certbot
+
+- hosts: kubernetes
+  roles:
+    - role: geerlingguy.containerd
+      tags: containerd
+      when: "use_containerd | default(false) | bool"
 
 - hosts: docker
   roles:
     - role: geerlingguy.docker
       tags: docker
+      when: "not use_containerd | default(true) | bool"
 
 - hosts: all,!pizero
   roles:

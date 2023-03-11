@@ -4,11 +4,38 @@
     name:
     - "nfs-common"
 
+- name: "Configure kernel modules for containerd"
+  copy:
+    dest: /etc/modules-load.d/containerd.conf
+    content: |
+      overlay
+      br_netfilter
+
+- name: "Load kernel modules for containerd"
+  modprobe:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - overlay
+  - br_netfilter
+
+- name: "Configure sysctl for containerd"
+  copy:
+    dest: /etc/sysctl.d/99-kubernetes-cri.conf
+    content: |
+      net.bridge.bridge-nf-call-iptables  = 1
+      net.ipv4.ip_forward                 = 1
+      net.bridge.bridge-nf-call-ip6tables = 1
+  register: sysctl_file
+
+- name: "Reload sysctl for containerd"
+  command: sysctl --system
+  when: sysctl_file.changed
+
 - name: "Disabling accepting ICMP redirects"
   sysctl:
     name: "net.ipv4.conf.all.accept_redirects"
     value: "0"
-
 
 - name: "Disabling sending ICMP redirects"
   sysctl:
