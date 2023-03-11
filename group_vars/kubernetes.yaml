@@ -1,5 +1,5 @@
 ---
-docker_version: "18.06.3~ce~3-0~{{ ansible_distribution |lower}}"
+docker_version: "5:20.10.23~3-0~debian-{{ ansible_distribution_release |lower}}"
 docker_package: "docker-{{ docker_edition }}={{ docker_version }}"
 
 kernel_parameters: "nofb vga=normal"
