@@ -1,1 +1,2 @@
 tailscale_args: --advertise-exit-node 
+ip_forwarding_enabled: true

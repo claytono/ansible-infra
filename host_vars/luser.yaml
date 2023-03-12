@@ -4,6 +4,7 @@ borgbackup_include:
 
 restic_sftp_server: true
 tailscale_args: --advertise-routes=172.19.74.0/23 --advertise-exit-node
+ip_forwarding_enabled: true
 
 restic_config:
   default:

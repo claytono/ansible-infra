@@ -72,6 +72,21 @@
   roles:
     - role: artis3n.tailscale
       tags: tailscale
+  tasks:
+    - name: "Configure sysctl for tailscale ip forwarding"
+      copy:
+        dest: /etc/sysctl.d/99-kubernetes-cri.conf
+        content: |
+          net.ipv4.ip_forward=1
+          net.ipv6.conf.all.forwarding=1
+      register: sysctl_file
+      when: ip_forwarding_enabled | default(false) | bool
+      tags: tailscale
+
+    - name: "Reload sysctl for tailscale ip forwarding"
+      command: sysctl --system
+      when: sysctl_file.changed
+      tags: tailscale
 
 - hosts: kubernetes
   roles:
