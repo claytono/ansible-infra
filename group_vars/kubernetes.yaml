@@ -1,13 +1,9 @@
 ---
-docker_version: "5:20.10.23~3-0~debian-{{ ansible_distribution_release |lower}}"
-docker_package: "docker-{{ docker_edition }}={{ docker_version }}"
-
+use_containerd: true
 containerd_version: "1.6.18-1"
 containerd_package: "containerd.io={{ containerd_version }}"
 containerd_config_default_write: true
 containerd_config_cgroup_driver_systemd: true
-
-use_containerd: false
 
 kernel_parameters: "nofb vga=normal"
 
