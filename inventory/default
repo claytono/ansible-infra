@@ -38,9 +38,6 @@ k5
 gasherbrum
 voron2
 
-[borgbackup_servers]
-luser
-
 [pi]
 voron2-pizero
 gasherbrum
