@@ -17,7 +17,11 @@
 
 - hosts: all
   roles:
-    - common
+    - role: common
+    - role: MichaelRigart.interfaces
+      become: true
+      tags: network
+      when: "manage_network | default(false) | bool"
 
 - hosts: all
   roles:

@@ -1,0 +1,13 @@
+---
+manage_network: true
+interfaces_bond_interfaces:
+  - device: bond0
+    bond_slaves: [ enp2s0f0, enp2s0f1 ]
+    hwaddr: "06:bc:96:51:3a:a0"
+    bootproto: dhcp
+    bond_mode: 802.3ad
+    bond_miimon: 100
+    bond_downdelay: 200
+    bond_updelay: 100
+    bond_lacp_rate: 1
+    bond_xmit_hash_policy: layer3+4
