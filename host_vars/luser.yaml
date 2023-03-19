@@ -16,3 +16,28 @@ restic_config:
     retention:
       << : *forget_config
       after-backup: true
+
+manage_network: true
+interfaces_bond_interfaces:
+- device: bond0
+  bond_slaves: [ enp3s0f0, enp3s0f1 ]
+  bootproto: manual
+  bond_mode: 802.3ad
+  bond_miimon: 100
+  bond_downdelay: 200
+  bond_updelay: 100
+  bond_lacp_rate: 1
+  bond_xmit_hash_policy: layer3+4
+interfaces_bridge_interfaces:
+- device: br0
+  type: bridge
+  bootproto: static
+  hwaddr: "06:bc:96:51:3a:a1"
+  stp: "off"
+  mtu: 1500
+  ports: [ bond0 ]
+  address: "172.19.74.161"
+  netmask: "255.255.255.0"
+  gateway: 172.19.74.1
+  maxwait: 5
+  fd: 0
