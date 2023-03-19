@@ -13,7 +13,7 @@
   src: https://github.com/Yannik/ansible-role-relaymail.git
   version: d0d7201b1b4a84ad358a4bccbbfa2232f80e6eac
 - name: artis3n.tailscale
-  version: 'v2.1.0'
+  version: 'v4.0.0'
 - src: https://github.com/UnderGreen/ansible-prometheus-node-exporter
   name: UnderGreen.prometheus-node-exporter
   version: 'v1.4.0'
