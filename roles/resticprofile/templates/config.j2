@@ -3,4 +3,12 @@
 {{ '{{' }} ${{ key }} := "{{ value }}" {{ '}}' }}
 {% endfor %}
 
-{{ restic_default_config |default({}) | combine(restic_config, recursive=True) | to_nice_yaml }}
+{% set ns = namespace() %}
+{% set ns.combined_config = {} %}
+
+{% for hash_name in restic_config_blocks %}
+  {% set config = lookup('vars', hash_name, default={}) %}
+  {% set ns.combined_config = ns.combined_config | combine(config, recursive=True) %}
+{% endfor %}
+
+{{ ns.combined_config | to_nice_yaml }}

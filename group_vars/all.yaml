@@ -67,14 +67,16 @@ restic_sftp_servers:
     home: /backups/restic/
     pool: repos
 
+restic_config_blocks:
+ - restic_default_config
+ - restic_prometheus_config
+ - restic_pizero_config
+ - restic_host_config
 restic_default_config:
   default:
     repository: sftp:restic@luser.fnord.net:/repos/main
     password-file: passphrase.txt
 
-    prometheus-push: "https://pushgateway.k.oneill.net/"
-    prometheus-labels:
-      - host: '{% raw %}{{ .Hostname }}{% endraw %}'
     backup:
       no-error-on-warning: true
       one-file-system: true
@@ -85,7 +87,7 @@ restic_default_config:
       schedule-priority: background
 
       source:
-       - /
+      - /
 
       run-before: &run_before |-
           {% raw %}curl -sf https://healthchecks.io/api/v1/checks/  \
@@ -95,9 +97,7 @@ restic_default_config:
             "
           {% endraw %}
       run-finally: &run_finally |-
-          {% raw %}curl -sf https://healthchecks.io/api/v1/checks/  \
-              -d '{ "api_key": "{{ $healthcheck_management_key }}", "name": "restic-{{ .Hostname }}-{{ .Profile.Name }}", "timeout": 259200, "channels": "*", "unique": ["name"] }' \
-            && rc="${ERROR_EXIT_CODE:-0}" \
+          {% raw %}rc="${ERROR_EXIT_CODE:-0}" \
             && curl -sf "https://hc-ping.com/{{ $healthcheck_ping_key }}/restic-{{ .Hostname }}-{{ .Profile.Name }}/${rc}" -d "Profile: $PROFILE_NAME \
             Command: $PROFILE_COMMAND \
             Message: $ERROR_MESSAGE \
@@ -105,10 +105,12 @@ restic_default_config:
             Stderr: $ERROR_STDERR \
             "
           {% endraw %}
+restic_prometheus_config:
+  default:
+    prometheus-push: "https://pushgateway.k.oneill.net/"
+    prometheus-labels:
+      - host: '{% raw %}{{ .Hostname }}{% endraw %}'
 
-
-# To be overridden by hosts/groups
-restic_config: {}
 restic_secrets:
   healthcheck_ping_key: !vault |
           $ANSIBLE_VAULT;1.1;AES256
