@@ -1,0 +1,29 @@
+---
+manage_network: true
+interfaces_bond_interfaces:
+  - device: bond0
+    bond_slaves: [ enp2s0f0, enp2s0f1 ]
+    hwaddr: "06:bc:96:51:3a:b0"
+    bootproto: dhcp
+    bond_mode: 802.3ad
+    bond_miimon: 100
+    bond_downdelay: 200
+    bond_updelay: 100
+    bond_lacp_rate: 1
+    bond_xmit_hash_policy: layer3+4
+
+interfaces_ether_interfaces:
+  - device: wlxe84e06993446
+    bootproto: dhcp
+    allowclass: allow-hotplug
+    wpaconf: /etc/wpa_supplicant/wpa_supplicant.conf
+
+wifi_ssid: "ez Share"
+wifi_psk: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          38373962326564333065663563393461613534373262383130386230323634356563343163343066
+          3965326339313463633935346634653465653462636433620a363266393232646534303630663935
+          64353338656537643038376361346635343233303763623636373164323064303830393830326463
+          6638313137656561300a356564626462653366336533353532653632373165383965306366303338
+          3038
+wifi_country: "US"

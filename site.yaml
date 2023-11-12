@@ -18,6 +18,9 @@
 - hosts: all
   roles:
     - role: common
+    - role: layereight.wifi
+      when: "wifi_ssid is defined"
+      tags: [wifi, network]
     - role: MichaelRigart.interfaces
       become: true
       tags: network

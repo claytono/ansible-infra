@@ -12,6 +12,7 @@ packages_to_install:
   - curl
   - dnsutils
   - dstat
+  - firmware-misc-nonfree
   - htop
   - lsb-release
   - tmux
