@@ -14,7 +14,9 @@ interfaces_bond_interfaces:
 
 interfaces_ether_interfaces:
   - device: wlxe84e06993446
-    bootproto: dhcp
+    bootproto: static
+    address: 192.168.4.5
+    netmask: 255.255.255.0
     allowclass: allow-hotplug
     wpaconf: /etc/wpa_supplicant/wpa_supplicant.conf
 
