@@ -121,18 +121,19 @@
       Pin-Priority: 900
   when: kubernetes_cni_version is defined
 
-- name: "Create docker-ce package pin for version"
+- name: "Create cri-tools package pin for version"
   copy:
-    dest: "/etc/apt/preferences.d/docker"
+    dest: "/etc/apt/preferences.d/cri-tools"
     content: |
-      Package: docker-ce
-      Pin: version {{ docker_version }}*
+      Package: cri-tools
+      Pin: version {{ cri_tools_version }}
       Pin-Priority: 900
-  when: docker_version is defined
+  when: cri_tools_version is defined
 
 - name: "Install packages"
   apt:
     name:
+    - "cri-tools={{ cri_tools_version }}"
     - "kubelet={{ kubelet_version }}"
     - "kubeadm={{ kubeadm_version }}"
     - "kubectl={{ kubectl_version }}"
