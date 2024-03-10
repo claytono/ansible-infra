@@ -57,12 +57,6 @@ interfaces_bond_interfaces:
   bond_xmit_hash_policy: layer3+4
   dnsnameservers: 172.19.74.1
   dnssearch: oneill.net
-interfaces_ether_interfaces:
-- device: bond0.2
-  bootproto: static
-  address: "172.19.75.161"
-  netmask: "255.255.255.0"
-  mtu: 9000
 interfaces_bridge_interfaces:
 - device: br0
   type: bridge
@@ -74,5 +68,16 @@ interfaces_bridge_interfaces:
   hwaddr: "06:bc:96:51:3a:a1"
   stp: "off"
   ports: [ bond0.1 ]
+  maxwait: 5
+  fd: 0
+- device: br1
+  type: bridge
+  bootproto: static
+  address: "172.19.75.161"
+  netmask: "255.255.255.0"
+  mtu: 9000
+  hwaddr: "06:bc:96:51:3a:a2"
+  stp: "off"
+  ports: [ bond0.2 ]
   maxwait: 5
   fd: 0

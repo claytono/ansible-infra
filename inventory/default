@@ -11,9 +11,6 @@ frank ansible_host=frank.oneill.net domain=oneill.net
 zwavejs ansible_host=zwavejs.oneill.net domain=oneill.net
 minamil ansible_host=minamil.oneill.net domain=oneill.net
 
-[tailscale]
-luser
-
 [kubernetes]
 k1
 k2
