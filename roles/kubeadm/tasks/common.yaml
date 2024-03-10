@@ -75,14 +75,19 @@
      state: latest
 
 - name: "Add Kubernetes APT key"
-  apt_key:
-    id: "EA46B53DC80D13EDEF05"
-    url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+  copy:
+    # Copy from role's files directory to remote host
+    src: "kubernetes-apt-keyring.gpg"
+    dest: "/etc/apt/trusted.gpg.d/kubernetes-apt-keyring.gpg"
+
+- name: "Remove old Kubernetes APT repo"
+  file:
+    path: "/etc/apt/sources.list.d/kubernetes.list"
+    state: absent
 
 - name: "Add Kubernetes APT repo"
   apt_repository:
-    repo: "deb http://apt.kubernetes.io/ kubernetes-xenial main"
-    filename: "kubernetes"
+    repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_short_version }}/deb/ /"
     update_cache: yes
 
 - name: "Create kubeadm package pin for version"

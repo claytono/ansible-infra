@@ -9,6 +9,7 @@ kernel_parameters: "nofb vga=normal"
 
 node_exporter_enabled: true
 
+kubernetes_short_version: "1.25"
 kubeadm_version: "1.25.8-00"
 kubelet_version: "1.25.8-00"
 kubectl_version: "1.25.8-00"
