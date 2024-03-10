@@ -15,6 +15,12 @@
     state: present
     autoremove: yes
 
+- name: "Install non-free on Debian"
+  apt:
+    name: firmware-misc-nonfree
+    state: present
+  when: ansible_distribution == 'Debian'
+
 - name: "Turn on passwordless sudo for sudo group"
   lineinfile:
       dest: /etc/sudoers
