@@ -44,8 +44,6 @@ genericusers_users:
     - *jezebel_ed25519
     - *xtal_ed25519
 
-docker_install_compose: false
-
 # relaymail
 relaymail_smtp_host: smtp.gmail.com
 relaymail_smtp_port: 587

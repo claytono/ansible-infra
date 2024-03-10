@@ -25,11 +25,6 @@ k2
 k4
 k5
 
-[docker]
-k1
-k2
-k4
-k5
 
 [certbot]
 gasherbrum

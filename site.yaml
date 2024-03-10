@@ -58,13 +58,6 @@
   roles:
     - role: geerlingguy.containerd
       tags: containerd
-      when: "use_containerd | default(false) | bool"
-
-- hosts: docker
-  roles:
-    - role: geerlingguy.docker
-      tags: docker
-      when: "not use_containerd | default(true) | bool"
 
 - hosts: all,!tailscale_disabled
   roles:
