@@ -66,7 +66,7 @@
       tags: docker
       when: "not use_containerd | default(true) | bool"
 
-- hosts: all,!pizero
+- hosts: all,!tailscale_disabled
   roles:
     - role: artis3n.tailscale
       tags: tailscale
