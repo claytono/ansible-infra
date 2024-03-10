@@ -55,6 +55,17 @@
       tags: certbot
 
 - hosts: kubernetes
+  tasks:
+  - name: "Create containerd package pin for version"
+    copy:
+      dest: "/etc/apt/preferences.d/containerd"
+      content: |
+        Package: containerd.io
+        Pin: version {{ containerd_version }}
+        Pin-Priority: 900
+    when: containerd_version is defined
+
+- hosts: kubernetes
   roles:
     - role: geerlingguy.containerd
       tags: containerd
