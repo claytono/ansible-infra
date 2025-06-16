@@ -60,3 +60,5 @@ nut_users:
 nut_peanut_enabled: true
 nut_peanut_nut_host: "{{ inventory_hostname }}"
 
+caddy_bin: /usr/local/sbin/caddy
+caddy_update: false

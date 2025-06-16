@@ -1,6 +1,3 @@
----
-# Main tasks for nut role: NUT CGI web interface (read-only) and custom NUT setup
-
 - name: Install NUT email notification script (if email is set)
   template:
     src: notify-email.sh.j2
@@ -73,39 +70,3 @@
     - nut-snmp
   when: "nut_enabled | default(false) | bool"
   tags: nut
-
-- name: Ensure www-data is a member of the nut group
-  user:
-    name: www-data
-    groups: nut
-    append: yes
-  become: true
-  tags: nut
-
-- name: Deploy PeaNUT settings.yml config file
-  template:
-    src: peanut-settings.yml.j2
-    dest: /etc/nut/peanut-settings.yml
-    owner: root
-    group: root
-    mode: '0644'
-  when: nut_peanut_enabled | default(false) | bool
-  tags: peanut
-
-- name: Deploy PeaNUT NUT web interface (optional)
-  community.docker.docker_container:
-    name: peanut
-    image: brandawg93/peanut:latest
-    restart_policy: unless-stopped
-    ports:
-      - "{{ nut_peanut_port | string }}:8080"
-    env:
-      NUT_HOST: "{{ nut_peanut_nut_host | string }}"
-      NUT_PORT: "{{ nut_peanut_nut_port | string }}"
-      WEB_PORT: "8080"
-    volumes:
-      - /etc/nut/peanut-settings.yml:/config/settings.yml:ro
-    state: started
-    pull: yes
-  when: nut_peanut_enabled | default(false) | bool
-  tags: peanut

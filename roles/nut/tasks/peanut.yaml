@@ -1,0 +1,52 @@
+- name: Ensure /etc/nut/peanut exists
+  ansible.builtin.file:
+    path: /etc/nut/peanut
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Copy Dockerfile for custom Caddy image
+  ansible.builtin.copy:
+    src: Dockerfile
+    dest: /etc/nut/peanut/Dockerfile
+    mode: '0644'
+  become: true
+
+- name: Deploy PeaNUT settings.yml config file
+  template:
+    src: peanut-settings.yml.j2
+    dest: /etc/nut/peanut-settings.yml
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Deploy Caddyfile for Docker Compose
+  ansible.builtin.template:
+    src: Caddyfile.j2
+    dest: /etc/nut/peanut/Caddyfile
+    mode: '0644'
+  become: true
+
+- name: Deploy docker-compose.yaml for peanut and caddy
+  ansible.builtin.template:
+    src: docker-compose.yaml.j2
+    dest: /etc/nut/peanut/docker-compose.yaml
+    mode: '0644'
+  become: true
+
+- name: Ensure /etc/ssl/caddy exists
+  ansible.builtin.file:
+    path: /etc/ssl/caddy
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Start docker compose up for peanut and caddy
+  community.docker.docker_compose_v2:
+    project_src: /etc/nut/peanut
+    state: present
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ ler53_aws_access_key }}"
+    AWS_SECRET_ACCESS_KEY: "{{ ler53_aws_secret_key }}"
+    AWS_REGION: "{{ route53_region }}"
+  become: true
