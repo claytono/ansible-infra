@@ -54,6 +54,17 @@
     - role: certbot
       tags: certbot
 
+- hosts: nut
+  roles:
+    - role: nut
+      tags: nut
+
+- hosts: docker
+  become: true
+  roles:
+    - geerlingguy.docker
+  tags: docker
+
 - hosts: kubernetes
   tasks:
   - name: "Create containerd package pin for version"

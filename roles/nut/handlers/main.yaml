@@ -1,0 +1,5 @@
+- name: Restart lighttpd
+  service:
+    name: lighttpd
+    state: restarted
+  become: true 

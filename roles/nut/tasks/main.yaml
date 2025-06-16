@@ -1,0 +1,175 @@
+---
+# Main tasks for nut role: NUT CGI web interface (read-only) and custom NUT setup
+
+- name: Install NUT email notification script (if email is set)
+  template:
+    src: notify-email.sh.j2
+    dest: /etc/nut/notify-email.sh
+    owner: root
+    group: nut
+    mode: '0750'
+  become: true
+  when: nut_notify_email is defined and nut_notify_email | length > 0
+  tags: nut
+
+- name: Set NOTIFYCMD and NOTIFYFLAGs for upssched (if email is set)
+  set_fact:
+    nut_upsmon_notifycmd: /usr/sbin/upssched
+    nut_upsmon_notifyflags:
+      - { name: "ONBATT", level: "SYSLOG+EXEC" }
+      - { name: "ONLINE", level: "SYSLOG+EXEC" }
+      - { name: "LOWBATT", level: "SYSLOG+EXEC" }
+      - { name: "FSD", level: "SYSLOG+EXEC" }
+      - { name: "COMMOK", level: "SYSLOG+EXEC" }
+      - { name: "COMMBAD", level: "SYSLOG+EXEC" }
+      - { name: "SHUTDOWN", level: "SYSLOG+EXEC" }
+  when: nut_notify_email is defined and nut_notify_email | length > 0
+  tags: nut
+
+- name: Include ntd.nut role for core NUT setup
+  include_role:
+    name: ntd.nut
+  tags: nut
+
+- name: Install nut-cgi and lighttpd packages
+  apt:
+    name:
+      - nut-cgi
+      - lighttpd
+    state: present
+  become: true
+  tags: nut
+
+- name: Ensure lighttpd is started and enabled
+  service:
+    name: lighttpd
+    state: started
+    enabled: true
+  become: true
+  tags: nut
+
+- name: Configure NUT CGI hosts.conf for read-only monitoring
+  copy:
+    dest: /etc/nut/hosts.conf
+    content: |
+      MONITOR ups1@localhost "Test UPS"
+    owner: root
+    group: nut
+    mode: '0640'
+  become: true
+  tags: nut
+
+- name: Ensure upsset.conf is present and does not enable control actions
+  copy:
+    dest: /etc/nut/upsset.conf
+    content: |
+      # No ENABLE lines for control actions; read-only web interface
+    owner: root
+    group: nut
+    mode: '0640'
+  become: true
+  tags: nut
+
+- name: Install upssched.conf
+  template:
+    src: "nut/upssched.conf.j2"
+    dest: "/etc/nut/upssched.conf"
+    owner: "root"
+    group: "nut"
+    mode: "0640"
+  when: "nut_onbatt_timer is defined"
+  tags: nut
+
+- name: Install upssched-cmd
+  copy:
+    src: "upssched-cmd.sh"
+    dest: "/etc/nut/upssched-cmd.sh"
+    owner: "root"
+    group: "nut"
+    mode: "0750"
+  when: "nut_onbatt_timer is defined"
+  tags: nut
+
+- name: Stop nut services if disabled
+  service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  with_items:
+    - nut-server
+    - nut-client
+    - nut-snmp
+  when: "nut_enabled | default(false) | bool"
+  tags: nut
+
+- name: Configure lighttpd for NUT CGI and static files
+  copy:
+    dest: /etc/lighttpd/conf-available/90-nut-cgi.conf
+    content: |
+      server.modules += ( "mod_cgi" )
+
+      alias.url += (
+          "/cgi-bin/nut/" => "/usr/lib/cgi-bin/nut/",
+          "/" => "/usr/share/nut/www/"
+      )
+
+      $HTTP["url"] =~ "^/cgi-bin/nut/" {
+          cgi.assign = ( "" => "" )
+      }
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  tags: nut
+  notify: Restart lighttpd
+
+- name: Enable nut-cgi config in lighttpd
+  command: lighty-enable-mod nut-cgi
+  args:
+    creates: /etc/lighttpd/conf-enabled/90-nut-cgi.conf
+  become: true
+  tags: nut
+
+- name: Reload lighttpd to apply nut-cgi config
+  service:
+    name: lighttpd
+    state: reloaded
+  become: true
+  tags: nut
+
+- name: Ensure www-data is a member of the nut group
+  user:
+    name: www-data
+    groups: nut
+    append: yes
+  become: true
+  tags: nut
+  notify: Restart lighttpd
+
+- name: Deploy PeaNUT settings.yml config file
+  template:
+    src: peanut-settings.yml.j2
+    dest: /etc/nut/peanut-settings.yml
+    owner: root
+    group: root
+    mode: '0644'
+  when: nut_peanut_enabled | default(false) | bool
+  tags: peanut
+
+- name: Deploy PeaNUT NUT web interface (optional)
+  community.docker.docker_container:
+    name: peanut
+    image: brandawg93/peanut:latest
+    restart_policy: unless-stopped
+    ports:
+      - "{{ nut_peanut_port | string }}:8080"
+    env:
+      NUT_HOST: "{{ nut_peanut_nut_host | string }}"
+      NUT_PORT: "{{ nut_peanut_nut_port | string }}"
+      WEB_PORT: "8080"
+    volumes:
+      - /etc/nut/peanut-settings.yml:/config/settings.yml:ro
+    state: started
+    pull: yes
+  when: nut_peanut_enabled | default(false) | bool
+  tags: peanut
