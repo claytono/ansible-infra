@@ -1,6 +1,6 @@
 #!/bin/sh
 
-UPSNAME="ups1"
+UPSNAME="${2:-${UPSNAME:-ups1}}"
 
 case $1 in
   onbatt_timer)
