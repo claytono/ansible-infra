@@ -14,7 +14,7 @@
   version: 'v4.4.3'
 - src: https://github.com/UnderGreen/ansible-prometheus-node-exporter
   name: UnderGreen.prometheus-node-exporter
-  version: 'v1.4.0'
+  version: 'v1.5.1'
 - src: michaelrigart.interfaces
   version: 'v1.13.3'
 - src: https://github.com/layereight/ansible-wifi
