@@ -31,34 +31,6 @@
     name: ntd.nut
   tags: nut
 
-- name: Install nut-cgi and lighttpd packages
-  apt:
-    name:
-      - nut-cgi
-      - lighttpd
-    state: present
-  become: true
-  tags: nut
-
-- name: Ensure lighttpd is started and enabled
-  service:
-    name: lighttpd
-    state: started
-    enabled: true
-  become: true
-  tags: nut
-
-- name: Configure NUT CGI hosts.conf for read-only monitoring
-  copy:
-    dest: /etc/nut/hosts.conf
-    content: |
-      MONITOR ups1@localhost "Test UPS"
-    owner: root
-    group: nut
-    mode: '0640'
-  become: true
-  tags: nut
-
 - name: Ensure upsset.conf is present and does not enable control actions
   copy:
     dest: /etc/nut/upsset.conf
@@ -102,41 +74,6 @@
   when: "nut_enabled | default(false) | bool"
   tags: nut
 
-- name: Configure lighttpd for NUT CGI and static files
-  copy:
-    dest: /etc/lighttpd/conf-available/90-nut-cgi.conf
-    content: |
-      server.modules += ( "mod_cgi" )
-
-      alias.url += (
-          "/cgi-bin/nut/" => "/usr/lib/cgi-bin/nut/",
-          "/" => "/usr/share/nut/www/"
-      )
-
-      $HTTP["url"] =~ "^/cgi-bin/nut/" {
-          cgi.assign = ( "" => "" )
-      }
-    owner: root
-    group: root
-    mode: '0644'
-  become: true
-  tags: nut
-  notify: Restart lighttpd
-
-- name: Enable nut-cgi config in lighttpd
-  command: lighty-enable-mod nut-cgi
-  args:
-    creates: /etc/lighttpd/conf-enabled/90-nut-cgi.conf
-  become: true
-  tags: nut
-
-- name: Reload lighttpd to apply nut-cgi config
-  service:
-    name: lighttpd
-    state: reloaded
-  become: true
-  tags: nut
-
 - name: Ensure www-data is a member of the nut group
   user:
     name: www-data
@@ -144,7 +81,6 @@
     append: yes
   become: true
   tags: nut
-  notify: Restart lighttpd
 
 - name: Deploy PeaNUT settings.yml config file
   template:
