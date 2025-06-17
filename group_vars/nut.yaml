@@ -34,6 +34,7 @@ nut_upsmon_extra: |
   NOTIFYFLAG COMMOK WALL+EXEC
   NOTIFYFLAG REPLBATT WALL+EXEC
   NOTIFYFLAG NOCOMM WALL+EXEC
+  NOTIFYFLAG SHUTDOWN WALL+EXEC
 
 nut_upsd_listen:
   - "0.0.0.0"
@@ -62,3 +63,5 @@ nut_peanut_nut_host: "{{ inventory_hostname }}"
 
 caddy_bin: /usr/local/sbin/caddy
 caddy_update: false
+
+nut_enabled: true

@@ -67,6 +67,5 @@
   with_items:
     - nut-server
     - nut-client
-    - nut-snmp
-  when: "nut_enabled | default(false) | bool"
+  when: "not (nut_enabled | default(false) | bool)"
   tags: nut

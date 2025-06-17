@@ -7,9 +7,10 @@ HOSTNAME=$(hostname)
 EVENT="$1"
 UPSNAME="$2"
 DATE="$(date)"
+SUBJECT="[NUT] $EVENT on $HOSTNAME"
 
 # Compose subject and body with real newlines using printf
-BODY=$(printf "NUT event: %s\n\nDetails:\n  UPS: %s\n  Host: %s\n  Date: %s\n" "$EVENT" "$UPSNAME" "$HOSTNAME" "$DATE")
+BODY=$(printf "NUT event: %s\n\n==== Event Details ====\nUPS: %s\nHost: %s\nDate: %s\n" "$EVENT" "$UPSNAME" "$HOSTNAME" "$DATE")
 
 # Add more details if available (future-proofing)
 if [ -n "$NOTIFYTYPE" ]; then

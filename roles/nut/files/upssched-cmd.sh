@@ -27,6 +27,9 @@ case $1 in
   nocomm_timer)
     /etc/nut/notify-email.sh NOCOMM "$UPSNAME"
     ;;
+  shutdown_timer)
+    /etc/nut/notify-email.sh SHUTDOWN "$UPSNAME"
+    ;;
   *)
     echo "Unrecognized command: $1" >> /var/log/ups.log
     ;;
