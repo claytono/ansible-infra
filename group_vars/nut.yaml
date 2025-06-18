@@ -14,14 +14,9 @@ nut_ups:
       serial = "CXXKV2009059"
 
 nut_upsmon_extra: |
-  MINSUPPLIES 1
   SHUTDOWNCMD "/sbin/shutdown -h +0"
-  POLLFREQ 5
-  POLLFREQALERT 5
   # HOSTSYNC: Time (in seconds) the master waits for all slaves to disconnect after a shutdown event (e.g., LOWBATT).
   HOSTSYNC 60
-  RBWARNTIME 43200
-  NOCOMMWARNTIME 300
   # FINALDELAY: Time (in seconds) the master waits after all slaves are gone before shutting down itself.
   FINALDELAY 120
   RUN_AS_USER root
