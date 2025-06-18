@@ -19,4 +19,4 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - /etc/ssl/caddy:/etc/ssl/caddy
     depends_on:
-      - peanut
+      - peanut 

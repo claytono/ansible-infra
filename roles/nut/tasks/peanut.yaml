@@ -1,12 +1,12 @@
 - name: Ensure /etc/nut/peanut exists
-  ansible.builtin.file:
+  file:
     path: /etc/nut/peanut
     state: directory
     mode: '0755'
   become: true
 
 - name: Copy Dockerfile for custom Caddy image
-  ansible.builtin.copy:
+  copy:
     src: Dockerfile
     dest: /etc/nut/peanut/Dockerfile
     mode: '0644'
@@ -21,21 +21,21 @@
     mode: '0644'
 
 - name: Deploy Caddyfile for Docker Compose
-  ansible.builtin.template:
+  template:
     src: Caddyfile.j2
     dest: /etc/nut/peanut/Caddyfile
     mode: '0644'
   become: true
 
 - name: Deploy docker-compose.yaml for peanut and caddy
-  ansible.builtin.template:
-    src: docker-compose.yaml.j2
+  copy:
+    src: docker-compose.yaml
     dest: /etc/nut/peanut/docker-compose.yaml
     mode: '0644'
   become: true
 
 - name: Ensure /etc/ssl/caddy exists
-  ansible.builtin.file:
+  file:
     path: /etc/ssl/caddy
     state: directory
     mode: '0755'

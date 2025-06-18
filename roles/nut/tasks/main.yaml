@@ -28,17 +28,6 @@
     name: ntd.nut
   tags: nut
 
-- name: Ensure upsset.conf is present and does not enable control actions
-  copy:
-    dest: /etc/nut/upsset.conf
-    content: |
-      # No ENABLE lines for control actions; read-only web interface
-    owner: root
-    group: nut
-    mode: '0640'
-  become: true
-  tags: nut
-
 - name: Install upssched.conf
   template:
     src: "nut/upssched.conf.j2"
