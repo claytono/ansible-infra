@@ -65,3 +65,6 @@ caddy_bin: /usr/local/sbin/caddy
 caddy_update: false
 
 nut_enabled: true
+
+nut_services:
+  - nut-server
