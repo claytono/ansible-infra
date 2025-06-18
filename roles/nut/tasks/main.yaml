@@ -49,16 +49,6 @@
   when: "nut_onbatt_timer is defined"
   tags: nut
 
-- name: Install upssched-cmd
-  copy:
-    src: "upssched-cmd.sh"
-    dest: "/etc/nut/upssched-cmd.sh"
-    owner: "root"
-    group: "nut"
-    mode: "0750"
-  when: "nut_onbatt_timer is defined"
-  tags: nut
-
 - name: Stop nut services if disabled
   service:
     name: "{{ item }}"
