@@ -1,0 +1,21 @@
+#!/bin/bash
+# NUT notify-email.sh: Send email on NUT events
+# Called by upssched-cmd.sh
+
+EMAIL="{{ nut_notify_email | default('root@localhost') }}"
+HOSTNAME=$(hostname)
+EVENT="${1%_timer}"
+UPSNAME="$UPSNAME"
+DATE="$(date)"
+SUBJECT="[NUT] $EVENT on $UPSNAME/$HOSTNAME"
+
+BODY=$(printf "NUT event: %s\n\n==== Event Details ====\nUPS: %s\nHost: %s\nDate: %s\n" "$EVENT" "$UPSNAME" "$HOSTNAME" "$DATE")
+
+if [ -n "$NOTIFYTYPE" ]; then
+  BODY="$BODY$(printf "  Type: %s\n" "$NOTIFYTYPE")"
+fi
+if [ -n "$NOTIFYMSG" ]; then
+  BODY="$BODY$(printf "  Message: %s\n" "$NOTIFYMSG")"
+fi
+
+printf "To: %s\nSubject: %s\n\n%s" "$EMAIL" "$SUBJECT" "$BODY" | /usr/sbin/sendmail -t

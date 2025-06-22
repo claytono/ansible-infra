@@ -1,0 +1,77 @@
+---
+nut_onbatt_timer: 30
+
+nut_packages:
+- nut-client
+- nut-server
+
+nut_ups:
+  - name: "ups1"
+    driver: "usbhid-ups"
+    device: auto
+    description: "UPS 1"
+    extra: |
+      serial = "CXXPV7000092"
+  - name: "ups2"
+    driver: "usbhid-ups"
+    device: auto
+    description: "UPS 2"
+    extra: |
+      serial = "CXXPV7000091"
+  - name: "ups3"
+    driver: "usbhid-ups"
+    device: auto
+    description: "UPS 3"
+    extra: |
+      serial = "CXXPX7007632"
+
+nut_upsmon_extra: |
+  SHUTDOWNCMD "/sbin/shutdown -h +0"
+  # HOSTSYNC: Time (in seconds) the master waits for all slaves to disconnect after a shutdown event (e.g., LOWBATT).
+  HOSTSYNC 60
+  # FINALDELAY: Time (in seconds) the master waits after all slaves are gone before shutting down itself.
+  FINALDELAY 120
+  RUN_AS_USER root
+  NOTIFYCMD /usr/sbin/upssched
+  NOTIFYFLAG ONBATT WALL+EXEC
+  NOTIFYFLAG ONLINE WALL+EXEC
+  NOTIFYFLAG LOWBATT WALL+EXEC
+  NOTIFYFLAG FSD WALL+EXEC
+  NOTIFYFLAG COMMBAD WALL+EXEC
+  NOTIFYFLAG COMMOK WALL+EXEC
+  NOTIFYFLAG REPLBATT WALL+EXEC
+  NOTIFYFLAG NOCOMM WALL+EXEC
+  NOTIFYFLAG SHUTDOWN WALL+EXEC
+
+nut_upsd_listen:
+  - "0.0.0.0"
+nut_upsd_allow:
+  - "MONITOR ALL 0.0.0.0/0"
+
+nut_upsd_extra: |
+  LISTEN 0.0.0.0 3493
+
+nut_users:
+  - name: "upsmon"
+    password: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      37333234376163666138313265373633323037633532633765373239343266613230346166396664
+      6361326162333334353336363630323630323038626136370a393237323731396366316664333962
+      31666239313739636439346562343635326535393139643432383566613164353532613633636437
+      3361343563386231380a643038653933323866666630653838393465633832393635366137663834
+      66613138623232623838633063393238373662303864356664643663653365346265643164303666
+      3838663262303561326139663665363065663362643739343863
+    role: "user"
+    extra: |
+      actions = MONITOR
+
+nut_peanut_enabled: true
+nut_peanut_nut_host: "{{ inventory_hostname }}"
+
+caddy_bin: /usr/local/sbin/caddy
+caddy_update: false
+
+nut_enabled: true
+
+nut_services:
+  - nut-server

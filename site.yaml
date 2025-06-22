@@ -54,6 +54,11 @@
     - role: certbot
       tags: certbot
 
+- hosts: nut
+  roles:
+    - role: nut
+      tags: nut
+
 - hosts: kubernetes
   tasks:
   - name: "Create containerd package pin for version"

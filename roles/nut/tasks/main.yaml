@@ -1,0 +1,50 @@
+- name: Install NUT email notification script (if email is set)
+  template:
+    src: notify-email.sh.j2
+    dest: /etc/nut/notify-email.sh
+    owner: root
+    group: nut
+    mode: '0750'
+  become: true
+  when: nut_notify_email is defined and nut_notify_email | length > 0
+  tags: nut
+
+- name: Set NOTIFYCMD and NOTIFYFLAGs for upssched (if email is set)
+  set_fact:
+    nut_upsmon_notifycmd: /usr/sbin/upssched
+    nut_upsmon_notifyflags:
+      - { name: "ONBATT", level: "SYSLOG+EXEC" }
+      - { name: "ONLINE", level: "SYSLOG+EXEC" }
+      - { name: "LOWBATT", level: "SYSLOG+EXEC" }
+      - { name: "FSD", level: "SYSLOG+EXEC" }
+      - { name: "COMMOK", level: "SYSLOG+EXEC" }
+      - { name: "COMMBAD", level: "SYSLOG+EXEC" }
+      - { name: "SHUTDOWN", level: "SYSLOG+EXEC" }
+  when: nut_notify_email is defined and nut_notify_email | length > 0
+  tags: nut
+
+- name: Include ntd.nut role for core NUT setup
+  include_role:
+    name: ntd.nut
+  tags: nut
+
+- name: Install upssched.conf
+  template:
+    src: "nut/upssched.conf.j2"
+    dest: "/etc/nut/upssched.conf"
+    owner: "root"
+    group: "nut"
+    mode: "0640"
+  when: "nut_onbatt_timer is defined"
+  tags: nut
+
+- name: Stop nut services if disabled
+  service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  with_items:
+    - nut-server
+    - nut-client
+  when: "not (nut_enabled | default(false) | bool)"
+  tags: nut

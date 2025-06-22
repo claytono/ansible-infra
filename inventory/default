@@ -10,6 +10,7 @@ gasherbrum ansible_host=gasherbrum.oneill.net domain=oneill.net
 gasherbrum-display ansible_host=gasherbrum-display.oneill.net domain=oneill.net
 frank ansible_host=frank.oneill.net domain=oneill.net
 zwavejs ansible_host=zwavejs.oneill.net domain=oneill.net
+upspi ansible_host=upspi.oneill.net domain=oneill.net
 
 [kubernetes]
 k1
@@ -25,6 +26,8 @@ k2
 k4
 k5
 
+[nut]
+upspi
 
 [certbot]
 gasherbrum
@@ -35,12 +38,15 @@ voron2-pizero
 gasherbrum
 gasherbrum-display
 zwavejs
+upspi
 
 [pizero]
 voron2-pizero
 gasherbrum-display
 
-
 [tailscale_disabled]
 voron2-pizero
 gasherbrum-display
+
+[nut_server]
+upspi

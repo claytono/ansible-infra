@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  peanut:
+    image: brandawg93/peanut:latest
+    restart: unless-stopped
+    volumes:
+      - /etc/nut/peanut-settings.yml:/config/settings.yml:ro
+
+  caddy:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "443:443"
+    environment:
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      AWS_REGION: "${AWS_REGION}"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - /etc/ssl/caddy:/etc/ssl/caddy
+    depends_on:
+      - peanut 
