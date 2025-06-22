@@ -9,9 +9,21 @@ nut_ups:
   - name: "ups1"
     driver: "usbhid-ups"
     device: auto
-    description: "Test UPS"
+    description: "UPS 1"
     extra: |
-      serial = "CXXKV2009059"
+      serial = "CXXPV7000092"
+  - name: "ups2"
+    driver: "usbhid-ups"
+    device: auto
+    description: "UPS 2"
+    extra: |
+      serial = "CXXPV7000091"
+  - name: "ups3"
+    driver: "usbhid-ups"
+    device: auto
+    description: "UPS 3"
+    extra: |
+      serial = "CXXPX7007632"
 
 nut_upsmon_extra: |
   SHUTDOWNCMD "/sbin/shutdown -h +0"
