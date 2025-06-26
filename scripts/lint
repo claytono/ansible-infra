@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+# Main linting script for the infra repository
+# Usage: ./scripts/lint [pre-commit arguments]
+# Examples:
+#   ./scripts/lint                    # Run hooks on changed files
+#   ./scripts/lint --all-files        # Run all hooks on all files
+#   ./scripts/lint shellcheck         # Run only shellcheck
+#   ./scripts/lint --files file.yaml  # Run on specific files
+
+# Change to repo root
+cd "$(dirname "$0")/.."
+
+# Default to running on changed files if no arguments provided
+if [[ $# -eq 0 ]]; then
+    echo "Running pre-commit hooks on changed files..."
+    pre-commit run
+else
+    echo "Running pre-commit with args: $*"
+    pre-commit run "$@"
+fi

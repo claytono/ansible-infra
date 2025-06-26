@@ -1,3 +1,0 @@
-dependencies:
-  - role: geerlingguy.docker
-    when: nut_peanut_enabled | default(false) | bool 

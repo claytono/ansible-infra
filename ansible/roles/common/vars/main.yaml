@@ -1,0 +1,19 @@
+---
+packages_to_remove:
+  - gvfs
+  - lxd
+  - screen
+  - xscreensaver
+packages_to_install:
+  - bc
+  - bind9-host
+  - bzip2
+  - ca-certificates
+  - curl
+  - dnsutils
+  - dstat
+  - htop
+  - lsb-release
+  - psmisc
+  - tmux
+  - vim

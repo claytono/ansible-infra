@@ -1,7 +1,13 @@
-venv
 *.retry
-.vagrant
-ansible-vault-password
-roles/galaxy
 *.swp
-.terraform
+
+# Ansible
+ansible-vault-password
+ansible/roles/galaxy
+
+# OpenTofu/Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+backend.tf

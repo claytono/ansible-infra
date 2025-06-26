@@ -1,4 +1,0 @@
----
-- name: "Install python"
-  raw: "apt-get install --no-install-recommends python3 -y"
-
