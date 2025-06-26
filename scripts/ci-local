@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e
+
+# Script to run GitHub Actions CI locally using act
+# Usage: ./scripts/ci-local [workflow-name]
+# Examples:
+#   ./scripts/ci-local           # Run ci.yml workflow
+#   ./scripts/ci-local ci.yml    # Run ci.yml workflow explicitly
+
+# Change to repo root
+cd "$(dirname "$0")/.."
+
+# Default workflow to run
+WORKFLOW="${1:-ci.yml}"
+
+# Check if we're in a Nix development environment
+if ! command -v act &> /dev/null; then
+    echo "Error: 'act' command not found."
+    echo "Please run this script from within the Nix development environment:"
+    echo "  nix develop"
+    echo "  ./scripts/ci-local"
+    exit 1
+fi
+
+echo "Running GitHub Actions workflow '$WORKFLOW' locally using act..."
+
+# Run act with the specified workflow
+# --rm: Remove container after run
+# --pull=false: Don't pull images (use cached)
+# -W: Specify workflow file
+act --rm --pull=false -W ".github/workflows/$WORKFLOW"

@@ -3,6 +3,39 @@
 This repository contains infrastructure automation using OpenTofu (for AWS
 resources) and Ansible (for system configuration).
 
+## Development Setup
+
+This repository uses Nix flakes to provide a consistent development
+environment with all required tools.
+
+### Prerequisites
+
+- [Nix](https://nixos.org/download.html) with flakes enabled
+
+### Getting Started
+
+```bash
+# Enter the development environment (automatically installs all tools)
+nix develop
+
+# Run linting
+./scripts/lint
+
+# Run CI locally using act
+./scripts/ci-local
+```
+
+The development environment includes:
+
+- OpenTofu (`tofu` command)
+- Ansible
+- AWS CLI
+- Pre-commit hooks
+- tflint (Terraform linter)
+- trivy (security scanner)
+- act (GitHub Actions runner)
+- deadnix (Nix linter)
+
 ## OpenTofu
 
 The `opentofu/` directory contains infrastructure definitions for AWS resources
@@ -16,18 +49,16 @@ including:
 We use pre-commit hooks for automated linting and validation:
 
 ```bash
-# Install pre-commit
-pip install pre-commit
-
+# From within the Nix development environment
 # Install hooks (run from repository root)
 pre-commit install
 
 # Run manually
-./scripts/lint.sh
+./scripts/lint
 ```
 
 The pre-commit configuration includes automated linting and formatting for all
-file types (shell scripts, markdown, YAML, Nix, and OpenTofu/Terraform with
+file types (shell scripts, markdown, YAML, and OpenTofu/Terraform with
 security scanning).
 
 ## Ansible

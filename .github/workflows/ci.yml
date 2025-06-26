@@ -12,28 +12,13 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
+    - name: Install Nix
+      uses: cachix/install-nix-action@v31
       with:
-        python-version: '3.11'
+        github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Install OpenTofu
-      uses: opentofu/setup-opentofu@v1
-      with:
-        tofu_version: '1.6.0'
-
-    - name: Install additional tools
-      run: |
-        # Install tflint
-        curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
-
-        # Install trivy
-        sudo apt-get update
-        sudo apt-get install wget apt-transport-https gnupg lsb-release
-        wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
-        echo "deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
-        sudo apt-get update
-        sudo apt-get install trivy
+    - name: Setup development environment
+      run: nix develop --command echo "Development environment ready"
 
     - name: Run pre-commit
-      uses: pre-commit/action@v3.0.1
+      run: nix develop --command pre-commit run --all-files
