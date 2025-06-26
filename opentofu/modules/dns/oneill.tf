@@ -3,9 +3,22 @@ resource "aws_route53_zone" "oneill_net" {
   delegation_set_id = aws_route53_delegation_set.main.id
 }
 
+# CloudFront distribution records for website hosting
+# Both apex domain and www subdomain point to the same CloudFront distribution
 resource "aws_route53_record" "oneill_a" {
   zone_id = aws_route53_zone.oneill_net.zone_id
   name    = "oneill.net"
+  type    = "A"
+  alias {
+    name                   = "d330vtujw3sx24.cloudfront.net."
+    zone_id                = "Z2FDTNDATAQYW2"
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "www" {
+  zone_id = aws_route53_zone.oneill_net.zone_id
+  name    = "www.oneill.net"
   type    = "A"
   alias {
     name                   = "d330vtujw3sx24.cloudfront.net."
@@ -43,7 +56,8 @@ resource "aws_route53_record" "dkim" {
   records = ["v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSWE5uk2EOlSVQ2Z68vMr04EQ5NoC0ki3wIDY3zIXFaEGbPisEJEYsNQ6fbj+d+9sc6kZ079M77S/FNpgZuWDepqZyT5SmzwGMw0RbUPr3F1JvQ9wFVx15P2ssPrFiY1Lv9vskqvanDka5+TDC7oiUd9oFZanF/KVLxMNsRRtStQIDAQAB"]
 }
 
-# ACM certificate validation records
+# AWS Certificate Manager (ACM) SSL certificate validation records
+# These DNS records prove domain ownership for automatic SSL certificate provisioning
 resource "aws_route53_record" "acm_validation" {
   zone_id = aws_route53_zone.oneill_net.zone_id
   name    = "_aab5ac87821783e4e8f7de6297024cbf.oneill.net"
@@ -60,6 +74,7 @@ resource "aws_route53_record" "www_acm_validation" {
   records = ["_d7fef7f4941ad7aa5ae1136c4cd91060.lblqlwmygg.acm-validations.aws."]
 }
 
+# Other services and subdomains
 resource "aws_route53_record" "atproto" {
   zone_id = aws_route53_zone.oneill_net.zone_id
   name    = "_atproto.oneill.net"
@@ -108,19 +123,7 @@ resource "aws_route53_record" "router" {
   records = ["172.19.74.1"]
 }
 
-resource "aws_route53_record" "www" {
-  zone_id = aws_route53_zone.oneill_net.zone_id
-  name    = "www.oneill.net"
-  type    = "A"
-  alias {
-    name                   = "d330vtujw3sx24.cloudfront.net."
-    zone_id                = "Z2FDTNDATAQYW2"
-    evaluate_target_health = false
-  }
-}
-
-
-
+# Nameserver records for delegation set
 resource "aws_route53_record" "oneill_ns1_a" {
   zone_id = aws_route53_zone.oneill_net.zone_id
   name    = "ns1.oneill.net"
