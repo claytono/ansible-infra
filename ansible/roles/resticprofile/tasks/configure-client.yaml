@@ -1,0 +1,36 @@
+---
+- user:
+    name: "{{ restic_client_user }}"
+    state: present
+  register: restic_user_info
+
+- name: "Create resticprofile configuration directory"
+  file:
+    path: "{{ restic_user_info.home }}/.config/resticprofile"
+    state: directory
+    mode: "0700"
+    owner: "{{ restic_client_user }}"
+
+- name: "Write passphrase to file"
+  copy:
+    content: "{{ restic_passphrase }}"
+    dest: "{{ restic_user_info.home }}/.config/resticprofile/passphrase.txt"
+    owner: "{{ restic_client_user }}"
+    mode: "0600"
+
+- name: "Write config file"
+  template:
+    src: "templates/config.j2"
+    dest: "{{ restic_user_info.home }}/.config/resticprofile/profiles.yaml"
+    owner: "{{ restic_client_user }}"
+    mode: "0600"
+  register: config_file
+
+- name: Check if resticprofile schedules are up to date
+  command: "{{ bin_dir }}/resticprofile status"
+  register: restic_status
+  changed_when: False
+
+- name: "Update resticprofile schedules"
+  command: "{{ bin_dir }}/resticprofile schedule"
+  when: restic_status.stdout is search("not found$") or config_file.changed

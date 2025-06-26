@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+# Change to repo root
+cd "$(dirname "$0")/../.."
+
+# Run pre-commit on all files in opentofu directory
+pre-commit run --files opentofu/**
