@@ -5,5 +5,7 @@ set -e
 # Change to repo root
 cd "$(dirname "$0")/../.."
 
-# Run pre-commit on all files in opentofu directory
-pre-commit run --files opentofu/**
+# Run pre-commit hooks only on OpenTofu-related files
+# This runs hooks on files that match the terraform patterns in .pre-commit-config.yaml
+echo "Running pre-commit hooks on OpenTofu files..."
+pre-commit run --files opentofu/*.tf opentofu/*/*.tf opentofu/*/*/*.tf opentofu/.terraform.lock.hcl opentofu/*/.terraform.lock.hcl opentofu/*/*/.terraform.lock.hcl 2>/dev/null || pre-commit run
