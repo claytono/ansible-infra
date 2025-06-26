@@ -35,9 +35,3 @@ repos:
       - id: terraform_validate
       - id: terraform_tflint
       - id: terraform_trivy
-
-  # Deadnix - finds unused/dead Nix code
-  - repo: https://github.com/astro/deadnix
-    rev: v1.2.1
-    hooks:
-      - id: deadnix

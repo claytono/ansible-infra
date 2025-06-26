@@ -35,10 +35,5 @@ jobs:
         sudo apt-get update
         sudo apt-get install trivy
 
-        # Install deadnix
-        wget -O deadnix https://github.com/astro/deadnix/releases/latest/download/deadnix-x86_64-unknown-linux-musl
-        chmod +x deadnix
-        sudo mv deadnix /usr/local/bin/
-
     - name: Run pre-commit
       uses: pre-commit/action@v3.0.1
