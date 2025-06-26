@@ -25,16 +25,8 @@ nix develop
 ./scripts/ci-local
 ```
 
-The development environment includes:
-
-- OpenTofu (`tofu` command)
-- Ansible
-- AWS CLI
-- Pre-commit hooks
-- tflint (Terraform linter)
-- trivy (security scanner)
-- act (GitHub Actions runner)
-- deadnix (Nix linter)
+The development environment includes OpenTofu, Ansible, AWS CLI, and all
+necessary linting tools.
 
 ## OpenTofu
 

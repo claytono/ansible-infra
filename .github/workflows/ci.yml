@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  pre-commit:
+  lint:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -20,5 +20,5 @@ jobs:
     - name: Setup development environment
       run: nix develop --command echo "Development environment ready"
 
-    - name: Run pre-commit
+    - name: Run lint
       run: nix develop --command ./scripts/lint

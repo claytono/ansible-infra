@@ -9,9 +9,9 @@ resource "aws_route53_record" "fnord_mx" {
   type    = "MX"
   ttl     = 86400
   records = [
-    "10 mx-1.pobox.com",
-    "10 mx-2.pobox.com",
-    "10 mx-3.pobox.com"
+    "10 mx-1.pobox.com.",
+    "10 mx-2.pobox.com.",
+    "10 mx-3.pobox.com."
   ]
 }
 
