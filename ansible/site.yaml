@@ -1,8 +1,8 @@
 ---
 - hosts: all
   gather_facts: no
-  tasks:
-    - include_vars: vars/vault.yaml
+#  tasks:
+#    - include_vars: vars/vault.yaml
 
   roles:
     - role: install_python
@@ -21,14 +21,14 @@
     - role: layereight.wifi
       when: "wifi_ssid is defined"
       tags: [wifi, network]
-    - role: MichaelRigart.interfaces
+    - role: michaelrigart.interfaces
       become: true
       tags: network
       when: "manage_network | default(false) | bool"
 
 - hosts: all
   roles:
-    - ANXS.generic-users
+    - anxs.generic-users
   tasks:
     - name: Get user groups
       getent:
@@ -43,7 +43,7 @@
 - hosts: all
   roles:
     - tbaczynski.chrony
-    - role: Yannik.relaymail
+    - role: yannik.relaymail
       when: is_vagrant is undefined or not is_vagrant
     - role: resticprofile
       tags: restic
@@ -102,6 +102,6 @@
 
 - hosts: all
   roles:
-    - role: UnderGreen.prometheus-node-exporter
+    - role: undergreen.prometheus-node-exporter
       tags: prom
       when: "node_exporter_enabled | default(false)"

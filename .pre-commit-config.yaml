@@ -39,3 +39,8 @@ repos:
         args:
           - --args=-platform=linux_amd64
           - --args=-platform=darwin_arm64
+
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.6.27
+    hooks:
+      - id: actionlint
