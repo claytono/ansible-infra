@@ -5,15 +5,15 @@
   version: '1.3.1'
 - src: mprahl.lets-encrypt-route-53
   version: 'v5.1.2'
-- src: ANXS.generic-users
+- src: anxs.generic-users
   version: v1.1.0
-- name: Yannik.relaymail
+- name: yannik.relaymail
   src: https://github.com/Yannik/ansible-role-relaymail.git
   version: d0d7201b1b4a84ad358a4bccbbfa2232f80e6eac
 - name: artis3n.tailscale
   version: 'v4.4.3'
-- src: https://github.com/UnderGreen/ansible-prometheus-node-exporter
-  name: UnderGreen.prometheus-node-exporter
+- src: https://github.com/undergreen/ansible-prometheus-node-exporter
+  name: undergreen.prometheus-node-exporter
   version: 'v1.4.0'
 - src: michaelrigart.interfaces
   version: 'v1.13.3'
