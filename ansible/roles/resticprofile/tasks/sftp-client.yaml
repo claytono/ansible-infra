@@ -1,7 +1,7 @@
 ---
 - name: client | generate ssh key for this machine
   ansible.builtin.user:
-    name: "{{ restic_client_user }}"
+    name: "{{ resticprofile_client_user }}"
     generate_ssh_key: true
     ssh_key_file: "{{ resticprofile_ssh_key }}"
     ssh_key_bits: "{{ resticprofile_ssh_key_bits }}"
@@ -14,7 +14,7 @@
 
 - name: client | disable strict key checking for backup servers
   ansible.builtin.blockinfile:
-    dest: "~{{ restic_client_user }}/.ssh/config"
+    dest: "~{{ resticprofile_client_user }}/.ssh/config"
     create: true
     marker: "### {mark} ANSIBLE MANAGED BLOCK for restic: {{ item.fqdn }} ###"
     content: |
@@ -32,3 +32,4 @@
     key: "{{ sshkey.stdout }}"
   delegate_to: "{{ item.fqdn }}"
   with_items: "{{ resticprofile_sftp_servers }}"
+  when: resticprofile_ssh_register

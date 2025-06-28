@@ -59,8 +59,8 @@ relaymail_smtp_password: !vault |
   36656338616634323135666332363837663061343362343862373939613537323634
 relaymail_overwrite_to_target: clayton.oneill@gmail.com
 
-restic_sftp_client: true
-restic_sftp_servers:
+resticprofile_sftp_client: true
+resticprofile_sftp_servers:
   - id: luser
     fqdn: luser.fnord.net
     user: restic
