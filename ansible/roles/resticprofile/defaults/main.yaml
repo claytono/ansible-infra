@@ -1,4 +1,6 @@
 ---
+#restic_passphrase: <set password in config>
+
 resticprofile_version: "0.21.0"
 resticprofile_arch: amd64
 resticprofile_bin_dir: "/usr/local/bin"
@@ -11,30 +13,18 @@ resticprofile_sftp_servers: []
 # type: string
 resticprofile_client_user: root
 
-# description: ssh key on the backup client to connect to the backup server
-# type: string
-resticprofile_ssh_key: "~{{ restic_client_user }}/.ssh/id_restic_{{ resticprofile_ssh_key_type }}"
-
-# description: ssh key bits number to use when generating new keys
-# type: integer
-resticprofile_ssh_key_bits: 2048
-
-# description: ssh key type to use when generating new keys
-# type: string
-resticprofile_ssh_key_type: "ed25519"
-
-#restic_passphrase: <set password in config>
 
 # The following restic_* variables are used to configure restic itself, not the
 # resticprofile role. We intentionally ignore the var-naming[no-role-prefix]
 # linting rule for these variables.
-restic_version: 0.16.4 # noqa: var-naming[no-role-prefix]
-restic_sftp_server: true # noqa: var-naming[no-role-prefix]
-restic_sftp_client: true # noqa: var-naming[no-role-prefix]
-restic_rclone_client: true # noqa: var-naming[no-role-prefix]
+restic_version: 0.15.2 # noqa: var-naming[no-role-prefix]
 restic_arch: amd64 # noqa: var-naming[no-role-prefix]
+restic_sftp_server: false # noqa: var-naming[no-role-prefix]
+restic_sftp_client: false # noqa: var-naming[no-role-prefix]
+restic_rclone_client: false # noqa: var-naming[no-role-prefix]
 restic_sftp_servers: [] # noqa: var-naming[no-role-prefix]
-restic_client_user: restic # noqa: var-naming[no-role-prefix]
-restic_ssh_key: /root/.ssh/id_ed25519 # noqa: var-naming[no-role-prefix]
-restic_ssh_key_bits: 256 # noqa: var-naming[no-role-prefix]
+restic_client_user: root # noqa: var-naming[no-role-prefix]
+
+restic_ssh_key: "~{{ restic_client_user }}/.ssh/id_restic_{{ restic_ssh_key_type }}" # noqa: var-naming[no-role-prefix]
+restic_ssh_key_bits: 2048 # noqa: var-naming[no-role-prefix]
 restic_ssh_key_type: ed25519 # noqa: var-naming[no-role-prefix]
