@@ -1,3 +1,4 @@
+---
 # Integration test exceptions for localhost
 restic_sftp_client: false
 setup_upgrade: true

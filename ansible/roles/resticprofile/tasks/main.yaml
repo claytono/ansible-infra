@@ -1,16 +1,16 @@
 ---
 - name: "Setup restic servers"
-  include_tasks: sftp-server.yaml
-  when: restic_sftp_server|bool
+  ansible.builtin.include_tasks: sftp-server.yaml
+  when: resticprofile_sftp_server|bool
 
 - name: "Install restic, resticprofile and rclone"
-  include_tasks: install.yaml
-  when: restic_sftp_client|bool
+  ansible.builtin.include_tasks: install.yaml
+  when: resticprofile_sftp_client|bool
 
 - name: "Configure restic client"
-  include_tasks: sftp-client.yaml
-  when: restic_sftp_client|bool
+  ansible.builtin.include_tasks: sftp-client.yaml
+  when: resticprofile_sftp_client|bool
 
 - name: "Configure }/resticprofile"
-  include_tasks: configure-client.yaml
-  when: restic_sftp_client|bool
+  ansible.builtin.include_tasks: configure-client.yaml
+  when: resticprofile_sftp_client|bool

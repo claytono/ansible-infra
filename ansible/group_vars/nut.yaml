@@ -2,8 +2,8 @@
 nut_onbatt_timer: 30
 
 nut_packages:
-- nut-client
-- nut-server
+  - nut-client
+  - nut-server
 
 nut_ups:
   - name: "ups1"

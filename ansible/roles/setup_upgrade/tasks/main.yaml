@@ -1,26 +1,26 @@
 ---
 - name: "Set hostname"
-  hostname:
+  ansible.builtin.hostname:
     name: "{{ inventory_hostname }}"
 
 - name: "Dist upgrade"
-  apt:
-    update_cache: yes
-    install_recommends: no
-    autoremove: yes
+  ansible.builtin.apt:
+    update_cache: true
+    install_recommends: false
+    autoremove: true
     upgrade: dist
   notify:
     - "Update grub"
 
 - name: "Autoremove unneeded apt packages"
-  apt:
-    autoremove: yes
+  ansible.builtin.apt:
+    autoremove: true
 
 - name: "Set grub kernel parameters"
-  lineinfile:
-    path: '/etc/default/grub'
+  ansible.builtin.lineinfile:
+    path: "/etc/default/grub"
     line: 'GRUB_CMDLINE_LINUX_DEFAULT="{{ kernel_parameters }}"'
-    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT\s*='
+    regexp: "^GRUB_CMDLINE_LINUX_DEFAULT\\s*="
   when: kernel_parameters is defined and ansible_architecture == "x86_64"
   notify:
     - "Update grub"

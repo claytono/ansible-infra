@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  gather_facts: no
+  gather_facts: false
 #  tasks:
 #    - include_vars: vars/vault.yaml
 
@@ -38,7 +38,7 @@
       user: name="coneill" groups="{{item}}" append=yes
       when: item in ansible_facts.getent_group
       with_items:
-       - libvirt
+        - libvirt
 
 - hosts: all
   roles:
@@ -49,7 +49,7 @@
       tags: restic
 
 - hosts: certbot
-  become: True
+  become: true
   roles:
     - role: certbot
       tags: certbot
@@ -61,14 +61,14 @@
 
 - hosts: kubernetes
   tasks:
-  - name: "Create containerd package pin for version"
-    copy:
-      dest: "/etc/apt/preferences.d/containerd"
-      content: |
-        Package: containerd.io
-        Pin: version {{ containerd_version }}
-        Pin-Priority: 900
-    when: containerd_version is defined
+    - name: "Create containerd package pin for version"
+      copy:
+        dest: "/etc/apt/preferences.d/containerd"
+        content: |
+          Package: containerd.io
+          Pin: version {{ containerd_version }}
+          Pin-Priority: 900
+      when: containerd_version is defined
 
 - hosts: kubernetes
   roles:

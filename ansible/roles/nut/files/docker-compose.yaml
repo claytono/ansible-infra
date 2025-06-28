@@ -1,4 +1,5 @@
-version: '3.8'
+---
+version: "3.8"
 services:
   peanut:
     image: brandawg93/peanut:latest

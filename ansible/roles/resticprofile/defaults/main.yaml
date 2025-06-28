@@ -1,33 +1,40 @@
-#restic_passphrase: <set password in config>
-
-restic_version: "0.15.2"
+---
 resticprofile_version: "0.21.0"
-
-restic_sftp_server: false
-restic_sftp_client: false
-restic_rclone_client: false
-
-# override for non-amd64 hosts
-restic_arch: amd64
 resticprofile_arch: amd64
-
-bin_dir: "/usr/local/bin"
-tmp_dir: "/tmp/resticprofile-ansible"
-
-restic_sftp_servers: []
-
+resticprofile_bin_dir: "/usr/local/bin"
+resticprofile_tmp_dir: "/tmp/resticprofile-ansible"
+resticprofile_sftp_server: false
+resticprofile_sftp_client: false
+resticprofile_rclone_client: false
+resticprofile_sftp_servers: []
 # description: backup user on the client
 # type: string
-restic_client_user: root
+resticprofile_client_user: root
 
 # description: ssh key on the backup client to connect to the backup server
 # type: string
-restic_ssh_key: "~{{ restic_client_user }}/.ssh/id_restic_{{ restic_ssh_key_type }}"
+resticprofile_ssh_key: "~{{ restic_client_user }}/.ssh/id_restic_{{ resticprofile_ssh_key_type }}"
 
 # description: ssh key bits number to use when generating new keys
 # type: integer
-restic_ssh_key_bits: 2048
+resticprofile_ssh_key_bits: 2048
 
 # description: ssh key type to use when generating new keys
 # type: string
-restic_ssh_key_type: "ed25519"
+resticprofile_ssh_key_type: "ed25519"
+
+#restic_passphrase: <set password in config>
+
+# The following restic_* variables are used to configure restic itself, not the
+# resticprofile role. We intentionally ignore the var-naming[no-role-prefix]
+# linting rule for these variables.
+restic_version: 0.16.4 # noqa: var-naming[no-role-prefix]
+restic_sftp_server: true # noqa: var-naming[no-role-prefix]
+restic_sftp_client: true # noqa: var-naming[no-role-prefix]
+restic_rclone_client: true # noqa: var-naming[no-role-prefix]
+restic_arch: amd64 # noqa: var-naming[no-role-prefix]
+restic_sftp_servers: [] # noqa: var-naming[no-role-prefix]
+restic_client_user: restic # noqa: var-naming[no-role-prefix]
+restic_ssh_key: /root/.ssh/id_ed25519 # noqa: var-naming[no-role-prefix]
+restic_ssh_key_bits: 256 # noqa: var-naming[no-role-prefix]
+restic_ssh_key_type: ed25519 # noqa: var-naming[no-role-prefix]
