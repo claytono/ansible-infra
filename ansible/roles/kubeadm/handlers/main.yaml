@@ -1,5 +1,5 @@
 ---
 - name: "Restart iscsid"
-  service:
+  ansible.builtin.service:
     name: iscsid
     state: restarted

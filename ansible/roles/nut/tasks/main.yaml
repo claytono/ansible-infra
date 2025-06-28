@@ -1,16 +1,17 @@
+---
 - name: Install NUT email notification script (if email is set)
-  template:
+  ansible.builtin.template:
     src: notify-email.sh.j2
     dest: /etc/nut/notify-email.sh
     owner: root
     group: nut
-    mode: '0750'
+    mode: "0750"
   become: true
   when: nut_notify_email is defined and nut_notify_email | length > 0
   tags: nut
 
 - name: Set NOTIFYCMD and NOTIFYFLAGs for upssched (if email is set)
-  set_fact:
+  ansible.builtin.set_fact:
     nut_upsmon_notifycmd: /usr/sbin/upssched
     nut_upsmon_notifyflags:
       - { name: "ONBATT", level: "SYSLOG+EXEC" }
@@ -24,12 +25,12 @@
   tags: nut
 
 - name: Include ntd.nut role for core NUT setup
-  include_role:
+  ansible.builtin.include_role:
     name: ntd.nut
   tags: nut
 
 - name: Install upssched.conf
-  template:
+  ansible.builtin.template:
     src: "nut/upssched.conf.j2"
     dest: "/etc/nut/upssched.conf"
     owner: "root"
@@ -39,10 +40,10 @@
   tags: nut
 
 - name: Stop nut services if disabled
-  service:
+  ansible.builtin.service:
     name: "{{ item }}"
     state: stopped
-    enabled: no
+    enabled: false
   with_items:
     - nut-server
     - nut-client

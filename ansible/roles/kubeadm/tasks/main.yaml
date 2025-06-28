@@ -1,9 +1,8 @@
 ---
-- include_tasks: common.yaml
-- include_tasks: iscsi.yaml
-
-- include_tasks: master.yaml
+- ansible.builtin.include_tasks: common.yaml
+- ansible.builtin.include_tasks: iscsi.yaml
+- ansible.builtin.include_tasks: master.yaml
   when: is_kubernetes_master
 
-- include_tasks: nodes.yaml
+- ansible.builtin.include_tasks: nodes.yaml
   when: is_kubernetes_node

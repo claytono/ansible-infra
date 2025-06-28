@@ -1,34 +1,35 @@
+---
 - name: server | create user
-  user:
+  ansible.builtin.user:
     name: "{{ item.user }}"
     shell: "/bin/bash"
     home: "{{ item.home }}"
     createhome: "yes"
   delegate_to: "{{ item.fqdn }}"
-  with_items: "{{ restic_sftp_servers }}"
+  with_items: "{{ resticprofile_sftp_servers }}"
   run_once: true
 
 - name: "Set repo user home to be owned by root for chroot"
-  file:
+  ansible.builtin.file:
     dest: "{{ item.home }}"
     owner: "root"
     group: "root"
     mode: "0755"
   delegate_to: "{{ item.fqdn }}"
-  with_items: "{{ restic_sftp_servers }}"
+  with_items: "{{ resticprofile_sftp_servers }}"
 
 - name: server | create directories
-  file:
+  ansible.builtin.file:
     path: "{{ item.home }}{{ item.pool }}"
     state: "directory"
     owner: "{{ item.user }}"
     group: "{{ item.user }}"
     mode: "0770"
   delegate_to: "{{ item.fqdn }}"
-  with_items: "{{ restic_sftp_servers }}"
+  with_items: "{{ resticprofile_sftp_servers }}"
 
 - name: "Setup restic user ssh access to sftp only"
-  copy:
+  ansible.builtin.copy:
     content: |
       Match user {{ item.user }}
       ChrootDirectory {{ item.home }}
@@ -39,12 +40,12 @@
     dest: "/etc/ssh/sshd_config.d/restic.conf"
   delegate_to: "{{ item.fqdn }}"
   register: sshd_config
-  with_items: "{{ restic_sftp_servers }}"
+  with_items: "{{ resticprofile_sftp_servers }}"
 
 - name: restart sshd
-  service:
+  ansible.builtin.service:
     name: sshd
     state: restarted
   delegate_to: "{{ item.fqdn }}"
-  with_items: "{{ restic_sftp_servers }}"
+  with_items: "{{ resticprofile_sftp_servers }}"
   when: sshd_config.changed
