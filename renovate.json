@@ -1,0 +1,32 @@
+{
+  "extends": ["config:base"],
+  "pre-commit": {
+    "enabled": true
+  },
+  "regexManagers": [
+    {
+      "fileMatch": ["^ansible/roles/resticprofile/defaults/main.yaml$"],
+      "matchStrings": [
+        "restic_version:\\s*\"?(?<currentValue>\\d+\\.\\d+\\.\\d+)\"?\\s*(#.*)?$"
+      ],
+      "depNameTemplate": "restic/restic",
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "fileMatch": ["^ansible/roles/resticprofile/defaults/main.yaml$"],
+      "matchStrings": [
+        "resticprofile_version:\\s*\"?(?<currentValue>\\d+\\.\\d+\\.\\d+)\"?\\s*(#.*)?$"
+      ],
+      "depNameTemplate": "matthiasbeyer/resticprofile",
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "fileMatch": ["^ansible/galaxy.yaml$"],
+      "matchStrings": [
+        "version: ?\"?(?<currentValue>[a-zA-Z0-9._-]+)\"?"
+      ],
+      "depNameTemplate": "ansible-galaxy-role",
+      "datasourceTemplate": "ansible-galaxy"
+    }
+  ]
+}
