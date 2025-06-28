@@ -26,6 +26,7 @@
   ansible.builtin.get_url:
     url: "https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml"
     dest: "/root"
+    mode: "0644"
 
 - name: "Switch config from vxlan to host-gw"
   ansible.builtin.lineinfile:

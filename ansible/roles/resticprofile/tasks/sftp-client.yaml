@@ -24,6 +24,7 @@
         {% if item.port is defined %}
         Port {{ item.port }}
         {% endif %}
+    mode: "0600"
   with_items: "{{ resticprofile_sftp_servers }}"
 
 - name: Client | put sshpubkey on the normal backupserver
