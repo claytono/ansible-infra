@@ -1,5 +1,5 @@
 ---
-- name: server | create user
+- name: Server | create user
   ansible.builtin.user:
     name: "{{ item.user }}"
     shell: "/bin/bash"
@@ -18,7 +18,7 @@
   delegate_to: "{{ item.fqdn }}"
   with_items: "{{ resticprofile_sftp_servers }}"
 
-- name: server | create directories
+- name: Server | create directories
   ansible.builtin.file:
     path: "{{ item.home }}{{ item.pool }}"
     state: "directory"
@@ -42,7 +42,7 @@
   register: sshd_config
   with_items: "{{ resticprofile_sftp_servers }}"
 
-- name: restart sshd
+- name: Restart sshd
   ansible.builtin.service:
     name: sshd
     state: restarted

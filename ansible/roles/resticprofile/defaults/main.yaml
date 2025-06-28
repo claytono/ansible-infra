@@ -13,7 +13,6 @@ resticprofile_sftp_servers: []
 # type: string
 resticprofile_client_user: root
 
-
 # The following restic_* variables are used to configure restic itself, not the
 # resticprofile role. We intentionally ignore the var-naming[no-role-prefix]
 # linting rule for these variables.

@@ -11,7 +11,7 @@
     group: root
     mode: "0644"
 
-- name: "kubeadm init"
+- name: "Kubeadm init"
   ansible.builtin.command: "kubeadm init --config /root/kubeadm.conf"
   args:
     creates: "/etc/kubernetes/admin.conf"
