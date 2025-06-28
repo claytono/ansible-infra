@@ -1,5 +1,5 @@
 ---
-tailscale_args: --advertise-exit-node #--accept-dns=false
+tailscale_args: --advertise-exit-node # --accept-dns=false
 ip_forwarding_enabled: true
 restic_prometheus_config: {}
 restic_host_config:

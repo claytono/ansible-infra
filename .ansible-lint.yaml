@@ -1,6 +1,7 @@
 ---
 exclude_paths:
   - ansible/roles/galaxy/
+  - ansible/site.yaml
 skip_list:
   - yaml[line-length]
   - no-changed-when

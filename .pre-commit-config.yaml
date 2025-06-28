@@ -19,6 +19,8 @@ repos:
         exclude: ^ansible/roles/galaxy/
         args:
           - ansible
+        env:
+          ANSIBLE_CONFIG: ansible/ansible.cfg
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.10.0.1
