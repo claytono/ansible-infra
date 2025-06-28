@@ -1,5 +1,5 @@
 ---
-#restic_passphrase: <set password in config>
+# restic_passphrase: <set password in config>
 
 resticprofile_version: "0.21.0"
 resticprofile_arch: amd64

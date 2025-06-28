@@ -53,7 +53,7 @@
     value: "0"
 
 - name: "Turn off swap"
-  ansible.builtin.shell: "swapoff -a"
+  ansible.builtin.command: "swapoff -a"
 - name: "Disable swap in fstab"
   ansible.builtin.replace:
     path: /etc/fstab
@@ -81,7 +81,7 @@
 - name: "Install apt-transport-https"
   ansible.builtin.apt:
     name: apt-transport-https
-    state: latest
+    state: latest # noqa package-latest
 
 - name: "Add Kubernetes APT key"
   ansible.builtin.copy:
