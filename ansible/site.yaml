@@ -1,5 +1,6 @@
 ---
-- hosts: all
+- name: Install Python if needed
+  hosts: all
   gather_facts: false
 #  tasks:
 #    - include_vars: vars/vault.yaml
@@ -9,13 +10,15 @@
       when: "setup_upgrade | default(false) | bool"
       tags: setup_upgrade
 
-- hosts: all
+- name: System upgrade
+  hosts: all
   roles:
     - role: setup_upgrade
       when: "setup_upgrade | default(false) | bool"
       tags: setup_upgrade
 
-- hosts: all
+- name: Common and network roles
+  hosts: all
   roles:
     - role: common
     - role: layereight.wifi
@@ -26,21 +29,26 @@
       tags: network
       when: "manage_network | default(false) | bool"
 
-- hosts: all
+- name: User group management
+  hosts: all
   roles:
     - anxs.generic-users
   tasks:
     - name: Get user groups
-      getent:
+      ansible.builtin.getent:
         database: group
 
     - name: Add coneill to groups if they exist
-      user: name="coneill" groups="{{item}}" append=yes
+      ansible.builtin.user:
+        name: "coneill"
+        groups: "{{ item }}"
+        append: true
       when: item in ansible_facts.getent_group
-      with_items:
+      loop:
         - libvirt
 
-- hosts: all
+- name: Chrony, relaymail, and resticprofile
+  hosts: all
   roles:
     - tbaczynski.chrony
     - role: yannik.relaymail
@@ -48,59 +56,70 @@
     - role: resticprofile
       tags: restic
 
-- hosts: certbot
+- name: Certbot
+  hosts: certbot
   become: true
   roles:
     - role: certbot
       tags: certbot
 
-- hosts: nut
+- name: NUT
+  hosts: nut
   roles:
     - role: nut
       tags: nut
 
-- hosts: kubernetes
+- name: Pin containerd version
+  hosts: kubernetes
   tasks:
     - name: "Create containerd package pin for version"
-      copy:
+      ansible.builtin.copy:
         dest: "/etc/apt/preferences.d/containerd"
         content: |
           Package: containerd.io
           Pin: version {{ containerd_version }}
           Pin-Priority: 900
+        mode: "0644"
       when: containerd_version is defined
 
-- hosts: kubernetes
+- name: Containerd role
+  hosts: kubernetes
   roles:
     - role: geerlingguy.containerd
       tags: containerd
 
-- hosts: all,!tailscale_disabled
+- name: Tailscale sysctl config
+  hosts: all,!tailscale_disabled
   roles:
     - role: artis3n.tailscale
       tags: tailscale
   tasks:
     - name: "Configure sysctl for tailscale ip forwarding"
-      copy:
+      ansible.builtin.copy:
         dest: /etc/sysctl.d/99-kubernetes-cri.conf
         content: |
           net.ipv4.ip_forward=1
           net.ipv6.conf.all.forwarding=1
+        mode: "0644"
       register: sysctl_file
       when: ip_forwarding_enabled | default(false) | bool
       tags: tailscale
+      notify: Reload sysctl for tailscale ip forwarding
 
-    - name: "Reload sysctl for tailscale ip forwarding"
-      command: sysctl --system
+  handlers:
+    - name: Reload sysctl for tailscale ip forwarding
+      ansible.builtin.command: sysctl --system
       when: sysctl_file.changed
       tags: tailscale
 
-- hosts: kubernetes
+- name: Kubernetes role
+  hosts: kubernetes
   roles:
     - role: kubeadm
       tags: kubernetes
 
-- hosts: all
+- name: Prometheus node exporter
+  hosts: all
   roles:
     - role: undergreen.prometheus-node-exporter
       tags: prom

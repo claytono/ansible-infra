@@ -1,6 +1,0 @@
-# This file contains ignores rule violations for ansible-lint
-ansible/host_vars/frank.yaml yaml[comments]
-ansible/roles/kubeadm/tasks/main.yaml name[missing]
-ansible/roles/nut/meta/main.yaml syntax-check[specific]
-ansible/roles/setup_upgrade/handlers/main.yaml no-changed-when
-ansible/site.yaml syntax-check[specific]

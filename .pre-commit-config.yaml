@@ -15,12 +15,9 @@ repos:
     rev: v24.12.2
     hooks:
       - id: ansible-lint
+        entry: bash -c 'ANSIBLE_CONFIG=ansible/ansible.cfg ansible-lint "$@"' --
         files: ^ansible/.*
         exclude: ^ansible/roles/galaxy/
-        args:
-          - ansible
-        env:
-          ANSIBLE_CONFIG: ansible/ansible.cfg
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.10.0.1
