@@ -10,6 +10,10 @@ terraform {
       source  = "vultr/vultr"
       version = "~> 2.15"
     }
+    onepassword = {
+      source  = "1Password/onepassword"
+      version = "~> 2.1"
+    }
   }
 
   backend "s3" {
@@ -18,6 +22,11 @@ terraform {
     region  = "us-east-1"
     encrypt = true
   }
+}
+
+# 1Password provider configuration
+provider "onepassword" {
+  account = "6GO3NBF2PRCY3NAW6SN2CG6I2U"
 }
 
 provider "aws" {
@@ -31,7 +40,7 @@ provider "aws" {
 }
 
 provider "vultr" {
-  api_key = var.vultr_api_key
+  api_key = local.vultr_api_key
 }
 
 module "dns" {
