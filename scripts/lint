@@ -13,6 +13,10 @@ set -e
 # Change to repo root
 cd "$(dirname "$0")/.."
 
+# Ensure Ansible Galaxy roles are installed (under Nix)
+./ansible/scripts/docker-nix-wrapper.sh \
+  ansible-galaxy install -r ansible/galaxy.yaml -p ansible/roles/galaxy
+
 # Default to running on changed files if no arguments provided
 if [[ $# -eq 0 ]]; then
     echo "Running pre-commit hooks on changed files..."
