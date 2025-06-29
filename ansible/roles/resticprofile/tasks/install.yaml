@@ -65,7 +65,7 @@
 
 - name: Download restic
   ansible.builtin.get_url:
-    url: "https://github.com/restic/restic/releases/download/v{{ restic_version }}/restic_{{ restic_version }}_{{resticprofile_os}}_{{ restic_arch }}.bz2"
+    url: "https://github.com/restic/restic/releases/download/v{{ restic_version }}/restic_{{ restic_version }}_{{ resticprofile_os }}_{{ restic_arch }}.bz2"
     dest: "{{ resticprofile_tmp_dir }}/restic.bz2"
     mode: "0640"
   vars:

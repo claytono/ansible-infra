@@ -1,5 +1,6 @@
 ---
-- ansible.builtin.user:
+- name: "Ensure resticprofile client user exists"
+  ansible.builtin.user:
     name: "{{ resticprofile_client_user }}"
     state: present
   register: restic_user_info
