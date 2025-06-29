@@ -6,6 +6,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 6.0"
     }
+    vultr = {
+      source  = "vultr/vultr"
+      version = "~> 2.15"
+    }
   }
 
   backend "s3" {
@@ -24,6 +28,10 @@ provider "aws" {
       ManagedBy = "opentofu"
     }
   }
+}
+
+provider "vultr" {
+  api_key = var.vultr_api_key
 }
 
 module "dns" {
