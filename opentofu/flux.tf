@@ -1,6 +1,6 @@
 resource "vultr_ssh_key" "flux" {
   name    = "flux-ssh-key"
-  ssh_key = file(var.ssh_pubkey_path)
+  ssh_key = trimspace(file(var.ssh_pubkey_path))
 }
 
 # To get available OS IDs, run:
@@ -8,11 +8,24 @@ resource "vultr_ssh_key" "flux" {
 
 resource "vultr_instance" "flux" {
   plan        = "vc2-1c-1gb"
-  region      = "ewr" # Change if you want a different region
-  os_id       = 477   # Debian 11 x64 (bullseye)
+  region      = "ewr"
+  os_id       = 477 # Debian 11 x64 (bullseye)
   label       = "flux.fnord.net"
   hostname    = "flux"
   ssh_key_ids = [vultr_ssh_key.flux.id]
+  enable_ipv6 = true
+}
+
+resource "vultr_reverse_ipv4" "flux" {
+  instance_id = vultr_instance.flux.id
+  ip          = vultr_instance.flux.main_ip
+  reverse     = "flux.fnord.net"
+}
+
+resource "vultr_reverse_ipv6" "flux" {
+  instance_id = vultr_instance.flux.id
+  ip          = vultr_instance.flux.v6_main_ip
+  reverse     = "flux.fnord.net"
 }
 
 data "aws_route53_zone" "fnord_net" {
@@ -28,6 +41,10 @@ resource "aws_route53_record" "flux_a" {
   records = [vultr_instance.flux.main_ip]
 }
 
-output "flux_ip" {
-  value = vultr_instance.flux.main_ip
+resource "aws_route53_record" "flux_aaaa" {
+  zone_id = data.aws_route53_zone.fnord_net.zone_id
+  name    = "flux.fnord.net"
+  type    = "AAAA"
+  ttl     = 300
+  records = [vultr_instance.flux.v6_main_ip]
 }
