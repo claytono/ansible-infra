@@ -1,0 +1,62 @@
+# syntax=docker/dockerfile:1
+
+FROM debian:bullseye-slim
+
+# Enable contrib, non-free, and non-free-firmware components
+RUN sed -i 's/main$/main contrib non-free non-free-firmware/' /etc/apt/sources.list
+# Install dependencies for Nix
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        curl \
+        ca-certificates \
+        git \
+        sudo \
+        bash \
+        xz-utils
+
+# Add a non-root user for Nix with UID 9000
+RUN useradd -m -u 9000 -s /bin/bash ansible
+# Enable passwordless sudo for ansible user
+RUN echo 'ansible ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/ansible && chmod 0440 /etc/sudoers.d/ansible
+
+# Install Nix (multi-user)
+RUN mkdir -m 0755 /nix && chown ansible /nix
+RUN curl -L https://install.determinate.systems/nix | \
+    bash -s -- install linux --init none --no-confirm
+# Add ansible user to all existing nixbld* groups and set permissions
+RUN for g in $(getent group | awk -F: '/^nixbld/ {print $1}'); do \
+        usermod -aG "$g" ansible; \
+    done && \
+    chown -R ansible /nix
+USER ansible
+ENV USER=ansible
+ENV NIX_PATH="nixpkgs=channel:nixos-unstable"
+ENV PATH="/home/ansible/.nix-profile/bin:/home/ansible/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/nix/var/nix/profiles/default/bin"
+ENV NIX_CONFIG="experimental-features = nix-command flakes"
+SHELL ["/bin/bash", "-c"]
+
+WORKDIR /workspace/ansible
+# Copy only ansible directory and flake config
+COPY --chown=ansible:ansible ansible /workspace/ansible
+COPY --chown=ansible:ansible flake.nix flake.lock /workspace/
+
+# Ensure the Nix wrapper is executable before using it
+RUN chmod +x ../ansible/scripts/docker-nix-wrapper.sh
+
+# Create a minimal inventory file for localhost and add it to tailscale_disabled group
+RUN mkdir -p inventory && \
+    cat > inventory/test_local <<EOF
+[local]
+localhost ansible_connection=local
+
+[tailscale_disabled]
+localhost
+EOF
+
+# Install Ansible Galaxy roles using the Nix wrapper
+RUN ../ansible/scripts/docker-nix-wrapper.sh \
+    ansible-galaxy install \
+    -r galaxy.yaml \
+    -p roles/galaxy
+
+ENTRYPOINT ["../ansible/scripts/docker-nix-wrapper.sh"]

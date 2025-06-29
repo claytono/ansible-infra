@@ -2,7 +2,7 @@
 manage_network: true
 interfaces_bond_interfaces:
   - device: bond0
-    bond_slaves: [ enp2s0f0, enp2s0f1 ]
+    bond_slaves: [enp2s0f0, enp2s0f1]
     hwaddr: "06:bc:96:51:3a:b0"
     bootproto: dhcp
     bond_mode: 802.3ad

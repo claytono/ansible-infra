@@ -1,154 +1,162 @@
 ---
 - name: "Install prereq packages"
-  apt:
+  ansible.builtin.apt:
     name:
-    - "nfs-common"
+      - "nfs-common"
 
 - name: "Configure kernel modules for containerd"
-  copy:
+  ansible.builtin.copy:
     dest: /etc/modules-load.d/containerd.conf
     content: |
       overlay
       br_netfilter
+    mode: "0644"
 
 - name: "Load kernel modules for containerd"
-  modprobe:
+  community.general.modprobe:
     name: "{{ item }}"
     state: present
   with_items:
-  - overlay
-  - br_netfilter
+    - overlay
+    - br_netfilter
 
 - name: "Configure sysctl for containerd"
-  copy:
+  ansible.builtin.copy:
     dest: /etc/sysctl.d/99-kubernetes-cri.conf
     content: |
       net.bridge.bridge-nf-call-iptables  = 1
       net.ipv4.ip_forward                 = 1
       net.bridge.bridge-nf-call-ip6tables = 1
+    mode: "0644"
   register: sysctl_file
 
 - name: "Configure sysctl for inotify watches for Kubernetes"
-  copy:
+  ansible.builtin.copy:
     dest: "/etc/sysctl.d/90-kubernetes-inotify.conf"
     content: |
       fs.inotify.max_user_watches = 1048576
+    mode: "0644"
   register: inotify_sysctl_file
 
 - name: "Reload sysctl for containerd"
-  command: sysctl --system
+  ansible.builtin.command: sysctl --system
   when: sysctl_file.changed or inotify_sysctl_file.changed
 
 - name: "Disabling accepting ICMP redirects"
-  sysctl:
+  ansible.posix.sysctl:
     name: "net.ipv4.conf.all.accept_redirects"
     value: "0"
 
 - name: "Disabling sending ICMP redirects"
-  sysctl:
+  ansible.posix.sysctl:
     name: "net.ipv4.conf.all.send_redirects"
     value: "0"
 
 - name: "Turn off swap"
-  shell: "swapoff -a"
-
+  ansible.builtin.command: "swapoff -a"
 - name: "Disable swap in fstab"
-  replace:
+  ansible.builtin.replace:
     path: /etc/fstab
-    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
-    replace: '# \1'
+    regexp: "^([^#].*?\\sswap\\s+sw\\s+.*)$"
+    replace: "# \\1"
 
 - name: "Disable nftables on Debian"
-  alternatives:
+  community.general.alternatives:
     name: iptables
     path: /usr/sbin/iptables-legacy
   when: ansible_facts['distribution'] == "Debian"
 
 - name: "Disable systemd-resolved"
-  systemd:
+  ansible.builtin.systemd:
     name: systemd-resolved
-    enabled: no
+    enabled: false
     state: stopped
 
 - name: "Disable systemd-resolved dhclient integration"
-  file:
+  ansible.builtin.file:
     path: /etc/dhcp/dhclient-enter-hooks.d/resolved
     state: absent
   register: dhclient_resolved_file
 
 - name: "Install apt-transport-https"
-  apt:
-     name: apt-transport-https
-     state: latest
+  ansible.builtin.apt:
+    name: apt-transport-https
+    state: latest # noqa package-latest
 
 - name: "Add Kubernetes APT key"
-  copy:
+  ansible.builtin.copy:
     # Copy from role's files directory to remote host
     src: "kubernetes-apt-keyring.gpg"
     dest: "/etc/apt/trusted.gpg.d/kubernetes-apt-keyring.gpg"
+    mode: "0644"
 
 - name: "Remove old Kubernetes APT repo"
-  file:
+  ansible.builtin.file:
     path: "/etc/apt/sources.list.d/kubernetes.list"
     state: absent
 
 - name: "Add Kubernetes APT repo"
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_short_version }}/deb/ /"
-    update_cache: yes
+    update_cache: true
 
 - name: "Create kubeadm package pin for version"
-  copy:
+  ansible.builtin.copy:
     dest: "/etc/apt/preferences.d/kubeadm"
     content: |
       Package: kubeadm
       Pin: version {{ kubeadm_version }}
       Pin-Priority: 900
+    mode: "0644"
   when: kubeadm_version is defined
 
 - name: "Create kubelet package pin for version"
-  copy:
+  ansible.builtin.copy:
     dest: "/etc/apt/preferences.d/kubelet"
     content: |
       Package: kubelet
       Pin: version {{ kubelet_version }}
       Pin-Priority: 900
+    mode: "0644"
   when: kubelet_version is defined
 
 - name: "Create kubectl package pin for version"
-  copy:
+  ansible.builtin.copy:
     dest: "/etc/apt/preferences.d/kubectl"
     content: |
       Package: kubectl
       Pin: version {{ kubectl_version }}
       Pin-Priority: 900
+    mode: "0644"
   when: kubectl_version is defined
 
 - name: "Create kubernetes-cni package pin for version"
-  copy:
+  ansible.builtin.copy:
     dest: "/etc/apt/preferences.d/kubernetes-cni"
     content: |
       Package: kubernetes-cni
       Pin: version {{ kubernetes_cni_version }}
       Pin-Priority: 900
+    mode: "0644"
   when: kubernetes_cni_version is defined
 
 - name: "Create cri-tools package pin for version"
-  copy:
+  ansible.builtin.copy:
     dest: "/etc/apt/preferences.d/cri-tools"
     content: |
       Package: cri-tools
       Pin: version {{ cri_tools_version }}
       Pin-Priority: 900
+    mode: "0644"
   when: cri_tools_version is defined
 
 - name: "Install packages"
-  apt:
+  ansible.builtin.apt:
     name:
-    - "cri-tools={{ cri_tools_version }}"
-    - "kubelet={{ kubelet_version }}"
-    - "kubeadm={{ kubeadm_version }}"
-    - "kubectl={{ kubectl_version }}"
-    - "kubernetes-cni={{ kubernetes_cni_version }}"
+      - "cri-tools={{ cri_tools_version }}"
+      - "kubelet={{ kubelet_version }}"
+      - "kubeadm={{ kubeadm_version }}"
+      - "kubectl={{ kubectl_version }}"
+      - "kubernetes-cni={{ kubernetes_cni_version }}"
     state: present
-    allow_downgrade: yes
+    allow_downgrade: true

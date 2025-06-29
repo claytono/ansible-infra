@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+# Usage:
+#   ./ansible/scripts/docker-integration-test           # Run playbook
+#   ./ansible/scripts/docker-integration-test bash      # Get a shell
+#   ./ansible/scripts/docker-integration-test ansible --version  # Custom command
+
+cd "$(dirname "$0")/../.."
+
+echo "Building Ansible integration test image..."
+docker build --load -t ansible-integration-test -f Dockerfile.ansible .
+
+if [[ $# -eq 0 ]]; then
+    echo "Running playbook in container (default)..."
+    docker run --rm ansible-integration-test ansible-playbook -i inventory/test_local site.yaml
+else
+    echo "Running in container with custom command: $*"
+    docker run --rm -it ansible-integration-test "$@"
+fi

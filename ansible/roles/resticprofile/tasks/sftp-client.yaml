@@ -1,34 +1,36 @@
 ---
-- name: client | generate ssh key for this machine
-  user:
-    name: "{{ restic_client_user }}"
+- name: Client | generate ssh key for this machine
+  ansible.builtin.user:
+    name: "{{ resticprofile_client_user }}"
     generate_ssh_key: true
-    ssh_key_file: "{{ restic_ssh_key }}"
-    ssh_key_bits: "{{ restic_ssh_key_bits }}"
-    ssh_key_type: "{{ restic_ssh_key_type }}"
+    ssh_key_file: "{{ resticprofile_ssh_key }}"
+    ssh_key_bits: "{{ resticprofile_ssh_key_bits }}"
+    ssh_key_type: "{{ resticprofile_ssh_key_type }}"
 
-- name: client | fetch ssh-key
-  command: "cat {{ restic_ssh_key }}.pub"
+- name: Client | fetch ssh-key
+  ansible.builtin.command: "cat {{ resticprofile_ssh_key }}.pub"
   register: sshkey
   changed_when: false
 
-- name: client | disable strict key checking for backup servers
-  blockinfile:
-    dest: "~{{ restic_client_user }}/.ssh/config"
+- name: Client | disable strict key checking for backup servers
+  ansible.builtin.blockinfile:
+    dest: "~{{ resticprofile_client_user }}/.ssh/config"
     create: true
     marker: "### {mark} ANSIBLE MANAGED BLOCK for restic: {{ item.fqdn }} ###"
     content: |
       Host {{ item.fqdn }}
         StrictHostKeyChecking no
-        IdentityFile {{ restic_ssh_key }}
+        IdentityFile {{ resticprofile_ssh_key }}
         {% if item.port is defined %}
         Port {{ item.port }}
         {% endif %}
-  with_items: "{{ restic_sftp_servers }}"
+    mode: "0600"
+  with_items: "{{ resticprofile_sftp_servers }}"
 
-- name: client | put sshpubkey on the normal backupserver
-  authorized_key:
+- name: Client | put sshpubkey on the normal backupserver
+  ansible.posix.authorized_key:
     user: "{{ item.user }}"
     key: "{{ sshkey.stdout }}"
   delegate_to: "{{ item.fqdn }}"
-  with_items: "{{ restic_sftp_servers }}"
+  with_items: "{{ resticprofile_sftp_servers }}"
+  when: resticprofile_ssh_register

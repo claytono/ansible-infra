@@ -1,11 +1,11 @@
 ---
-- name: "apt-get update"
-  apt:
-    update_cache: yes
+- name: "Apt-get update"
+  ansible.builtin.apt:
+    update_cache: true
     cache_valid_time: 3600
 
 - name: "Install boto3"
-  apt:
+  ansible.builtin.apt:
     name: "python3-boto3"
     state: present
 

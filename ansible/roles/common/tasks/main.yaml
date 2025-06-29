@@ -1,35 +1,35 @@
 ---
-- name: "apt-get update"
-  apt:
-    update_cache: yes
+- name: "Apt-get update"
+  ansible.builtin.apt:
+    update_cache: true
     cache_valid_time: 3600
 
 - name: "Remove unwanted packages"
-  apt:
-    name: "{{ packages_to_remove }}"
+  ansible.builtin.apt:
+    name: "{{ common_packages_to_remove }}"
     state: absent
 
 - name: "Install wanted packages"
-  apt:
-    name: "{{ packages_to_install }}"
+  ansible.builtin.apt:
+    name: "{{ common_packages_to_install }}"
     state: present
-    autoremove: yes
+    autoremove: true
 
 - name: "Install non-free on Debian"
-  apt:
+  ansible.builtin.apt:
     name: firmware-misc-nonfree
     state: present
   when: ansible_distribution == 'Debian'
 
 - name: "Turn on passwordless sudo for sudo group"
-  lineinfile:
-      dest: /etc/sudoers
-      state: present
-      regexp: '^%sudo'
-      line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+  ansible.builtin.lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^%sudo"
+    line: "%sudo ALL=(ALL) NOPASSWD: ALL"
 
 - name: "Setup ssh authorized keys for root"
-  authorized_key:
+  ansible.posix.authorized_key:
     user: root
     key: "{{ item }}"
   loop: "{{ ssh_keys }}"

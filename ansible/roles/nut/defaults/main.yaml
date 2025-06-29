@@ -1,3 +1,4 @@
+---
 nut_peanut_enabled: false
 nut_peanut_port: 8080
 nut_peanut_nut_host: "localhost"

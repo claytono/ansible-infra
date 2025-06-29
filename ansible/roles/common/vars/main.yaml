@@ -1,10 +1,10 @@
 ---
-packages_to_remove:
+common_packages_to_remove:
   - gvfs
   - lxd
   - screen
   - xscreensaver
-packages_to_install:
+common_packages_to_install:
   - bc
   - bind9-host
   - bzip2
@@ -17,3 +17,4 @@ packages_to_install:
   - psmisc
   - tmux
   - vim
+  - openssh-client
