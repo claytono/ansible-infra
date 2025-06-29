@@ -1,0 +1,9 @@
+---
+# Vultr VPS running Debian 11 (bullseye)
+# vc2-1c-1gb instance
+tailscale_args: --advertise-exit-node # --accept-dns=false
+ip_forwarding_enabled: true
+restic_prometheus_config: {}
+restic_host_config:
+  default:
+    repository: sftp:restic@luser.fnord.net:/repos/{{ ansible_hostname }}
