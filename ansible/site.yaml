@@ -2,8 +2,6 @@
 - name: Install Python if needed
   hosts: all
   gather_facts: false
-#  tasks:
-#    - include_vars: vars/vault.yaml
 
   roles:
     - role: install_python
