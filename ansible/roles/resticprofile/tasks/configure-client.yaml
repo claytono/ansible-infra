@@ -1,7 +1,7 @@
 ---
-- name: Ensure restic client user exists
+- name: "Ensure resticprofile client user exists"
   ansible.builtin.user:
-    name: "{{ restic_client_user }}"
+    name: "{{ resticprofile_client_user }}"
     state: present
   register: restic_user_info
 
@@ -10,20 +10,20 @@
     path: "{{ restic_user_info.home }}/.config/resticprofile"
     state: directory
     mode: "0700"
-    owner: "{{ restic_client_user }}"
+    owner: "{{ resticprofile_client_user }}"
 
 - name: "Write passphrase to file"
   ansible.builtin.copy:
     content: "{{ restic_passphrase }}"
     dest: "{{ restic_user_info.home }}/.config/resticprofile/passphrase.txt"
-    owner: "{{ restic_client_user }}"
+    owner: "{{ resticprofile_client_user }}"
     mode: "0600"
 
 - name: "Write config file"
   ansible.builtin.template:
     src: "templates/config.j2"
     dest: "{{ restic_user_info.home }}/.config/resticprofile/profiles.yaml"
-    owner: "{{ restic_client_user }}"
+    owner: "{{ resticprofile_client_user }}"
     mode: "0600"
   register: config_file
 
@@ -31,7 +31,8 @@
   ansible.builtin.command: "{{ resticprofile_bin_dir }}/resticprofile status"
   register: restic_status
   changed_when: false
+  when: resticprofile_enable_scheduling
 
 - name: "Update resticprofile schedules"
   ansible.builtin.command: "{{ resticprofile_bin_dir }}/resticprofile schedule"
-  when: restic_status.stdout is search("not found$") or config_file.changed
+  when: resticprofile_enable_scheduling and (restic_status is defined and (restic_status.stdout is search("not found$") or config_file.changed))
