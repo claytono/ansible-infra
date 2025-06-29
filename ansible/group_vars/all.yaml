@@ -89,6 +89,18 @@ restic_default_config:
       source:
         - /
 
+      exclude:
+        # System caches
+        - /var/cache/*
+
+        # User caches
+        - /home/*/.cache/*
+        - /root/.cache/*
+
+        # Temporary files
+        - /tmp/*
+        - /var/tmp/*
+
       run-before: &run_before |-
         {% raw %}curl -sf https://healthchecks.io/api/v1/checks/  \
             -d '{ "api_key": "{{ $healthcheck_management_key }}", "name": "restic-{{ .Hostname }}-{{ .Profile.Name }}", "timeout": 259200, "channels": "*", "unique": ["name"] }' \
