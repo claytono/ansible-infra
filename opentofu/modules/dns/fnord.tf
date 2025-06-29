@@ -15,12 +15,40 @@ resource "aws_route53_record" "fnord_mx" {
   ]
 }
 
-resource "aws_route53_record" "figment" {
+# Fastmail DKIM CNAMEs
+resource "aws_route53_record" "dkim_fn1_fnord" {
   zone_id = aws_route53_zone.fnord_net.zone_id
-  name    = "figment.fnord.net"
-  type    = "A"
-  ttl     = 86400
-  records = ["67.207.139.204"]
+  name    = "fm1._domainkey.fnord.net"
+  type    = "CNAME"
+  ttl     = 3600
+  records = ["fm1.fnord.net.dkim.fmhosted.com"]
+}
+
+resource "aws_route53_record" "dkim_fn2_fnord" {
+  zone_id = aws_route53_zone.fnord_net.zone_id
+  name    = "fm2._domainkey.fnord.net"
+  type    = "CNAME"
+  ttl     = 3600
+  records = ["fm2.fnord.net.dkim.fmhosted.com"]
+}
+
+resource "aws_route53_record" "dkim_fn3_fnord" {
+  zone_id = aws_route53_zone.fnord_net.zone_id
+  name    = "fm3._domainkey.fnord.net"
+  type    = "CNAME"
+  ttl     = 3600
+  records = ["fm3.fnord.net.dkim.fmhosted.com"]
+}
+
+# SPF TXT for Fastmail (messagingengine.com)
+resource "aws_route53_record" "spf_fnord" {
+  zone_id = aws_route53_zone.fnord_net.zone_id
+  name    = "fnord.net"
+  type    = "TXT"
+  ttl     = 3600
+  records = [
+    "v=spf1 include:_spf.google.com include:spf.messagingengine.com ~all"
+  ]
 }
 
 resource "aws_route53_record" "lucy" {
