@@ -1,5 +1,5 @@
 ---
-- name: client | generate ssh key for this machine
+- name: Client | generate ssh key for this machine
   ansible.builtin.user:
     name: "{{ resticprofile_client_user }}"
     generate_ssh_key: true
@@ -7,12 +7,12 @@
     ssh_key_bits: "{{ resticprofile_ssh_key_bits }}"
     ssh_key_type: "{{ resticprofile_ssh_key_type }}"
 
-- name: client | fetch ssh-key
+- name: Client | fetch ssh-key
   ansible.builtin.command: "cat {{ resticprofile_ssh_key }}.pub"
   register: sshkey
   changed_when: false
 
-- name: client | disable strict key checking for backup servers
+- name: Client | disable strict key checking for backup servers
   ansible.builtin.blockinfile:
     dest: "~{{ resticprofile_client_user }}/.ssh/config"
     create: true
@@ -24,9 +24,10 @@
         {% if item.port is defined %}
         Port {{ item.port }}
         {% endif %}
+    mode: "0600"
   with_items: "{{ resticprofile_sftp_servers }}"
 
-- name: client | put sshpubkey on the normal backupserver
+- name: Client | put sshpubkey on the normal backupserver
   ansible.posix.authorized_key:
     user: "{{ item.user }}"
     key: "{{ sshkey.stdout }}"
