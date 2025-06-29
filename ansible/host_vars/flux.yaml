@@ -6,6 +6,6 @@ ip_forwarding_enabled: true
 restic_prometheus_config: {}
 restic_host_config:
   default:
-    # Use a dedicatd repo.  This host has limited disk and memory, so pulling
+    # Use a dedicated repo.  This host has limited disk and memory, so pulling
     # the index for all other machines is not practical.
     repository: sftp:restic@luser.fnord.net:/repos/{{ ansible_hostname }}
