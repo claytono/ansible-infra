@@ -1,9 +1,4 @@
 ---
-- name: "Install ipvsadm for debugging"
-  ansible.builtin.apt:
-    name: "ipvsadm"
-    state: "latest"
-
 - name: "Reset kubeadm if requested"
   ansible.builtin.command: "kubeadm reset"
   when: "kubeadm_reset |default(false) |bool"

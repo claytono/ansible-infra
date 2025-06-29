@@ -11,7 +11,7 @@
     group: root
     mode: "0644"
 
-- name: "kubeadm init"
+- name: "Kubeadm init"
   ansible.builtin.command: "kubeadm init --config /root/kubeadm.conf"
   args:
     creates: "/etc/kubernetes/admin.conf"
@@ -26,6 +26,7 @@
   ansible.builtin.get_url:
     url: "https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml"
     dest: "/root"
+    mode: "0644"
 
 - name: "Switch config from vxlan to host-gw"
   ansible.builtin.lineinfile:

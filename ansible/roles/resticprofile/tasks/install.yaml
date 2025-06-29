@@ -41,7 +41,7 @@
 
 - name: Compare resticprofile versions
   ansible.builtin.set_fact:
-    resticprofile_install_resticprofile: "{{ resticprofile_version!= resticprofile_current_version }}"
+    resticprofile_install_resticprofile: "{{ resticprofile_version != resticprofile_current_version }}"
   vars:
     resticprofile_current_version: "{{ resticprofile_current.stdout | regex_replace('^resticprofile version (\\d+\\.\\d+\\.\\d+) .+$', '\\1') }}"
   when: resticprofile_bin.stat.exists
@@ -65,7 +65,7 @@
 
 - name: Download restic
   ansible.builtin.get_url:
-    url: "https://github.com/restic/restic/releases/download/v{{ resticprofile_restic_version }}/restic_{{ resticprofile_restic_version }}_{{resticprofile_os}}_{{ resticprofile_arch }}.bz2"
+    url: "https://github.com/restic/restic/releases/download/v{{ resticprofile_restic_version }}/restic_{{ resticprofile_restic_version }}_{{ resticprofile_os }}_{{ resticprofile_arch }}.bz2"
     dest: "{{ resticprofile_tmp_dir }}/restic.bz2"
     mode: "0640"
   vars:
@@ -84,7 +84,7 @@
 
 - name: Download resticprofile
   ansible.builtin.get_url:
-    url: "https://github.com/creativeprojects/resticprofile/releases/download/v{{ resticprofile_version }}/resticprofile_{{ resticprofile_version }}_{{resticprofile_os}}_{{resticprofile_arch}}.tar.gz"
+    url: "https://github.com/creativeprojects/resticprofile/releases/download/v{{ resticprofile_version }}/resticprofile_{{ resticprofile_version }}_{{ resticprofile_os }}_{{ resticprofile_arch }}.tar.gz"
     dest: "{{ resticprofile_tmp_dir }}/resticprofile.tar.gz"
     mode: "0640"
   vars:

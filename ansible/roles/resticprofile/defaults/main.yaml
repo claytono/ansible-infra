@@ -1,5 +1,5 @@
 ---
-#restic_passphrase: <set password in config>
+# restic_passphrase: <set password in config>
 
 resticprofile_version: "0.21.0"
 resticprofile_arch: amd64
@@ -12,7 +12,6 @@ resticprofile_sftp_servers: []
 # description: backup user on the client
 # type: string
 resticprofile_client_user: root
-
 
 # The following restic_* variables are used to configure restic itself, not the
 # resticprofile role. We intentionally ignore the var-naming[no-role-prefix]

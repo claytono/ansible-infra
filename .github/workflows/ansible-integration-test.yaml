@@ -1,11 +1,11 @@
+---
 name: Ansible Integration Test
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
-
+    branches: [main]
 jobs:
   ansible-integration-test:
     runs-on: ubuntu-latest
