@@ -45,8 +45,9 @@ resource "aws_route53_record" "oneill_spf" {
   name    = "oneill.net"
   type    = "TXT"
   ttl     = 3600
-  records = ["v=spf1 include:_spf.google.com include:pobox.com ~all"]
+  records = ["v=spf1 include:_spf.google.com include:spf.messagingengine.com ~all"]
 }
+
 
 resource "aws_route53_record" "dkim" {
   zone_id = aws_route53_zone.oneill_net.zone_id
@@ -54,6 +55,31 @@ resource "aws_route53_record" "dkim" {
   type    = "TXT"
   ttl     = 3600
   records = ["v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSWE5uk2EOlSVQ2Z68vMr04EQ5NoC0ki3wIDY3zIXFaEGbPisEJEYsNQ6fbj+d+9sc6kZ079M77S/FNpgZuWDepqZyT5SmzwGMw0RbUPr3F1JvQ9wFVx15P2ssPrFiY1Lv9vskqvanDka5+TDC7oiUd9oFZanF/KVLxMNsRRtStQIDAQAB"]
+}
+
+# Fastmail DKIM CNAME records for oneill.net
+resource "aws_route53_record" "dkim_fm1" {
+  zone_id = aws_route53_zone.oneill_net.zone_id
+  name    = "fm1._domainkey.oneill.net"
+  type    = "CNAME"
+  ttl     = 3600
+  records = ["fm1.oneill.net.dkim.fmhosted.com"]
+}
+
+resource "aws_route53_record" "dkim_fm2" {
+  zone_id = aws_route53_zone.oneill_net.zone_id
+  name    = "fm2._domainkey.oneill.net"
+  type    = "CNAME"
+  ttl     = 3600
+  records = ["fm2.oneill.net.dkim.fmhosted.com"]
+}
+
+resource "aws_route53_record" "dkim_fm3" {
+  zone_id = aws_route53_zone.oneill_net.zone_id
+  name    = "fm3._domainkey.oneill.net"
+  type    = "CNAME"
+  ttl     = 3600
+  records = ["fm3.oneill.net.dkim.fmhosted.com"]
 }
 
 # AWS Certificate Manager (ACM) SSL certificate validation records
