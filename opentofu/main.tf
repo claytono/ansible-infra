@@ -14,6 +14,10 @@ terraform {
       source  = "1Password/onepassword"
       version = "~> 2.1"
     }
+    b2 = {
+      source  = "Backblaze/b2"
+      version = "~> 0.10"
+    }
   }
 
   backend "s3" {
@@ -41,6 +45,11 @@ provider "aws" {
 
 provider "vultr" {
   api_key = local.vultr_api_key
+}
+
+provider "b2" {
+  application_key_id = local.b2_application_key_id
+  application_key    = local.b2_application_key
 }
 
 module "dns" {
