@@ -90,14 +90,10 @@
     dest: "/etc/apt/trusted.gpg.d/kubernetes-apt-keyring.gpg"
     mode: "0644"
 
-- name: "Remove old Kubernetes APT repo"
-  ansible.builtin.file:
-    path: "/etc/apt/sources.list.d/kubernetes.list"
-    state: absent
-
 - name: "Add Kubernetes APT repo"
   ansible.builtin.apt_repository:
     repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_short_version }}/deb/ /"
+    filename: "kubernetes"
     update_cache: true
 
 - name: "Create kubeadm package pin for version"
