@@ -1,5 +1,9 @@
 {
-  "extends": ["config:base"],
+  "extends": ["config:best-practices"],
+  "schedule": ["before 6am on monday"],
+  "minimumReleaseAge": "14 days",
+  "internalChecksFilter": "strict",
+  "semanticCommits": "disabled",
   "pre-commit": {
     "enabled": true
   },
