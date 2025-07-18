@@ -1,15 +1,22 @@
 {
-  "extends": ["config:best-practices"],
-  "schedule": ["before 6am on monday"],
+  "extends": [
+    "config:best-practices"
+  ],
+  "schedule": [
+    "before 6am on monday"
+  ],
   "minimumReleaseAge": "14 days",
   "internalChecksFilter": "strict",
   "semanticCommits": "disabled",
   "pre-commit": {
     "enabled": true
   },
-  "regexManagers": [
+  "customManagers": [
     {
-      "fileMatch": ["^ansible/roles/resticprofile/defaults/main.yaml$"],
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^ansible/roles/resticprofile/defaults/main.yaml$/"
+      ],
       "matchStrings": [
         "restic_version:\\s*\"?(?<currentValue>\\d+\\.\\d+\\.\\d+)\"?\\s*(#.*)?$"
       ],
@@ -17,7 +24,10 @@
       "datasourceTemplate": "github-releases"
     },
     {
-      "fileMatch": ["^ansible/roles/resticprofile/defaults/main.yaml$"],
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^ansible/roles/resticprofile/defaults/main.yaml$/"
+      ],
       "matchStrings": [
         "resticprofile_version:\\s*\"?(?<currentValue>\\d+\\.\\d+\\.\\d+)\"?\\s*(#.*)?$"
       ],
@@ -25,7 +35,10 @@
       "datasourceTemplate": "github-releases"
     },
     {
-      "fileMatch": ["^ansible/galaxy.yaml$"],
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^ansible/galaxy.yaml$/"
+      ],
       "matchStrings": [
         "version: ?\"?(?<currentValue>[a-zA-Z0-9._-]+)\"?"
       ],
