@@ -22,26 +22,6 @@
     line: "export KUBECONFIG=/etc/kubernetes/admin.conf"
     regexp: "^export KUBECONFIG="
 
-- name: "Retrieve flannel config"
-  ansible.builtin.get_url:
-    url: "https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml"
-    dest: "/root"
-    mode: "0644"
-
-- name: "Switch config from vxlan to host-gw"
-  ansible.builtin.lineinfile:
-    path: "/root/kube-flannel.yml"
-    regexp: '^(\s+)*"Type"\s*:\s*"vxlan"'
-    line: '\1"Type": "host-gw"'
-    backrefs: true
-
-- name: "Install flannel + config"
-  ansible.builtin.command: "kubectl apply -f /root/kube-flannel.yml"
-  args:
-    creates: "/etc/cni/net.d/10-flannel.conflist"
-  environment:
-    KUBECONFIG: "/etc/kubernetes/admin.conf"
-
 - name: "Fixup admin.conf to use fqdn"
   ansible.builtin.lineinfile:
     path: "/etc/kubernetes/admin.conf"
