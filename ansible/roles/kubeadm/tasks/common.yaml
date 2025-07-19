@@ -52,8 +52,16 @@
     name: "net.ipv4.conf.all.send_redirects"
     value: "0"
 
+- name: "Check if swap is enabled"
+  ansible.builtin.command: "swapon --show"
+  register: swap_status
+  changed_when: false
+  failed_when: false
+
 - name: "Turn off swap"
   ansible.builtin.command: "swapoff -a"
+  when: swap_status.stdout != ""
+
 - name: "Disable swap in fstab"
   ansible.builtin.replace:
     path: /etc/fstab
@@ -146,13 +154,19 @@
     mode: "0644"
   when: cri_tools_version is defined
 
-- name: "Install packages"
+- name: "Install Kubernetes packages (except kubelet)"
   ansible.builtin.apt:
     name:
       - "cri-tools={{ cri_tools_version }}"
-      - "kubelet={{ kubelet_version }}"
       - "kubeadm={{ kubeadm_version }}"
       - "kubectl={{ kubectl_version }}"
       - "kubernetes-cni={{ kubernetes_cni_version }}"
     state: present
     allow_downgrade: true
+
+- name: "Install kubelet package"
+  ansible.builtin.apt:
+    name: "kubelet={{ kubelet_version }}"
+    state: present
+    allow_downgrade: true
+  notify: "Restart kubelet"
