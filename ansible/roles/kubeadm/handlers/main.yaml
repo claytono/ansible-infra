@@ -3,3 +3,8 @@
   ansible.builtin.service:
     name: iscsid
     state: restarted
+
+- name: "Restart kubelet"
+  ansible.builtin.service:
+    name: kubelet
+    state: restarted

@@ -4,6 +4,7 @@
 # Ansible
 ansible-vault-password
 ansible/roles/galaxy
+ansible/admin.conf
 
 # OpenTofu/Terraform
 *.tfstate

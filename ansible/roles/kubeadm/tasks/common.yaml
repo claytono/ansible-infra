@@ -156,3 +156,4 @@
       - "kubernetes-cni={{ kubernetes_cni_version }}"
     state: present
     allow_downgrade: true
+  notify: "Restart kubelet"
