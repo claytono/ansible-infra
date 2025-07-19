@@ -10,9 +10,9 @@ kernel_parameters: "nofb vga=normal"
 node_exporter_enabled: true
 
 kubernetes_short_version: "1.28"
-kubeadm_version: "1.27.16-1.1"
-kubelet_version: "1.27.16-1.1"
-kubectl_version: "1.27.16-1.1"
+kubeadm_version: "1.28.15-1.1"
+kubelet_version: "1.28.15-1.1"
+kubectl_version: "1.28.15-1.1"
 cri_tools_version: "1.28.0-1.1"
 kubernetes_cni_version: "1.2.0-2.1"
 

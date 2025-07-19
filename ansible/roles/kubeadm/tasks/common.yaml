@@ -146,14 +146,19 @@
     mode: "0644"
   when: cri_tools_version is defined
 
-- name: "Install packages"
+- name: "Install Kubernetes packages (except kubelet)"
   ansible.builtin.apt:
     name:
       - "cri-tools={{ cri_tools_version }}"
-      - "kubelet={{ kubelet_version }}"
       - "kubeadm={{ kubeadm_version }}"
       - "kubectl={{ kubectl_version }}"
       - "kubernetes-cni={{ kubernetes_cni_version }}"
+    state: present
+    allow_downgrade: true
+
+- name: "Install kubelet package"
+  ansible.builtin.apt:
+    name: "kubelet={{ kubelet_version }}"
     state: present
     allow_downgrade: true
   notify: "Restart kubelet"
