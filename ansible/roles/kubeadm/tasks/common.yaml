@@ -52,8 +52,16 @@
     name: "net.ipv4.conf.all.send_redirects"
     value: "0"
 
+- name: "Check if swap is enabled"
+  ansible.builtin.command: "swapon --show"
+  register: swap_status
+  changed_when: false
+  failed_when: false
+
 - name: "Turn off swap"
   ansible.builtin.command: "swapoff -a"
+  when: swap_status.stdout != ""
+
 - name: "Disable swap in fstab"
   ansible.builtin.replace:
     path: /etc/fstab

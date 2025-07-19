@@ -19,7 +19,7 @@
 - name: "Set KUBECONFIG for root"
   ansible.builtin.lineinfile:
     path: "/root/.bashrc"
-    line: "export KUBECONFIG=/etc/kubernetes/admin.conf"
+    line: "export KUBECONFIG=/etc/kubernetes/super-admin.conf"
     regexp: "^export KUBECONFIG="
 
 - name: "Fixup admin.conf to use fqdn"
@@ -29,8 +29,21 @@
     backrefs: true
     line: "\\1server: https://{{ ansible_fqdn }}:6443"
 
+- name: "Fixup super-admin.conf to use fqdn"
+  ansible.builtin.lineinfile:
+    path: "/etc/kubernetes/super-admin.conf"
+    regexp: "^(\\s+)server:\\s+"
+    backrefs: true
+    line: "\\1server: https://{{ ansible_fqdn }}:6443"
+
 - name: "Fetch admin.conf for local use"
   ansible.builtin.fetch:
     src: "/etc/kubernetes/admin.conf"
+    dest: "{{ playbook_dir }}/"
+    flat: true
+
+- name: "Fetch super-admin.conf for local use"
+  ansible.builtin.fetch:
+    src: "/etc/kubernetes/super-admin.conf"
     dest: "{{ playbook_dir }}/"
     flat: true
