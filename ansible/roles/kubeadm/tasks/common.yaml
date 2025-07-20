@@ -68,23 +68,25 @@
     regexp: "^([^#].*?\\sswap\\s+sw\\s+.*)$"
     replace: "# \\1"
 
-- name: "Disable nftables on Debian"
+- name: "Disable nftables on older distributions"
   community.general.alternatives:
     name: iptables
     path: /usr/sbin/iptables-legacy
-  when: ansible_facts['distribution'] == "Debian"
+  when: ansible_facts['distribution_codename'] != "bookworm"
 
 - name: "Disable systemd-resolved"
   ansible.builtin.systemd:
     name: systemd-resolved
     enabled: false
     state: stopped
+  when: ansible_facts['distribution_codename'] != "bookworm"
 
 - name: "Disable systemd-resolved dhclient integration"
   ansible.builtin.file:
     path: /etc/dhcp/dhclient-enter-hooks.d/resolved
     state: absent
   register: dhclient_resolved_file
+  when: ansible_facts['distribution_codename'] != "bookworm"
 
 - name: "Install apt-transport-https"
   ansible.builtin.apt:
