@@ -21,26 +21,22 @@
     - br_netfilter
 
 - name: "Configure sysctl for containerd"
-  ansible.builtin.copy:
-    dest: /etc/sysctl.d/99-kubernetes-cri.conf
-    content: |
-      net.bridge.bridge-nf-call-iptables  = 1
-      net.ipv4.ip_forward                 = 1
-      net.bridge.bridge-nf-call-ip6tables = 1
-    mode: "0644"
-  register: sysctl_file
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: true
+  with_items:
+    - { name: "net.bridge.bridge-nf-call-iptables", value: "1" }
+    - { name: "net.ipv4.ip_forward", value: "1" }
+    - { name: "net.bridge.bridge-nf-call-ip6tables", value: "1" }
 
 - name: "Configure sysctl for inotify watches for Kubernetes"
-  ansible.builtin.copy:
-    dest: "/etc/sysctl.d/90-kubernetes-inotify.conf"
-    content: |
-      fs.inotify.max_user_watches = 1048576
-    mode: "0644"
-  register: inotify_sysctl_file
-
-- name: "Reload sysctl for containerd"
-  ansible.builtin.command: sysctl --system
-  when: sysctl_file.changed or inotify_sysctl_file.changed
+  ansible.posix.sysctl:
+    name: "fs.inotify.max_user_watches"
+    value: "1048576"
+    state: present
+    reload: true
 
 - name: "Disabling accepting ICMP redirects"
   ansible.posix.sysctl:
@@ -67,26 +63,6 @@
     path: /etc/fstab
     regexp: "^([^#].*?\\sswap\\s+sw\\s+.*)$"
     replace: "# \\1"
-
-- name: "Disable nftables on older distributions"
-  community.general.alternatives:
-    name: iptables
-    path: /usr/sbin/iptables-legacy
-  when: ansible_facts['distribution_codename'] != "bookworm"
-
-- name: "Disable systemd-resolved"
-  ansible.builtin.systemd:
-    name: systemd-resolved
-    enabled: false
-    state: stopped
-  when: ansible_facts['distribution_codename'] != "bookworm"
-
-- name: "Disable systemd-resolved dhclient integration"
-  ansible.builtin.file:
-    path: /etc/dhcp/dhclient-enter-hooks.d/resolved
-    state: absent
-  register: dhclient_resolved_file
-  when: ansible_facts['distribution_codename'] != "bookworm"
 
 - name: "Install apt-transport-https"
   ansible.builtin.apt:
