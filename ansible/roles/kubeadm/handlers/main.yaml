@@ -4,6 +4,11 @@
     name: iscsid
     state: restarted
 
+- name: "Restart containerd"
+  ansible.builtin.service:
+    name: containerd
+    state: restarted
+
 - name: "Restart kubelet"
   ansible.builtin.service:
     name: kubelet
