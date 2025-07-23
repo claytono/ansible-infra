@@ -20,6 +20,9 @@ jobs:
       - name: Setup development environment
         run: nix develop --command echo "Development environment ready"
 
+      - name: Install Ansible Galaxy roles
+        run: nix develop --command ./ansible/scripts/docker-nix-wrapper.sh ansible-galaxy install -r ansible/galaxy.yaml -p ansible/roles/galaxy
+
       - name: Write vault password file
         run: echo "$ANSIBLE_VAULT_PASSWORD" > ansible/ansible-vault-password
         env:
