@@ -11,6 +11,9 @@
   "pre-commit": {
     "enabled": true
   },
+  "managerFilePatterns": [
+    "/^ansible/galaxy.yaml$/"
+  ],
   "customManagers": [
     {
       "customType": "regex",
@@ -33,17 +36,6 @@
       ],
       "depNameTemplate": "matthiasbeyer/resticprofile",
       "datasourceTemplate": "github-releases"
-    },
-    {
-      "customType": "regex",
-      "managerFilePatterns": [
-        "/^ansible/galaxy.yaml$/"
-      ],
-      "matchStrings": [
-        "version: ?\"?(?<currentValue>[a-zA-Z0-9._-]+)\"?"
-      ],
-      "depNameTemplate": "ansible-galaxy-role",
-      "datasourceTemplate": "ansible-galaxy"
     }
   ]
 }
