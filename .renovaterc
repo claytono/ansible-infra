@@ -11,7 +11,7 @@
   "pre-commit": {
     "enabled": true
   },
-  "ansible": {
+  "ansible-galaxy": {
     "enabled": true,
     "managerFilePatterns": [
       "/^ansible/galaxy.yaml$/"
