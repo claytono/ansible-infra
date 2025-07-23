@@ -56,7 +56,7 @@ EOF
 # Install Ansible Galaxy roles using the Nix wrapper
 RUN ../ansible/scripts/docker-nix-wrapper.sh \
     ansible-galaxy install \
-    -r galaxy.yaml \
+    -r requirements.yaml \
     -p roles/galaxy
 
 ENTRYPOINT ["../ansible/scripts/docker-nix-wrapper.sh"]
