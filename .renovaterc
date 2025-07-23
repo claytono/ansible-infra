@@ -11,6 +11,12 @@
   "pre-commit": {
     "enabled": true
   },
+  "ansible-galaxy": {
+    "enabled": true,
+    "managerFilePatterns": [
+      "/^ansible/galaxy.yaml$/"
+    ]
+  },
   "customManagers": [
     {
       "customType": "regex",
