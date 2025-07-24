@@ -1,4 +1,16 @@
 ---
+- name: Gather variables for each operating system
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "{{ ansible_facts['distribution'] | lower }}-{{ ansible_facts['distribution_version'] | lower }}.yml"
+        - "{{ ansible_facts['distribution'] | lower }}-{{ ansible_facts['distribution_major_version'] | lower }}.yml"
+        - "{{ ansible_facts['os_family'] | lower }}-{{ ansible_facts['distribution_major_version'] | lower }}.yml"
+        - "{{ ansible_facts['distribution'] | lower }}.yml"
+        - "{{ ansible_facts['os_family'] | lower }}.yml"
+      paths:
+        - "{{ role_path }}/vars"
 
 - include_tasks: "{{ ansible_facts.os_family | lower }}.yml"
 
@@ -16,6 +28,15 @@
 - import_tasks: 'ethernet_configuration.yml'
   when: interfaces_ether_interfaces is defined
   tags: configuration
+
+- name: Debian | Merge configuration in interface file
+  assemble:
+    src: "{{ interfaces_net_path['debian'] }}"
+    dest: /etc/network/interfaces
+  tags: configuration
+  when:
+    - ansible_facts.os_family | lower == 'debian'
+    - interfaces_merge
 
 - import_tasks: 'service.yml'
   tags: service
