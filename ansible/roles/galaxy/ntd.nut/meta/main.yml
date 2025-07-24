@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  author: Nicola Fontana
+  namespace: ntd
+  role_name: nut
+  description: Network UPS Tools (nut) for Debian.
+  company: eNTiDi software
+  license: MIT
+  min_ansible_version: "2.5"
+  galaxy_tags:
+    - ups
+    - battery
+    - shutdown
+    - hardware
+    - nut
+    - debian
+    - redhat
+    - archlinux
+
+dependencies: []

@@ -1,0 +1,8 @@
+---
+- name: restart chrony
+  service:
+    name: chrony
+    state: restarted
+  tags: [ ntp, chrony ]
+
+...
