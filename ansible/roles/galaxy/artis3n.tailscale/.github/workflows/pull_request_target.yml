@@ -14,8 +14,6 @@ env:
   # https://www.jeffgeerling.com/blog/2020/getting-colorized-output-molecule-and-ansible-on-github-actions-ci
   PY_COLORS: '1'
   ANSIBLE_FORCE_COLOR: '1'
-  # Temporary - https://github.com/artis3n/ansible-role-tailscale/issues/432#issuecomment-1948954799
-  HEADSCALE_IMAGE: headscale/headscale:0.22
 
 jobs:
   molecule:
@@ -30,6 +28,8 @@ jobs:
           - image: ghcr.io/artis3n/docker-almalinux8-ansible:latest
           - image: ghcr.io/artis3n/docker-rhel8-ansible:latest
           - image: ghcr.io/artis3n/docker-oraclelinux8-ansible:latest
+          - image: geerlingguy/docker-ubuntu2404-ansible:latest
+          - image: ghcr.io/fkonradmain/docker-linuxmint22-ansible:latest
           - image: geerlingguy/docker-ubuntu2204-ansible:latest
           - image: geerlingguy/docker-ubuntu2004-ansible:latest
           - image: geerlingguy/docker-ubuntu1804-ansible:latest
@@ -42,8 +42,9 @@ jobs:
           - image: geerlingguy/docker-fedora31-ansible:latest
           - image: ghcr.io/artis3n/docker-arch-ansible:latest
           - image: ghcr.io/artis3n/docker-opensuse-tumbleweed-ansible:latest
-          - image: ghcr.io/artis3n/docker-opensuse-leap-ansible:latest
-            command: /lib/systemd/systemd
+          # Leap 15.6 is currently not supported by Tailscale: https://github.com/artis3n/ansible-role-tailscale/issues/480
+          # - image: ghcr.io/artis3n/docker-opensuse-leap-ansible:latest
+          #   command: /lib/systemd/systemd
 
     uses: ./.github/workflows/molecule.yml
     with:
@@ -60,18 +61,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - image: geerlingguy/docker-centos7-ansible:latest
-            command: /usr/lib/systemd/systemd
           - image: ghcr.io/artis3n/docker-amazonlinux2-ansible:latest
             command: /usr/lib/systemd/systemd
-          # Default version of Python in 16.04 is 3.5.2
-          # Ansible-core now requires 2.7 or 3.6 minimum.
-          #
-          # Therefore, while Tailscale supports Ubuntu 16.04,
-          # this role has deprecated support for it.
-          #
-          # - image: geerlingguy/docker-ubuntu1604-ansible:latest
-          #   command: /lib/systemd/systemd
 
     uses: ./.github/workflows/molecule.yml
     with:
@@ -132,7 +123,7 @@ jobs:
 
   molecule-headscale:
     name: "Test Headscale Compatibility"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     environment: E2E
     strategy:
       fail-fast: false
@@ -153,7 +144,7 @@ jobs:
 
       - name: Set up Python 3.x
         id: setup-python
-        uses: actions/setup-python@v5.0.0
+        uses: actions/setup-python@v5
         with:
           python-version-file: pyproject.toml
           cache: 'poetry'

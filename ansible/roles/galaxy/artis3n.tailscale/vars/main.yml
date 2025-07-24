@@ -6,6 +6,7 @@ tailscale_debian_family_distros:
   - Debian
   - Pop!_OS
   - OSMC
+  - "Linux Mint"
 
 tailscale_centos_family_distros:
   - CentOS
@@ -36,12 +37,13 @@ tailscale_debian_distro:
   ubuntu: ubuntu
   debian: debian
   osmc: debian
+  "linux mint": ubuntu
 
 tailscale_apt_keyring_path: /usr/share/keyrings/tailscale-archive-keyring.gpg
 
-tailscale_apt_deb: deb [signed-by={{ tailscale_apt_keyring_path }}] https://pkgs.tailscale.com/{{ release_stability | lower }}/{{ tailscale_debian_distro[ansible_distribution | lower] }} {{ ansible_distribution_release | lower }} main
+tailscale_apt_deb: deb [signed-by={{ tailscale_apt_keyring_path }}] https://pkgs.tailscale.com/{{ release_stability | lower }}/{{ tailscale_debian_distro[ansible_distribution | lower] }} {{ apt_codename | lower }} main
 
-tailscale_apt_signkey: https://pkgs.tailscale.com/{{ release_stability | lower }}/{{ tailscale_debian_distro[ansible_distribution | lower] }}/{{ ansible_distribution_release | lower }}.noarmor.gpg
+tailscale_apt_signkey: https://pkgs.tailscale.com/{{ release_stability | lower }}/{{ tailscale_debian_distro[ansible_distribution | lower] }}/{{ apt_codename | lower }}.noarmor.gpg
 
 tailscale_yum_dependencies:
   - yum-utils
@@ -65,7 +67,9 @@ tailscale_dnf_repos:
   Amazon: https://pkgs.tailscale.com/{{ release_stability | lower }}/fedora/tailscale.repo
   Fedora: https://pkgs.tailscale.com/{{ release_stability | lower }}/fedora/tailscale.repo
 
-tailscale_opensuse_leap_repository: "https://pkgs.tailscale.com/stable/opensuse/leap/{{ ansible_distribution_version }}/tailscale.repo"
-tailscale_opensuse_tumbleweed_repository: https://pkgs.tailscale.com/stable/opensuse/tumbleweed/tailscale.repo
+tailscale_opensuse_leap_key: https://pkgs.tailscale.com/{{ release_stability | lower }}/opensuse/leap/{{ ansible_distribution_version }}/repo.gpg
+tailscale_opensuse_leap_repository: https://pkgs.tailscale.com/stable/opensuse/leap/{{ ansible_distribution_version }}/tailscale.repo
+tailscale_opensuse_tumbleweed_key: https://pkgs.tailscale.com/{{ release_stability | lower }}/opensuse/tumbleweed/repo.gpg
+tailscale_opensuse_tumbleweed_repository: https://pkgs.tailscale.com/{{ release_stability | lower }}/opensuse/tumbleweed/tailscale.repo
 
 tailscale_original_distribution_major_version: "{{ ansible_distribution_major_version }}"

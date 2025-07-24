@@ -2,8 +2,13 @@
 - name: Install | CentOS and related families
   when: >
     ansible_distribution in tailscale_centos_family_distros
-    or (ansible_distribution == 'Amazon' and ansible_distribution_major_version | int < 2023)
   ansible.builtin.include_tasks: centos/install.yml
+
+- name: Install | Amazon Linux 2
+  when:
+    - ansible_distribution == 'Amazon'
+    - ansible_distribution_major_version | int < 2023
+  ansible.builtin.include_tasks: centos/install-legacy.yml
 
 - name: Install | Debian and related families
   when: ansible_distribution in tailscale_debian_family_distros
@@ -68,8 +73,8 @@
   vars:
     tailscale_status_parsed: "{{ tailscale_status.stdout | from_json }}"
   ansible.builtin.set_fact:
-    tailscale_is_online: "{{  tailscale_status_parsed.Self.Online }}"
-    tailscale_version: "{{  tailscale_status_parsed.Version }}"
+    tailscale_is_online: "{{ tailscale_status_parsed.Self.Online }}"
+    tailscale_version: "{{ tailscale_status_parsed.Version }}"
 
 - name: Install | Tailscale version and online status
   ansible.builtin.debug:
@@ -113,7 +118,10 @@
 
 - name: Install | Build the final tailscale_args
   ansible.builtin.set_fact:
-    tailscale_args_string: "{{ tailscale_args }} {{ tailscale_tags_string | trim }} --timeout={{ tailscale_up_timeout | trim }}s"
+    tailscale_args_string: >
+      {{ tailscale_args }}
+      {{ tailscale_tags_string | trim if tailscale_tags_string is not none else '' }}
+      --timeout={{ tailscale_up_timeout | trim }}s
 
 - name: Install | Final `tailscale up` arguments string
   ansible.builtin.debug:
@@ -167,6 +175,11 @@
 
 - name: Install | Report redacted failure from "tailscale up"  # noqa: no-handler
   ansible.builtin.fail:
-    msg: "{{ tailscale_start.stderr | default () | regex_replace('tskey.*\\s', 'REDACTED ') | regex_replace('\\t', '') | split('\n') }}"
+    msg: "{{ tailscale_start.stderr | default () | regex_replace(tailscale_authkey, 'REDACTED') | regex_replace('\\t', '') | split('\n') }}"
   when:
     - tailscale_start is failed
+
+- name: Install | Register role facts
+  ansible.builtin.include_tasks: facts.yml
+  when:
+    - not tailscale_up_skip
