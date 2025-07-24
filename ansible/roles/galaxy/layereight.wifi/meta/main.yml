@@ -1,0 +1,25 @@
+---
+
+galaxy_info:
+  author: https://github.com/layereight/
+  description: A simple Ansible role to install and configure wpa_supplicant.
+
+  platforms:
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+
+  galaxy_tags:
+    - wifi
+    - wpa
+    - supplicant
+
+  license:
+    - BSD
+
+  min_ansible_version: 2.1
+
+dependencies: []

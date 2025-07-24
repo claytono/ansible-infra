@@ -1,0 +1,3 @@
+#{{ ansible_managed }}
+
+[{{ relaymail_smtp_host }}]:{{ relaymail_smtp_port }}    {{ relaymail_smtp_user }}:{{ relaymail_smtp_password }}

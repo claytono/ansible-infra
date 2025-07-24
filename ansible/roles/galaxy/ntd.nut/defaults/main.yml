@@ -1,0 +1,87 @@
+---
+# Whether to start or not the NUT service after the configuration
+nut_enable_service: true
+
+# If this is set to false, none of the following options will have any effect.
+# Any and all changes to /etc/nut/* will be your responsibility.
+nut_managed_config: true
+
+nut_mode: standalone
+nut_host: localhost
+nut_powervalue: 1
+nut_services:
+  - nut-driver
+  - nut-monitor
+  - nut-server
+
+# DEPRECATED. Please migrate to nut_users instead.
+nut_user:
+nut_password:
+nut_role:
+
+# Add users to the NUT configuration, which can be used for external clients.
+# Note that the first user is used for upsmon, unless the legacy nut_user and nut_password are set.
+# This behaviour can be overridden by setting nut_upsmon_ variables explicitly.
+# nut_users:
+#   - name: nutuser1
+#     password: password1
+#     role: secondary
+#   - name: nutuser2
+#     password: password2
+#     role: primary
+#     extra: |
+#       sdtype = 2
+nut_users:
+  - name: monitor
+    password: Whatever...
+    role: primary
+
+# upsmon user is automatically derived unless overriden explicitly.
+# if nut_user is defined, it will be used as the upsmon user. Otherwise, the first user in nut_users will be used.
+nut_upsmon_user: "{{ nut_user if nut_user else (nut_users[0].name if nut_users | length > 0 else 'monitor') }}"
+nut_upsmon_password: "{{ nut_password if nut_password else (nut_users[0].password if nut_users | length > 0 else 'Whatever...') }}"
+nut_upsmon_role: "{{ nut_role if nut_role else (nut_users[0].role if nut_users | length > 0 else 'master') }}"
+
+# DEPRECATED: use nut_ups_extra
+nut_maxretry: 3
+
+# This is only an example: you must match your hardware setup.
+nut_ups:
+  - name: UPS
+    # Specify a driver that supports your UPS. See
+    # http://networkupstools.org/stable-hcl.html
+    driver: riello_ups
+    device: /dev/ttyUSB0
+    description: Some descriptive information
+    # Further configuration options can be appended to any specific UPS
+    # by defining a multiline `extra` field, e.g.:
+    # extra: |
+    #   sdtype = 2
+
+# These ..._extra options are directly appended to the relevant files,
+# so any additional configuration could be defined here
+nut_ups_extra: |
+  maxretry = 3
+
+nut_upsd_extra: |
+  MAXAGE 15
+  MAXCONN 1024
+  LISTEN 127.0.0.1 3493
+  LISTEN ::1 3493
+
+nut_upsmon_extra: |
+  MINSUPPLIES 1
+  SHUTDOWNCMD "/sbin/shutdown -h +0"
+  POLLFREQ 5
+  POLLFREQALERT 5
+  HOSTSYNC 15
+  DEADTIME 15
+  POWERDOWNFLAG /etc/killpower
+  RBWARNTIME 43200
+  NOCOMMWARNTIME 300
+  FINALDELAY 5
+
+# When set, NOTIFYCMD will be configured to this path
+# nut_upsmon_notifycmd:
+# When set, the content will be copied to the nut_upsmon_notifycmd path
+# nut_upsmon_notifycmd_content:

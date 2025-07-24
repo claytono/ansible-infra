@@ -53,10 +53,4 @@ localhost ansible_connection=local
 localhost
 EOF
 
-# Install Ansible Galaxy roles using the Nix wrapper
-RUN ../ansible/scripts/docker-nix-wrapper.sh \
-    ansible-galaxy install \
-    -r requirements.yaml \
-    -p roles/galaxy
-
 ENTRYPOINT ["../ansible/scripts/docker-nix-wrapper.sh"]
