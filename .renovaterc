@@ -8,6 +8,7 @@
   "ignorePaths": [
     "ansible/roles/galaxy/**"
   ],
+  "rebaseWhen": "behind-base-branch",
   "minimumReleaseAge": "14 days",
   "internalChecksFilter": "strict",
   "semanticCommits": "disabled",
