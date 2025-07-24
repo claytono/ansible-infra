@@ -6,7 +6,7 @@
 - src: mprahl.lets-encrypt-route-53
   version: "v5.1.2"
 - src: anxs.generic-users
-  version: v1.1.0
+  version: v1.2.0
 - name: yannik.relaymail
   src: https://github.com/Yannik/ansible-role-relaymail.git
   version: d0d7201b1b4a84ad358a4bccbbfa2232f80e6eac
