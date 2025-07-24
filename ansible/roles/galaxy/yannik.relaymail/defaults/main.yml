@@ -1,0 +1,15 @@
+# force the from address to be the {{ relaymail_smtp_user }}
+relaymail_force_from_address: true
+
+# "all" overwrites the to addresses for all users
+# "local" overwrites the to address for emails addressed to local users
+# "none"
+relaymail_overwrite_to: all
+
+# Set relay SMTP port to 25 by default
+relaymail_smtp_port: 25
+
+# Add more options at end of main.cf
+relaymail_additional_options: {}
+
+relaymail_smtp_tls_security_level: secure

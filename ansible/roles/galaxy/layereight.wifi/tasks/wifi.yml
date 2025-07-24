@@ -1,0 +1,40 @@
+---
+
+  - name: Install wpa_supplicant
+    become: yes
+    apt:
+      name: wpasupplicant
+      update_cache: yes
+      cache_valid_time: "{{ wifi_apt_cache_valid_time }}"
+
+  - name: Install rfkill
+    become: yes
+    apt:
+      name: rfkill
+    when: wifi_rfkill_unblock
+
+  - name: Unblock wifi interface
+    become: yes
+    command: rfkill unblock wifi
+    when: wifi_rfkill_unblock
+
+  - name: Configure wpa_supplicant
+    become: yes
+    template:
+      src: wpa_supplicant.conf.j2
+      dest: /etc/wpa_supplicant/wpa_supplicant.conf
+      backup: yes
+    notify: Restart Networking
+
+  #
+  # dhcpcd interferes with normal interfaces config for wpa_supplicant
+  #
+  - name: Disable dhcpcd for {{ wifi_disable_dhcpcd_workaround_interface }}
+    become: yes
+    blockinfile:
+      path: /etc/dhcpcd.conf
+      block: |
+        denyinterfaces {{ wifi_disable_dhcpcd_workaround_interface }}
+        nohook wpa_supplicant
+    notify: Restart dhcpcd
+    when: wifi_disable_dhcpcd_workaround

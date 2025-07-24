@@ -1,0 +1,8 @@
+---
+
+  - name: Testing the "layereight.wifi" Ansible role
+    hosts: localhost
+    connection: local
+
+    roles:
+      - ansible-wifi

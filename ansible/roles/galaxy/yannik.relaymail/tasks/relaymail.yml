@@ -1,0 +1,24 @@
+- name: Install required packages
+  apt: name={{ item }} state=present
+  with_items:
+    - postfix
+    - libsasl2-modules
+ 
+- name: Add postfix config files
+  template: src={{ item }} dest=/etc/postfix/ owner=root group=root mode=644
+  with_items:
+    - main.cf
+    - master.cf
+    - recipient_canonical_maps
+    - sender_canonical_maps
+  notify: restart postfix
+
+- name: Add secret auth
+  template: src=sasl_passwd dest=/etc/postfix owner=root group=root mode=600
+  register: sasl_hash_results
+  notify: restart postfix
+
+# lookup table type "regexp" doesn't need to be hashed according to "man postmap"
+- name: postmap sasl hastable
+  command: postmap /etc/postfix/sasl_passwd
+  when: sasl_hash_results is changed

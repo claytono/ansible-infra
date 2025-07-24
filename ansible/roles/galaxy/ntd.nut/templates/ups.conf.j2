@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+
+{{ nut_ups_extra }}
+
+{% for ups in nut_ups %}
+[{{ ups.name }}]
+    driver = {{ ups.driver }}
+    port   = {{ ups.device }}
+    desc   = "{{ ups.description }}"
+    {{ ups.extra | default('') | indent(4) }}
+{% endfor %}

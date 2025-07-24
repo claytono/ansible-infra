@@ -1,0 +1,86 @@
+# {{ ansible_managed }}
+
+auto {{ item.device }}
+{% if item.bootproto == 'manual' %}
+iface {{ item.device }} inet manual
+{% endif %}
+{% if item.bootproto == 'dhcp' %}
+iface {{ item.device }} inet dhcp
+{% endif %}
+{% if item.bootproto == 'static' %}
+iface {{ item.device }} inet static
+{% if item.address is defined %}
+address {{ item.address }}
+{% endif %}
+{% if item.netmask is defined %}
+netmask {{ item.netmask }}
+{% endif %}
+{% if item.gateway is defined %}
+gateway {{ item.gateway }}
+{% endif %}
+{% endif %}
+{% if item.mtu is defined %}
+mtu {{ item.mtu }}
+{% endif %}
+{% if item.hwaddr is defined %}
+hwaddress {{ item.hwaddr }}
+{% endif %}
+{% if item.pre_up is defined %}
+pre-up {{ item.pre_up }}
+{% endif %}
+{% if item.bond_mode is defined %}
+bond-mode {{ item.bond_mode }}
+{% endif %}
+{% if item.bond_ad_select is defined %}
+bond-ad_select {{ item.bond_ad_select }}
+{% endif %}
+bond-miimon {{ item.bond_miimon|default(100) }}
+{% if item.bond_lacp_rate is defined %}
+bond-lacp-rate {{ item.bond_lacp_rate }}
+{% endif %}
+{% if item.bond_min_links is defined %}
+bond-min-links {{ item.bond_min_links }}
+{% endif %}
+{% if item.bond_downdelay is defined %}
+bond-downdelay {{ item.bond_downdelay }}
+{% endif %}
+{% if item.bond_updelay is defined %}
+bond-updelay {{ item.bond_updelay }}
+{% endif %}
+{% if item.bond_xmit_hash_policy is defined %}
+bond-xmit-hash-policy {{ item.bond_xmit_hash_policy }}
+{% endif %}
+{% if item.bond_slaves is defined and item.bond_mode | default == 'active-backup' %}
+bond-slaves none
+{% endif %}
+{% if item.bond_slaves is defined and item.bond_mode | default == '802.3ad' %}
+bond-slaves {{ item.bond_slaves|join(' ') }}
+{% endif %}
+
+{% if item.route is defined %}
+{% for i in item.route %}
+{# Workaround for Ansible bug https://github.com/ansible/ansible/issues/17872. #}
+{% set prefix = ('0.0.0.0/' ~ i.netmask) | ipaddr('prefix') %}
+{% set route = i.network ~ '/' ~ prefix %}
+{% if 'gateway' in i %}
+{% set route = route ~ ' via ' ~ i.gateway %}
+{% else %}
+{% set route = route ~ ' dev ' ~ item.device %}
+{% endif %}
+{% if 'table' in i %}
+{% set route = route ~ ' table ' ~ i.table %}
+{% endif %}
+{% if 'options' in i %}
+{% set route = route ~ ' ' ~ i.options | join(' ') %}
+{% endif %}
+up ip route add {{ route }}
+down ip route del {{ route }}
+{% endfor %}
+{% endif %}
+
+{% if item.rules is defined %}
+{% for rule in item.rules %}
+up ip rule add {{ rule }}
+down ip rule del {{ rule }}
+{% endfor %}
+{% endif %}

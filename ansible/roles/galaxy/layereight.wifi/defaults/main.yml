@@ -1,0 +1,10 @@
+---
+
+wifi_country: "DE"
+wifi_apt_cache_valid_time: 86400
+wifi_control_interface_access_group: root
+
+wifi_rfkill_unblock: true
+
+wifi_disable_dhcpcd_workaround: false
+wifi_disable_dhcpcd_workaround_interface: wlan0
