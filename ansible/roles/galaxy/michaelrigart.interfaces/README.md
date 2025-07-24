@@ -1,4 +1,4 @@
-Ansible Interfaces Role [![Build Status](https://travis-ci.org/michaelrigart/ansible-role-interfaces.svg?branch=master)](https://travis-ci.org/michaelrigart/ansible-role-interfaces)
+Ansible Interfaces Role
 =======================
 
 An ansible role for configuring different network interfaces.
@@ -38,6 +38,15 @@ interfaces_setup_filter: "{{ omit }}"
 
 # An optional gather_subset parameter to pass to the setup module.
 interfaces_setup_gather_subset: "{{ omit }}"
+
+# An option to merge all configurations setup with merge: true
+# in the global interfaces file (Debian-Family only)
+interfaces_merge: false
+
+# An option that does not fail interfaces bounce action when an
+# error has occured - useful when you assume one of the interfaces
+# to not have proper state.
+interfaces_bounce_ignore_errors: false
 ```
 
 Note: The values for the list are listed in the examples below.
@@ -161,7 +170,7 @@ configures an IP route on the interface for the `myroutetable` routing table.
 ```
 
 6) Configure a hot-pluggable Wifi interface `wlan0` with a static IP and a
-`wpa_supplicant` configuration. Also configure eth0 with a dhcp IP. 
+`wpa_supplicant` configuration. Also configure eth0 with a dhcp IP.
 
 ```yaml
 - hosts: myhost
@@ -379,7 +388,7 @@ is not supported at this time.
 
 14) Configure firewalld zones (RedHat-family only)
 
-  Adding interface to firewalld zone is possible using the `zone` attribute. 
+  Adding interface to firewalld zone is possible using the `zone` attribute.
   This is only supported on distributions of the RedHat family.
 
   ```yaml
@@ -439,6 +448,49 @@ bouncing network interfaces before they are active. This can be done by setting
           bootproto: dhcp
           hwaddr: 00:11:22:33:44:66
           ports: [eth1, eth2]
+```
+
+18) Routes and rules can be a mix of strings and hashes (a.k.a. dict, mapping, associative array, etc.) allowing
+    the role to handle rules and routes outside the expected formats. These can also be applied to loopback devices in
+    distributions using Network Manager's new `nmconnect` configuration files (e.g. RHEL8 & RHEL9).
+
+    The example below configures an interface, to act as a second interface so that any traffic that hits it is returned via the same interface. In addition internal traffic is marked so it can be picked up by some other service (like HAproxy).
+
+### host_vars/proxy1
+```yaml
+interfaces_route_tables:
+    - name: frontend
+      id: 200
+    - name: marktable
+      id: 100
+interfaces_ether_interfaces:
+    - device: eth1
+      bootproto: static
+      address: 10.10.10.1
+      netmask: 255.255.255.0
+      defroute: false
+      route:
+        - table: frontend
+          device: eth1
+          network: 0.0.0.0
+          netmask: 0.0.0.0
+          gateway: 10.10.10.254
+      rules:
+        - from: 10.10.10.1
+          table: frontend
+        - "fwmark 1 lookup marktable"
+    - device: lo
+      type: loopback
+      # Setting bootproto to dhcp is required to set `method=auto` in the nmconnect file
+      # This replicates `ip route add local 0.0.0.0/0 dev lo table 100"`
+      bootproto: dhcp
+      route:
+        - table: marktable
+          device: lo
+          network: 0.0.0.0
+          netmask: 0
+          options:
+            - type: local
 ```
 
 Example Playbook

@@ -1,8 +1,9 @@
 # {{ ansible_managed }}
 
-{% for i in item.route %}
+{% for i in item.route | default([]) %}
 {# Workaround for Ansible bug https://github.com/ansible/ansible/issues/17872. #}
-{% set prefix = ('0.0.0.0/' ~ i.netmask) | ipaddr('prefix') %}
+{% if i is mapping %}{# If route is not a mapping, then assume it's a complete rule #}
+{% set prefix = ('0.0.0.0/' ~ i.netmask) | ansible.utils.ipaddr('prefix') %}
 {% set route = i.network ~ '/' ~ prefix %}
 {% if 'gateway' in i %}
 {% set route = route ~ ' via ' ~ i.gateway %}
@@ -12,8 +13,14 @@
 {% if 'table' in i %}
 {% set route = route ~ ' table ' ~ i.table %}
 {% endif %}
-{% if 'options' in i %}
-{% set route = route ~ ' ' ~ i.options | join(' ') %}
-{% endif %}
+{{ route -}}
+{% for option in i.options | default([]) %}
+{% if option is mapping %}{% set option = (option | dict2items | first).key %}{% endif %}
+ {{ option -}}
+{% endfor %}
+
+{% else %}
+{% set route = i %}
 {{ route }}
+{% endif %}
 {% endfor %}
