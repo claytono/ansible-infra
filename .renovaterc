@@ -5,6 +5,9 @@
   "schedule": [
     "before 6am on monday"
   ],
+  "ignorePaths": [
+    "ansible/roles/galaxy/**"
+  ],
   "minimumReleaseAge": "14 days",
   "internalChecksFilter": "strict",
   "semanticCommits": "disabled",
@@ -34,5 +37,6 @@
       "depNameTemplate": "matthiasbeyer/resticprofile",
       "datasourceTemplate": "github-releases"
     }
-  ]
+  ],
+  "gitIgnoredAuthors": ["github-actions[bot]@users.noreply.github.com"]
 }
