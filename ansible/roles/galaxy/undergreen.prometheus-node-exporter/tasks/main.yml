@@ -1,9 +1,19 @@
 ---
 
-- name: download prometheus node exporter binary
-  get_url:
+- name: download prometheus node exporter binary locally
+  become: no
+  local_action:
+    module: get_url
     url: "{{ url }}"
+    dest: "/tmp/{{ prometheus_node_exporter_release_name }}.tar.gz"
+  
+- name: transfer local node exporter binary
+  copy: 
+    src: "/tmp/{{ prometheus_node_exporter_release_name }}.tar.gz"
     dest: "{{ prometheus_exporters_common_dist_dir }}/{{ prometheus_node_exporter_release_name }}.tar.gz"
+    owner: "{{ prometheus_exporters_common_user}}"
+    group: "{{ prometheus_exporters_common_group }}"
+    mode: '0755'
 
 - name: unarchive binary tarball
   unarchive:
@@ -17,7 +27,7 @@
 
 - name: update group and owner for files
   file:
-    path: "{{ prometheus_node_exporter_release_name }}"
+    path: "{{ prometheus_exporters_common_dist_dir }}/{{ prometheus_node_exporter_release_name }}"
     state: directory
     recurse: yes
     owner: "{{ prometheus_exporters_common_user}}"
@@ -46,6 +56,7 @@
   command: initctl version
   when: service_mgr | default(ansible_service_mgr) == 'upstart'
   register: upstart_version
+  changed_when: false
 
 - name: create init service unit
   template:
@@ -75,5 +86,5 @@
 - name: ensure prometheus node exporter service is enabled and started
   service:
     name: prometheus-node-exporter
-    state: started
+    state: restarted
     enabled: yes
