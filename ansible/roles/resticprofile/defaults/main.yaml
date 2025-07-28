@@ -24,5 +24,5 @@ resticprofile_enable_scheduling: true
 # The following restic_* variables are used to configure restic itself, not the
 # resticprofile role. We intentionally ignore the var-naming[no-role-prefix]
 # linting rule for these variables.
-restic_version: 0.15.2 # noqa: var-naming[no-role-prefix]
+restic_version: 0.18.0 # noqa: var-naming[no-role-prefix]
 restic_arch: amd64 # noqa: var-naming[no-role-prefix]
