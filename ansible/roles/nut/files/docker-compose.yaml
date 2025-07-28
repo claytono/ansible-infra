@@ -2,7 +2,7 @@
 version: "3.8"
 services:
   peanut:
-    image: brandawg93/peanut:latest@sha256:f83ff012c739f9e23b1cb601b06b2352125d01965f9b65901c5062be1108e80d
+    image: brandawg93/peanut:latest@sha256:8979780e39a9ec68135d34b9852271f3ec2d681977d2871fad6ccb48ffcaf35c
     restart: unless-stopped
     volumes:
       - /etc/nut/peanut-settings.yml:/config/settings.yml:ro
