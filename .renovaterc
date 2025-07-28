@@ -19,10 +19,10 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/^ansible/roles/resticprofile/defaults/main.yaml$/"
+        "ansible/roles/resticprofile/defaults/main.yaml"
       ],
       "matchStrings": [
-        "restic_version:\\s*\"?(?<currentValue>\\d+\\.\\d+\\.\\d+)\"?\\s*(#.*)?$"
+        "(?:^|\\n)\\s*restic_version:\\s*\"?(?<currentValue>\\d+\\.\\d+\\.\\d+)\"?\\s*(#.*)?"
       ],
       "depNameTemplate": "restic/restic",
       "datasourceTemplate": "github-releases"
@@ -30,12 +30,12 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/^ansible/roles/resticprofile/defaults/main.yaml$/"
+        "ansible/roles/resticprofile/defaults/main.yaml"
       ],
       "matchStrings": [
-        "resticprofile_version:\\s*\"?(?<currentValue>\\d+\\.\\d+\\.\\d+)\"?\\s*(#.*)?$"
+        "(?:^|\\n)\\s*resticprofile_version:\\s*\"?(?<currentValue>\\d+\\.\\d+\\.\\d+)\"?\\s*(#.*)?"
       ],
-      "depNameTemplate": "matthiasbeyer/resticprofile",
+      "depNameTemplate": "creativeprojects/resticprofile",
       "datasourceTemplate": "github-releases"
     }
   ],
