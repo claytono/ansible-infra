@@ -1,27 +1,27 @@
 ---
-- name: "Ensure resticprofile client user exists"
+- name: Ensure resticprofile client user exists
   ansible.builtin.user:
     name: "{{ resticprofile_client_user }}"
     state: present
   register: restic_user_info
 
-- name: "Create resticprofile configuration directory"
+- name: Create resticprofile configuration directory
   ansible.builtin.file:
     path: "{{ restic_user_info.home }}/.config/resticprofile"
     state: directory
     mode: "0700"
     owner: "{{ resticprofile_client_user }}"
 
-- name: "Write passphrase to file"
+- name: Write passphrase to file
   ansible.builtin.copy:
     content: "{{ restic_passphrase }}"
     dest: "{{ restic_user_info.home }}/.config/resticprofile/passphrase.txt"
     owner: "{{ resticprofile_client_user }}"
     mode: "0600"
 
-- name: "Write config file"
+- name: Write config file
   ansible.builtin.template:
-    src: "templates/config.j2"
+    src: templates/config.j2
     dest: "{{ restic_user_info.home }}/.config/resticprofile/profiles.yaml"
     owner: "{{ resticprofile_client_user }}"
     mode: "0600"
@@ -29,10 +29,22 @@
 
 - name: Check if resticprofile schedules are up to date
   ansible.builtin.command: "{{ resticprofile_bin_dir }}/resticprofile status"
-  register: restic_status
+  register: resticprofile_status
   changed_when: false
   when: resticprofile_enable_scheduling
 
-- name: "Update resticprofile schedules"
+- name: Unschedule existing jobs if upgrading resticprofile
+  ansible.builtin.command: "{{ resticprofile_bin_dir }}/resticprofile unschedule"
+  when:
+    - resticprofile_enable_scheduling
+    - resticprofile_install_resticprofile
+    - resticprofile_status.stdout is not search('not found$')
+  register: unschedule_result
+  failed_when: false
+
+- name: Update resticprofile schedules
   ansible.builtin.command: "{{ resticprofile_bin_dir }}/resticprofile schedule"
-  when: resticprofile_enable_scheduling and (restic_status is defined and (restic_status.stdout is search("not found$") or config_file.changed))
+  when:
+    - resticprofile_enable_scheduling
+    - resticprofile_status is defined
+    - (resticprofile_status.stdout is search("not found$") or config_file.changed or resticprofile_install_resticprofile)

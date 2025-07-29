@@ -1,19 +1,18 @@
 ---
 # restic_passphrase: <set password in config>
 
-resticprofile_version: "0.21.0"
+resticprofile_version: 0.31.0
 resticprofile_arch: amd64
-resticprofile_bin_dir: "/usr/local/bin"
-resticprofile_tmp_dir: "/tmp/resticprofile-ansible"
+resticprofile_bin_dir: /usr/local/bin
+resticprofile_tmp_dir: /tmp/resticprofile-ansible
 resticprofile_sftp_server: false
 resticprofile_sftp_client: false
 resticprofile_rclone_client: false
 resticprofile_sftp_servers: []
 resticprofile_client_user: root
-resticprofile_ssh_key: "~{{ resticprofile_client_user }}/.ssh/id_restic_{{ resticprofile_ssh_key_type }}"
+resticprofile_ssh_key: ~{{ resticprofile_client_user }}/.ssh/id_restic_{{ resticprofile_ssh_key_type }}
 resticprofile_ssh_key_bits: 2048
 resticprofile_ssh_key_type: ed25519
-
 
 # Whether or not to register the ssh key with the backup server.  Used for testing.
 resticprofile_ssh_register: true
@@ -24,5 +23,5 @@ resticprofile_enable_scheduling: true
 # The following restic_* variables are used to configure restic itself, not the
 # resticprofile role. We intentionally ignore the var-naming[no-role-prefix]
 # linting rule for these variables.
-restic_version: 0.15.2 # noqa: var-naming[no-role-prefix]
+restic_version: 0.18.0 # noqa: var-naming[no-role-prefix]
 restic_arch: amd64 # noqa: var-naming[no-role-prefix]

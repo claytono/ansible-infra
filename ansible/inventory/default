@@ -4,12 +4,10 @@ k1 ansible_host=k1.oneill.net domain=oneill.net
 k2 ansible_host=k2.oneill.net domain=oneill.net
 k4 ansible_host=k4.oneill.net domain=oneill.net
 k5 ansible_host=k5.oneill.net domain=oneill.net
-fiber ansible_host=fiber.oneill.net domain=oneill.net
-voron2 ansible_host=voron2.oneill.net domain=oneill.net
-voron2-pizero ansible_host=voron2-pizero.oneill.net domain=oneill.net
-gasherbrum ansible_host=gasherbrum.oneill.net domain=oneill.net
-gasherbrum-display ansible_host=gasherbrum-display.oneill.net domain=oneill.net
-frank ansible_host=frank.oneill.net domain=oneill.net
+#voron2 ansible_host=voron2.oneill.net domain=oneill.net
+#voron2-pizero ansible_host=voron2-pizero.oneill.net domain=oneill.net
+#gasherbrum ansible_host=gasherbrum.oneill.net domain=oneill.net
+#gasherbrum-display ansible_host=gasherbrum-display.oneill.net domain=oneill.net
 zwavejs ansible_host=zwavejs.oneill.net domain=oneill.net
 upspi ansible_host=upspi.oneill.net domain=oneill.net
 
@@ -31,23 +29,23 @@ k5
 upspi
 
 [certbot]
-gasherbrum
-voron2
+#gasherbrum
+#voron2
 
 [pi]
-voron2-pizero
-gasherbrum
-gasherbrum-display
+#voron2-pizero
+#gasherbrum
+#gasherbrum-display
 zwavejs
 upspi
 
 [pizero]
-voron2-pizero
-gasherbrum-display
+#voron2-pizero
+#gasherbrum-display
 
 [tailscale_disabled]
-voron2-pizero
-gasherbrum-display
+#voron2-pizero
+#gasherbrum-display
 
 [nut_server]
 upspi
