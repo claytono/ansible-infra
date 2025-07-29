@@ -4,23 +4,23 @@ falcon_eip: 50.16.92.207
 
 prometheus_node_exporter_version: 1.0.1
 prometheus_node_exporter_config_flags:
-  "collector.textfile.directory": "/var/lib/node_exporter/textfile_collector"
-  "web.listen-address": "0.0.0.0:9100"
-  "log.level": "info"
-
+  collector.textfile.directory: /var/lib/node_exporter/textfile_collector
+  web.listen-address: 0.0.0.0:9100
+  log.level: info
 enable_ufw: false
 
 ssh_keys:
-  - &jezebel_rsa "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA5XY/Pltocwc8sAZwewrhgInrrDDuw89wJ0I1bx6wR16x650iifiSnIZlD+elk2zyu+AqMwJ74URZgshz02W6HMnFmx6CXfvXC6DmEpSnyY4/WThmP2WyNE/A9nJaLBbBb/LnfJoA+Knb8XzJHWFtpFcNmP9Ltlm1Q9VoFFeCrIG04xmXR4WO2AtTa/Bj0WAPa2whfSiCluFrFLMqqXsXw51Myj6RUahNbQdjwOwFQAwzMEegrEINOKYSlojTyV7mdJ6e3oepf5+3GhttMUVjqFHSxG/HK9WB4xxUaQXdMadNhivJKfHKVFxheW+FWae4WBPV31VHqRQuWrUEEamhUQ==
-                 coneill@jezebel"
-  - &xtal_ed25519 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB3URIT9ojo8mqsEjxmFu1C+Bxa3jdcKkUzM++IfDVmu coneill@xtal.oneill.net"
+  - &jezebel_rsa ssh-rsa
+                 AAAAB3NzaC1yc2EAAAABIwAAAQEA5XY/Pltocwc8sAZwewrhgInrrDDuw89wJ0I1bx6wR16x650iifiSnIZlD+elk2zyu+AqMwJ74URZgshz02W6HMnFmx6CXfvXC6DmEpSnyY4/WThmP2WyNE/A9nJaLBbBb/LnfJoA+Knb8XzJHWFtpFcNmP9Ltlm1Q9VoFFeCrIG04xmXR4WO2AtTa/Bj0WAPa2whfSiCluFrFLMqqXsXw51Myj6RUahNbQdjwOwFQAwzMEegrEINOKYSlojTyV7mdJ6e3oepf5+3GhttMUVjqFHSxG/HK9WB4xxUaQXdMadNhivJKfHKVFxheW+FWae4WBPV31VHqRQuWrUEEamhUQ==
+                 coneill@jezebel
+  - &xtal_ed25519 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB3URIT9ojo8mqsEjxmFu1C+Bxa3jdcKkUzM++IfDVmu coneill@xtal.oneill.net
 
 genericusers_users:
   - name: coneill
-    comment: "Clayton O'Neill"
-    shell: "/bin/bash"
+    comment: Clayton O'Neill
+    shell: /bin/bash
     uid: 10001
-    groups: ["sudo", "audio", "video", "dialout"]
+    groups: [sudo, audio, video, dialout]
     pass: !vault |
       $ANSIBLE_VAULT;1.1;AES256
       31623865666436383432373566303765326238656334323163363735393337303064316137313761
@@ -35,12 +35,12 @@ genericusers_users:
       6533666132636666373833653166356133306338343131386431
     ssh_keys:
       - *jezebel_rsa
-      - &jezebel_ed25519 "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJCMCD7OnhZIJvdUhHhYGIoH7fN5fWLXHPijB60vp21t coneill@jezebel"
+      - &jezebel_ed25519 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJCMCD7OnhZIJvdUhHhYGIoH7fN5fWLXHPijB60vp21t coneill@jezebel
       - *xtal_ed25519
   - name: ansible
-    comment: "Ansible role user"
+    comment: Ansible role user
     uid: 9000
-    groups: ["sudo"]
+    groups: [sudo]
     ssh_keys:
       - *jezebel_rsa
       - *jezebel_ed25519
@@ -82,24 +82,30 @@ restic_default_config:
       one-file-system: true
 
       schedule: "*-*-* {{ 23 | random(seed=inventory_hostname) }}:{{ 60 | random(seed=inventory_hostname) }}:00"
-      schedule-permission: "system"
-      schedule-lock-wait: "23h"
+      schedule-permission: system
+      schedule-lock-wait: 23h
       schedule-priority: background
 
       source:
         - /
 
       exclude:
-        # System caches
+      # System caches
         - /var/cache/*
+        - /var/lib/apt/lists/**
 
         # User caches
         - /home/*/.cache/*
         - /root/.cache/*
 
         # Temporary files
-        - /tmp/*
-        - /var/tmp/*
+        - /tmp/**
+        - /var/tmp/**
+
+        # Kubernetes/Container runtime data
+        - /var/lib/containerd/**
+        - /var/log/containers/**
+        - /var/log/pods/**
 
       run-before: &run_before |-
         {% raw %}curl -sf https://healthchecks.io/api/v1/checks/  \
@@ -119,7 +125,7 @@ restic_default_config:
         {% endraw %}
 restic_prometheus_config:
   default:
-    prometheus-push: "https://pushgateway.k.oneill.net/"
+    prometheus-push: https://pushgateway.k.oneill.net/
     prometheus-labels:
       - host: "{% raw %}{{ .Hostname }}{% endraw %}"
 
@@ -139,7 +145,6 @@ restic_secrets:
     3433346335656662660a633137343563613165663334343836316164306239323339373765346562
     35643236396431666630626532646334653331633935313432363165656231343435646636666665
     6162373932353165646535646632623236653335326636653631
-
 restic_passphrase: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   31386466306334343030376139306166306531353631313537643062613331656665656539303461
@@ -173,7 +178,7 @@ ler53_aws_secret_key: !vault |
 route53_region: us-east-1
 
 aws_secret_access_key: aws_access_key_id
-aws_secret_access_token: !vault |
+aws_secret_access_token: !vault |-
   $ANSIBLE_VAULT;1.1;AES256
   37663466303235396662653362663136326538623964313363343666666363326236383534356565
   3564303034623962366535323037326264613931633131380a356335376134666330313463396631

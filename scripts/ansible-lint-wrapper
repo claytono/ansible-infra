@@ -1,12 +1,6 @@
 #!/bin/bash
 
-# ansible-lint wrapper script
-# Sets ANSIBLE_CONFIG and filters files to only process YAML files under ansible/
-
-set -e
-
-# Set ANSIBLE_CONFIG to point to the ansible directory
-export ANSIBLE_CONFIG=ansible.cfg
+set -eu -o pipefail
 
 # Change to the ansible directory
 cd ansible
@@ -24,7 +18,7 @@ done
 
 # Only run ansible-lint if we have files to process
 if [ ${#filtered_files[@]} -gt 0 ]; then
-    exec ansible-lint "${filtered_files[@]}"
+    exec ansible-lint --fix "${filtered_files[@]}"
 else
     echo "No YAML files under ansible/ directory to lint"
     exit 0

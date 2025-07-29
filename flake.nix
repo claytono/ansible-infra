@@ -21,16 +21,15 @@
         default = pkgs.mkShell {
           # Pinned packages available in the environment
           packages = with pkgs; [
+            act
             ansible
+            ansible-lint
             opentofu
             awscli2
             pre-commit
             tflint
             trivy
-            # GitHub Actions local runner
-            act
-            # Nix linters/formatters
-            deadnix
+            yamlfix
           ];
         };
       });
