@@ -58,6 +58,7 @@ relaymail_smtp_password: !vault |
   6463353564616264650a353837323562646462626537386339393738633336383131316230306361
   36656338616634323135666332363837663061343362343862373939613537323634
 relaymail_overwrite_to_target: clayton.oneill@gmail.com
+relaymail_restrict_port_25: false
 
 resticprofile_sftp_client: true
 resticprofile_sftp_servers:
