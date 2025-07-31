@@ -1,0 +1,9 @@
+relaymail_packages:
+  - postfix
+  - cyrus-sasl
+  - cyrus-sasl-plain
+  - ca-certificates
+
+relaymail_additional_options:
+  smtp_tls_CAfile: /etc/ssl/certs/ca-bundle.trust.crt
+

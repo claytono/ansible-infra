@@ -38,12 +38,14 @@ Role Variables
 * `relaymail_smtp_host`: hostname of the smtp server used for relaying email (required)
     * Example: `smtp.example.org`
 * `relaymail_smtp_port`: port of the smtp server used for relaying email
-    * Default: `25`
+    * Default: `587`
 * `relaymail_smtp_user`: username to authenticate with at the relaying mailserver (required)
     * Example: `user@example.org`
 * `relaymail_smtp_password`: password to authenticate with at the rayling mailserver (required)
-* `relaymail_force_from_address`: force the from address to be the `relaymail_smtp_user`
-    * Default: `true`
+* `relaymail_force_from_address`: overwrite from address with `relaymail_smtp_user` (or `relaymail_from_address` if it is defined). `all` overwrites the from address for all emails, `local` overwrites it for all mail sent from a local user, `none` never overwrites the from address
+    * Default: `all`
+* `relaymail_from_address`: optional from address to be used by `relaymail_force_from_address` instead of `relaymail_smtp_user`
+    * Example: `user` or `user@example.com`
 * `relaymail_overwrite_to`: `all` overwrites the to address for all emails, `local` overwrites the to address for emails addressed to local users, `none` does never overwrite the to address
     * Default: `all`
 * `relaymail_overwrite_to_target`: email address which mails with overwritten to should be sent to (required when `relaymail_overwrite_to` is not `none`)
@@ -51,6 +53,21 @@ Role Variables
 * `relaymail_smtp_tls_security_level`: See http://www.postfix.org/postconf.5.html#smtp_tls_security_level
     * Example: `dane-only`
     * Default: `secure`
+* `relaymail_smtp_tls_wrappermode`: Connect using explicit SSL/TLS mode (instead of STARTSSL). Required when submitting mail on port 465 (SMTPS).
+    * Example: `"yes"`
+    * Default: `"no"`
+* `relaymail_authorized_submit_users`: Only allow specified users to submit mail via sendmail command (see http://www.postfix.org/postconf.5.html#authorized_submit_users)
+    * Example: `root`
+    * Default: `static:anyone`
+* `relaymail_restrict_port_25`: Restrict outbound traffic on port 25 to postfix user (via iptables).
+    * Example: `false`
+    * Default: `true`
+* `relaymail_enable_loopback_smtp`: Enable smtpd on local port 2V for smtp-based mail submission
+  * Example: `true`
+  * Default: `false`
+* `relaymail_authorized_smtp_users`: Users allowed to submit mail via local smtp
+  * Example: `['keepalived']`
+  * Default: `[]`
 * `relaymail_additional_options`: dictionary of key/value pairs to append to main.cf.
     * Default: {}
 
