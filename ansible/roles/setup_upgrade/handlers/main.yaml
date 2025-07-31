@@ -1,4 +1,7 @@
 ---
 - name: "Update grub"
   ansible.builtin.command: "update-grub"
-  when: ansible_architecture == "x86_64"
+  when:
+    - ansible_architecture == "x86_64"
+    - setup_upgrade_update_grub | default(true)
+  failed_when: false
