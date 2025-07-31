@@ -4,3 +4,4 @@ restic_sftp_client: false
 setup_upgrade: true
 resticprofile_ssh_register: false
 resticprofile_enable_scheduling: false
+setup_upgrade_update_grub: false
