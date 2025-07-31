@@ -1,0 +1,6 @@
+relaymail_packages:
+  - postfix
+  - libsasl2-modules
+  - ca-certificates
+  - mailutils
+
