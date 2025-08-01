@@ -1,0 +1,42 @@
+[project]
+name = "artis3n.tailscale"
+description = "Ansible collection to manage your Tailscale devices and tailnet."
+version = "1.0.1"
+authors = [
+    { name = "Ari Kalfus (artis3n)", email = "dev@artis3nal.com" },
+]
+license = "MIT"
+readme = "README.md"
+keywords = [
+    "ansible",
+    "networking",
+    "tailscale",
+    "vpn",
+]
+classifiers = [
+    "Framework :: Ansible",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet",
+    "Topic :: Security",
+    "Topic :: System",
+    "Topic :: System :: Networking",
+]
+requires-python = "~=3.13"
+dependencies = [
+    "ansible~=11.3.0",
+]
+
+[dependency-groups]
+dev = [
+    "ansible-lint~=25.1.3",
+    "molecule~=25.3.1",
+    "molecule-plugins[docker]~=23.7.0",
+    "pre-commit>=4.1.0",
+]
+
+[project.urls]
+homepage = "https://github.com/artis3n/ansible-collection-tailscale"
+repository = "https://github.com/artis3n/ansible-collection-tailscale"
+documentation = "https://github.com/artis3n/ansible-collection-tailscale"
+"Bug Tracker" = "https://github.com/artis3n/ansible-collection-tailscale/issues"

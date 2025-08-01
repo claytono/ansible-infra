@@ -6,7 +6,7 @@
     "before 6am on monday"
   ],
   "ignorePaths": [
-    "ansible/roles/galaxy/**"
+    "ansible/galaxy/**"
   ],
   "rebaseWhen": "behind-base-branch",
   "minimumReleaseAge": "14 days",

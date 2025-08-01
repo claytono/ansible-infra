@@ -6,7 +6,7 @@ ansible-vault-password
 ansible/admin.conf
 ansible/super-admin.conf
 .galaxy_install_info
-ansible/roles/galaxy/**/*.png
+ansible/galaxy/**/*.png
 
 # OpenTofu/Terraform
 *.tfstate
