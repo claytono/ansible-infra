@@ -89,7 +89,7 @@
 - name: Tailscale sysctl config
   hosts: all,!tailscale_disabled
   roles:
-    - role: artis3n.tailscale
+    - role: artis3n.tailscale.machine
       tags: tailscale
   tasks:
     - name: "Configure sysctl for tailscale ip forwarding"

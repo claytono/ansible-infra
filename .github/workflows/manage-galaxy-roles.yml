@@ -1,69 +1,69 @@
-name: Manage Ansible Galaxy Roles
+---
+name: Manage Ansible Galaxy Roles and Collections
 
 on:
   pull_request:
     types:
-      - opened
-      - synchronize
-      - reopened
+    - opened
+    - synchronize
+    - reopened
   push:
     branches:
-      - main
+    - main
 
 permissions:
   contents: write
 
 jobs:
   manage-roles:
-    name: Manage Ansible Galaxy Roles
+    name: Manage Ansible Galaxy Roles and Collections
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-        with:
-          fetch-depth: 0
-          token: ${{ github.token }}
-          persist-credentials: false
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+    - name: Checkout repository
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
+      with:
+        fetch-depth: 0
+        token: ${{ github.token }}
+        persist-credentials: false
+        ref: ${{ github.event.pull_request.head.ref || github.ref }}
 
-      - name: Install Nix
-        uses: cachix/install-nix-action@c134e4c9e34bac6cab09cf239815f9339aaaf84e # v31
-        with:
-          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install Nix
+      uses: cachix/install-nix-action@c134e4c9e34bac6cab09cf239815f9339aaaf84e  # v31
+      with:
+        github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Remove existing galaxy roles and collections
+      run: |
+        rm -rf ansible/galaxy
 
-      - name: Remove existing galaxy roles
-        run: |
-          rm -rf ansible/roles/galaxy
+    - name: Install galaxy roles and collections
+      run: |
+        cd ansible
+        nix develop --command ansible-galaxy install -r requirements.yaml
 
-      - name: Install galaxy roles
-        run: |
-          cd ansible
-          nix develop --command ansible-galaxy install -r requirements.yaml -p roles/galaxy
+    - name: Check for changes
+      if: github.ref == 'refs/heads/main'
+      run: |
+        if ! git diff --quiet; then
+          echo "Galaxy roles need to be updated on main branch!"
+          git diff --stat
+          exit 1
+        fi
 
-      - name: Check for changes
-        if: github.ref == 'refs/heads/main'
-        run: |
-          if ! git diff --quiet; then
-            echo "Galaxy roles need to be updated on main branch!"
-            git diff --stat
-            exit 1
-          fi
+    - name: Commit updated roles
+      if: github.event_name == 'pull_request'
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add .
+        if ! git diff --exit-code --cached; then
+          git commit -m "Update Ansible Galaxy roles and collections"
+        fi
 
-      - name: Commit updated roles
-        if: github.event_name == 'pull_request'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          if ! git diff --exit-code --cached; then
-            git commit -m "Update Ansible Galaxy roles"
-          fi
-
-      - name: Push changes via PAT
-        if: github.event_name == 'pull_request'
-        run: |
-          BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF##*/}}"
-          echo "Pushing to branch: $BRANCH_NAME"
-          git push "https://x-access-token:${{ secrets.PAT }}@github.com/${{ github.repository }}" "HEAD:${BRANCH_NAME}"
+    - name: Push changes via PAT
+      if: github.event_name == 'pull_request'
+      run: |-
+        BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF##*/}}"
+        echo "Pushing to branch: $BRANCH_NAME"
+        git push "https://x-access-token:${{ secrets.PAT }}@github.com/${{ github.repository }}" "HEAD:${BRANCH_NAME}"

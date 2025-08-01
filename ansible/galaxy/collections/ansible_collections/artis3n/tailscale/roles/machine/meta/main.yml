@@ -1,0 +1,26 @@
+---
+galaxy_info:
+  role_name: tailscale
+  author: artis3n
+  description: Install a Tailscale machine.
+  license: MIT
+
+  min_ansible_version: "2.18"
+
+  galaxy_tags:
+    - tailscale
+    - vpn
+    - networking
+
+# argument_specs:
+#   main:
+#     short_description: Install a Tailscale machine
+#     version-added: '0.1.0'
+#     author: artis3n
+#     options:
+
+
+collections:
+  - community.general
+
+dependencies: []
