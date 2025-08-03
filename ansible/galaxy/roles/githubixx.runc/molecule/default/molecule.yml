@@ -1,0 +1,69 @@
+---
+# Copyright (C) 2021-2025 Robert Wimmer
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+dependency:
+  name: galaxy
+
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+    type: libvirt
+
+platforms:
+  - name: test-runc-ubuntu2204
+    box: alvistack/ubuntu-22.04
+    memory: 2048
+    cpus: 2
+    groups:
+      - ubuntu
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: static
+        ip: 172.16.10.20
+  - name: test-runc-ubuntu2404
+    box: alvistack/ubuntu-24.04
+    memory: 2048
+    cpus: 2
+    groups:
+      - ubuntu
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: static
+        ip: 172.16.10.30
+  - name: test-runc-arch
+    box: generic/arch
+    memory: 2048
+    cpus: 2
+    groups:
+      - archlinux
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: static
+        ip: 172.16.10.40
+
+provisioner:
+  name: ansible
+  connection_options:
+    ansible_ssh_user: vagrant
+    ansible_become: true
+  log: true
+  lint: |
+    set -e
+    yamllint .
+    flake8
+    ansible-lint .
+
+scenario:
+  name: default
+  test_sequence:
+    - prepare
+    - converge
+
+verifier:
+  name: ansible
+  enabled: true

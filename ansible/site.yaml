@@ -67,25 +67,6 @@
     - role: nut
       tags: nut
 
-- name: Pin containerd version
-  hosts: kubernetes
-  tasks:
-    - name: "Create containerd package pin for version"
-      ansible.builtin.copy:
-        dest: "/etc/apt/preferences.d/containerd"
-        content: |
-          Package: containerd.io
-          Pin: version {{ containerd_version }}
-          Pin-Priority: 900
-        mode: "0644"
-      when: containerd_version is defined
-
-- name: Containerd role
-  hosts: kubernetes
-  roles:
-    - role: geerlingguy.containerd
-      tags: containerd
-
 - name: Tailscale sysctl config
   hosts: all,!tailscale_disabled
   roles:
