@@ -1,9 +1,4 @@
 ---
-use_containerd: true
-containerd_version: "1.7.27-1"
-containerd_package: "containerd.io={{ containerd_version }}"
-containerd_config_default_write: true
-containerd_config_cgroup_driver_systemd: true
 
 kernel_parameters: "nofb vga=normal"
 

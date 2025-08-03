@@ -1,0 +1,59 @@
+---
+# Copyright (C) 2021-2025 Robert Wimmer
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+- name: Run tasks for Archlinux
+  hosts: archlinux
+  remote_user: vagrant
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Init pacman
+      ansible.builtin.raw: |
+        pacman-key --init
+        pacman-key --populate archlinux
+      changed_when: false
+      failed_when: false
+
+    - name: Updating pacman cache
+      ansible.builtin.raw: |
+        pacman -Sy
+      changed_when: false
+
+    - name: Install Python
+      ansible.builtin.raw: |
+        pacman -S --noconfirm python openssl
+      args:
+        executable: /bin/bash
+      changed_when: false
+
+- name: Run tasks for Ubuntu
+  hosts: ubuntu
+  remote_user: vagrant
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Update APT package cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+- name: Install runc
+  hosts: all
+  remote_user: vagrant
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Include runc role
+      ansible.builtin.include_role:
+        name: githubixx.runc
+
+- name: Install CNI plugins
+  hosts: all
+  remote_user: vagrant
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Include CNI role
+      ansible.builtin.include_role:
+        name: githubixx.cni

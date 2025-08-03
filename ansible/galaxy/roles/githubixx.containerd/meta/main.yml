@@ -1,0 +1,27 @@
+---
+# Copyright (C) 2021-2025 Robert Wimmer
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+galaxy_info:
+  author: Robert Wimmer
+  description: Ansible role to install containerd
+  license: GPLv3
+  min_ansible_version: "2.9"
+  role_name: containerd
+  namespace: githubixx
+  platforms:
+    - name: ArchLinux
+    - name: Ubuntu
+      versions:
+        - "focal"
+        - "jammy"
+        - "noble"
+  galaxy_tags:
+    - kubernetes
+    - k8s
+    - containerd
+    - docker
+    - container
+    - containers
+    - oci
+    - cri

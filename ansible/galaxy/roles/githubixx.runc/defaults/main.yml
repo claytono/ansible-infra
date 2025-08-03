@@ -1,0 +1,30 @@
+---
+# Copyright (C) 2021-2025 Robert Wimmer
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# runc version to install
+runc_version: "1.3.0"
+
+# Where to install "runc" binaries.
+runc_bin_directory: "/usr/local/sbin"
+
+# Owner/group of "runc" binary. If the variables are not set
+# the resulting binary will be owned by the current user.
+runc_owner: "root"
+runc_group: "root"
+
+# Specifies the permissions of the "runc" binary
+runc_binary_mode: "0755"
+
+# Processor architecture "runc" should run on.
+# Currently only "amd64" is available.
+runc_arch: "amd64"
+
+# Name of the binary filename to download
+runc_archive: "runc.{{ runc_arch }}"
+
+# The runc download URL (normally no need to change it)
+runc_url: "https://github.com/opencontainers/runc/releases/download/v{{ runc_version }}/{{ runc_archive }}"
+
+# SHA256 checksum (normally no need to change it / see: https://github.com/opencontainers/runc/releases)
+runc_checksum: "sha256:https://github.com/opencontainers/runc/releases/download/v{{ runc_version }}/runc.sha256sum"

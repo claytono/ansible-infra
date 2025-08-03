@@ -1,0 +1,13 @@
+---
+# Copyright (C) 2021-2025 Robert Wimmer
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+- name: Install containerd
+  hosts: all
+  remote_user: vagrant
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Include containerd role
+      ansible.builtin.include_role:
+        name: githubixx.containerd

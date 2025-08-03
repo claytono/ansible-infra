@@ -1,0 +1,92 @@
+---
+# Copyright (C) 2021-2025 Robert Wimmer
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# Only value "base" is currently supported
+containerd_flavor: "base"
+
+# containerd version to install
+containerd_version: "2.1.3"
+
+# Directory where to store "containerd" binaries
+containerd_binary_directory: "/usr/local/bin"
+
+# Location of containerd configuration file
+containerd_config_directory: "/etc/containerd"
+
+# Directory to store the archive
+containerd_tmp_directory: "{{ lookup('env', 'TMPDIR') | default('/tmp', true) }}"
+
+# Owner/group of "containerd" binaries. If the variables are not set
+# the resulting binary will be owned by the current user.
+containerd_owner: "root"
+containerd_group: "root"
+
+# Specifies the permissions of the "containerd" binaries
+containerd_binary_mode: "0755"
+
+# Operating system
+# Possible options: "linux", "windows"
+containerd_os: "linux"
+
+# Processor architecture "containerd" should run on.
+# Other possible values: "arm64","arm"
+containerd_arch: "amd64"
+
+# Name of the archive file name
+containerd_archive_base: "containerd-{{ containerd_version }}-{{ containerd_os }}-{{ containerd_arch }}.tar.gz"
+
+# The containerd download URL (normally no need to change it)
+containerd_url: "https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/{{ containerd_archive_base }}"
+
+# containerd systemd service settings
+containerd_service_settings:
+  "ExecStartPre": "{{ modprobe_location }} overlay"
+  "ExecStart": "{{ containerd_binary_directory }}/containerd"
+  "Restart": "always"
+  "RestartSec": "5"
+  "Type": "notify"
+  "Delegate": "yes"
+  "KillMode": "process"
+  "OOMScoreAdjust": "-999"
+  "LimitNOFILE": "1048576"
+  "LimitNPROC": "infinity"
+  "LimitCORE": "infinity"
+
+# Content of configuration file of "containerd". The settings below are the
+# settings that are either different to the default "containerd" settings or
+# stated explicitly to make important settings more visible even if they're
+# default. So these settings will override the default settings.
+#
+# The default "containerd" configuration can be generated with this command:
+#
+# containerd config default
+#
+# A full configuration example with all possible options is also available here:
+# https://github.com/containerd/containerd/blob/main/docs/cri/config.md#full-configuration
+#
+# Also if you want to adjust settings please consult the CRI Plugin Config Guide:
+# https://github.com/containerd/containerd/blob/main/docs/cri/config.md
+#
+# Difference to default configuration:
+#
+# - In 'plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options' the
+#   setting "SystemdCgroup" is set to "true" instead of "false". This is relevant for
+#   Kubernetes e.g. Also see:
+#   https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd-systemd)
+#
+containerd_config: |
+  version = 3
+  [plugins]
+    [plugins.'io.containerd.cri.v1.runtime']
+      [plugins.'io.containerd.cri.v1.runtime'.containerd]
+        default_runtime_name = 'runc'
+        [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes]
+          [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc]
+            runtime_type = 'io.containerd.runc.v2'
+            [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc.options]
+              BinaryName = '/usr/local/sbin/runc'
+              SystemdCgroup = true
+      [plugins.'io.containerd.cri.v1.runtime'.cni]
+        bin_dir = '/opt/cni/bin'
+        conf_dir = '/etc/cni/net.d'

@@ -1,0 +1,129 @@
+---
+# Copyright (C) 2021-2025 Robert Wimmer
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+- name: Include variables depending on flavor
+  ansible.builtin.include_vars:
+    file: "flavor_{{ containerd_flavor }}.yml"
+  tags:
+    - containerd-install
+
+- name: Create containerd temporary directory
+  ansible.builtin.file:
+    path: "{{ containerd_tmp_directory }}"
+    state: directory
+    mode: 0700
+    owner: root
+    group: root
+  tags:
+    - containerd-install
+    - containerd-config
+
+- name: Downloading containerd archive
+  ansible.builtin.get_url:
+    url: "{{ containerd_url }}"
+    dest: "{{ containerd_tmp_directory }}/containerd.tar.gz"
+    checksum: "sha256:{{ containerd_url }}.sha256sum"
+    mode: 0600
+  tags:
+    - containerd-install
+    - containerd-download
+
+- name: Unarchive containerd
+  ansible.builtin.unarchive:
+    src: "{{ containerd_tmp_directory }}/containerd.tar.gz"
+    dest: "{{ containerd_tmp_directory }}"
+    remote_src: true
+  tags:
+    - containerd-install
+    - containerd-unarchive
+
+- name: Copy containerd binaries to destination directory
+  ansible.builtin.copy:
+    src: "{{ containerd_tmp_directory }}{{ containerd_binaries_src_directory }}/{{ binary }}"
+    dest: "{{ containerd_binary_directory }}/{{ binary }}"
+    mode: "{{ containerd_binary_mode }}"
+    owner: "{{ containerd_owner | default(omit) }}"
+    group: "{{ containerd_group | default(omit) }}"
+    remote_src: true
+  loop: "{{ containerd_binaries }}"
+  loop_control:
+    loop_var: "binary"
+  notify:
+    - Restart containerd
+  tags:
+    - containerd-install
+
+- name: Create directory for containerd configuration file
+  ansible.builtin.file:
+    path: "{{ containerd_config_directory }}"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  tags:
+    - containerd-install
+    - containerd-config
+
+- name: Create containerd configuration file
+  ansible.builtin.copy:
+    content: "{{ containerd_config }}"
+    dest: "{{ containerd_config_directory }}/config.toml"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart containerd
+  tags:
+    - containerd-install
+    - containerd-config
+
+- name: Find location of modprobe binary
+  ansible.builtin.stat:
+    path: "{{ path }}"
+  loop:
+    - /usr/bin/modprobe
+    - /usr/sbin/modprobe
+    - /sbin/modprobe
+  loop_control:
+    loop_var: path
+  register: modprobe_locations
+  tags:
+    - containerd_install
+
+- name: Set modprobe_location
+  ansible.builtin.set_fact:
+    modprobe_location: "{{ modprobe_locations.results | selectattr('stat.exists', '==', True) | map(attribute='path') | first }}"
+  tags:
+    - containerd_install
+
+- name: Modprobe path
+  ansible.builtin.debug:
+    msg: "Using {{ modprobe_location }} in containerd.service"
+  tags:
+    - containerd-install
+
+- name: Create containerd.service systemd file
+  ansible.builtin.template:
+    src: etc/systemd/system/containerd.service.j2
+    dest: /etc/systemd/system/containerd.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Reload systemd
+    - Restart containerd
+  tags:
+    - containerd-install
+    - containerd-systemd
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Enable and start containerd
+  ansible.builtin.service:
+    name: containerd
+    enabled: true
+    state: started
+  tags:
+    - containerd-systemd
