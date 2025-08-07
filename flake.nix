@@ -1,5 +1,5 @@
 {
-  description = "Infra-ansible flake";
+  description = "Development environment flake";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -24,12 +24,19 @@
             act
             ansible
             ansible-lint
-            opentofu
             awscli2
+            jq
+            kubeconform
+            kubectl
+            kustomize
+            mosquitto
+            opentofu
             pre-commit
+            skopeo
             tflint
             trivy
             yamlfix
+            yq-go
           ];
         };
       });
