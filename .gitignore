@@ -14,3 +14,7 @@ ansible/galaxy/**/*.png
 .terraform/
 *.tfvars
 backend.tf
+
+# Kubernetes
+kubernetes/hass/configmap.yaml
+.vscode/
