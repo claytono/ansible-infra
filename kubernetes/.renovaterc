@@ -1,0 +1,20 @@
+{
+  "description": "Renovate config for multi-project Helm chart version automation.",
+  "extends": ["config:best-practices"],
+  "schedule": ["before 6am on monday"],
+  "rebaseWhen": "behind-base-branch",
+  "minimumReleaseAge": "14 days",
+  "internalChecksFilter": "strict",
+  "semanticCommits": "disabled",
+  "pre-commit": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "matchDatasources": ["helm"],
+      "matchManagers": ["helmv3"],
+      "matchFileNames": ["**/Chart.yaml"]
+    }
+  ],
+  "gitIgnoredAuthors": ["github-actions[bot]@users.noreply.github.com"]
+}

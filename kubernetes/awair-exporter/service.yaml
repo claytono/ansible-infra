@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: awair-exporter
+
+spec:
+  selector:
+    app.kubernetes.io/name: awair-exporter
+    app.kubernetes.io/instance: awair-exporter
+  ports:
+  - name: awair-exporter
+    protocol: TCP
+    port: 8000

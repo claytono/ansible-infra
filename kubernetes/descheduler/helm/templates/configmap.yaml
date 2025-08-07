@@ -1,0 +1,43 @@
+---
+# Source: descheduler/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: descheduler
+  namespace: default
+  labels:
+    app.kubernetes.io/name: descheduler
+    helm.sh/chart: descheduler-0.31.0
+    app.kubernetes.io/instance: descheduler
+    app.kubernetes.io/version: "0.31.0"
+    app.kubernetes.io/managed-by: Helm
+data:
+  policy.yaml: |
+    apiVersion: "descheduler/v1alpha2"
+    kind: "DeschedulerPolicy"
+    evictLocalStoragePods: true
+    maxNoOfPodsToEvictPerNode: 2
+    profiles:
+    - name: default
+      pluginConfig:
+      - args:
+          evictLocalStoragePods: true
+          labelSelector:
+            matchExpressions:
+            - key: job-name
+              operator: DoesNotExist
+        name: DefaultEvictor
+      - args:
+          maxPodLifeTimeSeconds: 1209600
+          states:
+          - Running
+        name: PodLifeTime
+      - args:
+          includingInitContainers: true
+          podRestartThreshold: 10
+        name: RemovePodsHavingTooManyRestarts
+      plugins:
+        deschedule:
+          enabled:
+          - PodLifeTime
+          - RemovePodsHavingTooManyRestarts

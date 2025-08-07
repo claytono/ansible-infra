@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: prometheus
+  annotations:
+    reloader.stakater.com/auto: 'true'
+
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus
+      app.kubernetes.io/instance: prometheus
+  template:
+    metadata:
+      name: prometheus
+      labels:
+        app.kubernetes.io/name: prometheus
+        app.kubernetes.io/instance: prometheus
+    spec:
+      serviceAccountName: prometheus
+      containers:
+      - name: prometheus
+        image: prom/prometheus:latest
+        args:
+        - --config.file=/etc/prometheus/prometheus.yml
+        - --web.external-url=https://prometheus.k.oneill.net
+        - --storage.tsdb.retention.time=730d
+        ports:
+        - name: web
+          containerPort: 9090
+        volumeMounts:
+        - name: config
+          mountPath: /etc/prometheus
+        - name: secrets
+          mountPath: /secrets
+          readOnly: true
+        - name: data
+          mountPath: /prometheus/data
+      volumes:
+      - name: config
+        configMap:
+          name: prometheus
+      - name: secrets
+        secret:
+          secretName: prometheus
+      - name: data
+        persistentVolumeClaim:
+          claimName: prometheus-data

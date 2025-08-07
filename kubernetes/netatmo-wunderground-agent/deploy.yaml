@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: netatmo-wunderground-agent
+  annotations:
+    reloader.stakater.com/auto: 'true'
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: netatmo-wunderground-agent
+      app.kubernetes.io/instance: netatmo-wunderground-agent
+  template:
+    metadata:
+      name: netatmo-wunderground-agent
+      labels:
+        app.kubernetes.io/name: netatmo-wunderground-agent
+        app.kubernetes.io/instance: netatmo-wunderground-agent
+    spec:
+      containers:
+      - name: netatmo-wunderground-agent
+        image: brbeaird/netatmo-wunderground-agent
+        env:
+        - name: netatmo_tokenFileDirectory
+          value: /data
+        envFrom:
+        - secretRef:
+            name: netatmo-wunderground-agent
+        volumeMounts:
+        - name: data-volume
+          mountPath: /data
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: netatmo-wunderground-agent-data

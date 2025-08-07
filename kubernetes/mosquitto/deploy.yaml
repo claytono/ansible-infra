@@ -1,0 +1,71 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: mosquitto
+  annotations:
+    reloader.stakater.com/auto: 'true'
+
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mosquitto
+      app.kubernetes.io/instance: mosquitto
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      initContainers:
+      - name: init-password-file
+        image: debian:stable-slim
+        command: [/bin/sh, -c, /scripts/create-password-file.sh > /generated/passwd]
+        volumeMounts:
+        - name: script
+          mountPath: /scripts
+          readOnly: true
+        - name: users
+          mountPath: /users
+          readOnly: true
+        - name: generated
+          mountPath: /generated
+      containers:
+      - name: mosquitto
+        image: eclipse-mosquitto:2.0
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: '0.5'
+            memory: 500Mi
+        ports:
+        - containerPort: 9001
+        - containerPort: 1883
+        volumeMounts:
+        - name: config
+          mountPath: /mosquitto/config
+          readOnly: true
+        - name: data
+          mountPath: /mosquitto/data
+        - name: generated
+          mountPath: /generated
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: mosquitto
+      - name: passwd
+        secret:
+          secretName: mosquitto
+      - name: users
+        secret:
+          secretName: mosquitto-users
+      - name: data
+        persistentVolumeClaim:
+          claimName: mosquitto-data
+      - name: generated
+        emptyDir: {}
+      - name: script
+        configMap:
+          name: create-password-file-script
+          defaultMode: 0755

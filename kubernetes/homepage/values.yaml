@@ -1,0 +1,33 @@
+---
+image:
+  repository: ghcr.io/gethomepage/homepage
+  tag: v1.4.0@sha256:63434aafeb3d49be1f21ebd3c5d777fe5b7794c31342daad4e96f09b72a57188
+
+# The service account is necessary to allow discovery of other services
+serviceAccount:
+  create: true
+  name: homepage
+
+# This enables the service account to access the necessary resources
+enableRbac: true
+
+# Environment variables
+env:
+- name: HOMEPAGE_ALLOWED_HOSTS
+  value: '*'
+
+ingress:
+  main:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: letsencrypt
+    tls:
+    - hosts:
+      - homepage.k.oneill.net
+      secretName: homepage-tls
+    hosts:
+    - host: homepage.k.oneill.net
+      paths:
+      - path: /
+        pathType: Prefix

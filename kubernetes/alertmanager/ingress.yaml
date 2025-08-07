@@ -1,0 +1,32 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: alertmanager
+  labels:
+    k8s-app: alertmanager
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    gethomepage.dev/enabled: 'true'
+    gethomepage.dev/name: Alertmanager
+    gethomepage.dev/group: Monitoring
+    gethomepage.dev/icon: alertmanager.png
+
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - alertmanager.k.oneill.net
+    secretName: alertmanager-tls
+  rules:
+  - host: alertmanager.k.oneill.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: alertmanager
+            port:
+              number: 9093

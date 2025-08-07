@@ -1,0 +1,31 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: plexmediaserver
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    gethomepage.dev/enabled: 'true'
+    gethomepage.dev/name: Plex
+    gethomepage.dev/description: Plex Media Server
+    gethomepage.dev/group: Media
+    gethomepage.dev/icon: plex.png
+
+spec:
+  tls:
+  - hosts:
+    - plex.k.oneill.net
+    secretName: plexmediaserver-tls
+  rules:
+  - host: plex.k.oneill.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: plexmediaserver
+            port:
+              number: 32400
+  ingressClassName: nginx

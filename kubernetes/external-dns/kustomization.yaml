@@ -1,0 +1,28 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: kube-system
+
+resources:
+- helm/crds/dnsendpoints.externaldns.k8s.io.yaml
+- helm/templates/deployment.yaml
+- helm/templates/service.yaml
+- helm/templates/clusterrole.yaml
+- helm/templates/serviceaccount.yaml
+- helm/templates/clusterrolebinding.yaml
+- externalsecret.yaml
+
+commonLabels:
+  app: external-dns
+
+patches:
+- patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: external-dns
+      annotations:
+        reloader.stakater.com/auto: "true"
+  target:
+    kind: Deployment
+    name: external-dns

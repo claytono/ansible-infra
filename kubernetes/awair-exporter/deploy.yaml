@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: awair-exporter
+  annotations:
+    reloader.stakater.com/auto: 'true'
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: awair-exporter
+      app.kubernetes.io/instance: awair-exporter
+  template:
+    metadata:
+      name: awair-exporter
+      labels:
+        app.kubernetes.io/name: awair-exporter
+        app.kubernetes.io/instance: awair-exporter
+    spec:
+      containers:
+      - name: awair-exporter
+        image: dvorak/awair_exporter
+        imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: awair-exporter
+        ports:
+        - containerPort: 8000

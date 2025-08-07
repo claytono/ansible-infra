@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: tautulli
+
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tautulli
+      app.kubernetes.io/instance: tautulli
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tautulli
+        app.kubernetes.io/instance: tautulli
+    spec:
+      containers:
+      - name: tautulli
+        securityContext:
+          privileged: true
+        image: tautulli/tautulli
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8181
+        env:
+        - name: TZ
+          value: EST5EDT
+        livenessProbe:
+          failureThreshold: 10000
+          httpGet:
+            path: /
+            port: 8181
+        volumeMounts:
+        - mountPath: /config
+          name: config
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: tautulli-config

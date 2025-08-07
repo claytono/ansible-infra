@@ -1,0 +1,36 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- cronjob-copy-main.yaml
+- cronjob-b2.yaml
+- cronjob-b2-forget.yaml
+- pvc.yaml
+- externalsecret.yaml
+
+configMapGenerator:
+
+- files:
+  - profiles.yaml
+  name: resticprofile-config
+  options:
+    disableNameSuffixHash: true
+
+- files:
+  - rclone.conf
+  name: rclone-config
+  options:
+    disableNameSuffixHash: true
+
+images:
+- name: alpine
+  newTag: 3.22@sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1
+- name: creativeprojects/resticprofile
+  newTag: 0.31.0@sha256:d24763cbd165aa7f73fbf014ca99eef895bf7f90b59552192ef614a3ae2d0bb3
+
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/name: resticprofile
+    app.kubernetes.io/instance: resticprofile

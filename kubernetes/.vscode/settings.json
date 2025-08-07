@@ -1,0 +1,10 @@
+{
+    "vs-kubernetes": {
+        "disable-linters": [
+            "resource-limits"
+        ]
+    },
+    "yaml.customTags": [
+      "!ENV scalar"
+    ]
+}

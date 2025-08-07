@@ -1,0 +1,44 @@
+---
+schedule: 17 7 * * *
+deschedulerPolicyAPIVersion: descheduler/v1alpha2
+
+deschedulerPolicy:
+  maxNoOfPodsToEvictPerNode: 2
+  evictLocalStoragePods: true
+  profiles:
+  - name: default
+    pluginConfig:
+    - name: DefaultEvictor
+      args:
+        evictLocalStoragePods: true
+        labelSelector:
+          matchExpressions:
+          - key: job-name
+            operator: DoesNotExist
+    - name: PodLifeTime
+      args:
+        maxPodLifeTimeSeconds: 1209600
+        states:
+        - Running
+        # - name: LowNodeUtilization
+        #   args:
+        #     thresholds:
+        #       cpu: 20
+        #       memory: 20
+        #       pods: 20
+        #     targetThresholds:
+        #       cpu: 50
+        #       memory: 50
+        #       pods: 50
+    - name: RemovePodsHavingTooManyRestarts
+      args:
+        podRestartThreshold: 10
+        includingInitContainers: true
+    plugins:
+        # balance:
+        #   enabled:
+        #     - LowNodeUtilization
+      deschedule:
+        enabled:
+        - PodLifeTime
+        - RemovePodsHavingTooManyRestarts

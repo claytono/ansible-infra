@@ -1,0 +1,85 @@
+---
+# Source: reloader/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    meta.helm.sh/release-namespace: "default"
+    meta.helm.sh/release-name: "reloader"
+  labels:
+    app: reloader
+    chart: "reloader-2.1.5"
+    release: "reloader"
+    heritage: "Helm"
+    app.kubernetes.io/managed-by: "Helm"
+    group: com.stakater.platform
+    provider: stakater
+    version: v1.4.5
+  name: reloader
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: reloader
+      release: "reloader"
+  template:
+    metadata:
+      labels:
+        app: reloader
+        chart: "reloader-2.1.5"
+        release: "reloader"
+        heritage: "Helm"
+        app.kubernetes.io/managed-by: "Helm"
+        group: com.stakater.platform
+        provider: stakater
+        version: v1.4.5
+    spec:
+      containers:
+      - image: "ghcr.io/stakater/reloader:v1.4.5"
+        imagePullPolicy: IfNotPresent
+        name: reloader
+        env:
+        - name: GOMAXPROCS
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.cpu
+              divisor: '1'
+        - name: GOMEMLIMIT
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.memory
+              divisor: '1'
+        ports:
+        - name: http
+          containerPort: 9090
+        livenessProbe:
+          httpGet:
+            path: /live
+            port: http
+          timeoutSeconds: 5
+          failureThreshold: 5
+          periodSeconds: 10
+          successThreshold: 1
+          initialDelaySeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: http
+          timeoutSeconds: 5
+          failureThreshold: 5
+          periodSeconds: 10
+          successThreshold: 1
+          initialDelaySeconds: 10
+
+        securityContext:
+          {}
+        args:
+          - "--log-level=info"
+      securityContext: 
+        runAsNonRoot: true
+        runAsUser: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: reloader

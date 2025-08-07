@@ -1,0 +1,22 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: default
+
+resources:
+- deployment.yaml
+- pvc.yaml
+- service.yaml
+- ingress.yaml
+
+images:
+- name: qbittorrent
+  newName: ghcr.io/linuxserver/qbittorrent
+  newTag: 5.1.2@sha256:db088f4b2afec2fb1c7d61d800de37af1d098722ee3700829b25a8ccc88d8416
+
+labels:
+
+- pairs:
+    app.kubernetes.io/name: qbittorrent
+    app.kubernetes.io/instance: qbittorrent
+  includeSelectors: true
