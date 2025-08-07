@@ -30,6 +30,7 @@
             kubectl
             kustomize
             mosquitto
+            nodejs_24
             opentofu
             pre-commit
             skopeo

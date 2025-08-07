@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
 
-    - name: Install Nix & run pre-commit
+    - name: Install Nix
       uses: cachix/install-nix-action@c134e4c9e34bac6cab09cf239815f9339aaaf84e  # v31
       with:
         github_access_token: ${{ github.token }}
@@ -28,5 +28,10 @@ jobs:
         restore-keys: |
           precommit-
 
-    - run: |-
-        nix develop --command ./scripts/lint
+    - name: Write vault password file
+      run: echo "$ANSIBLE_VAULT_PASSWORD" > ansible/ansible-vault-password
+      env:
+        ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+
+    - name: Run lint
+      run: nix develop --command ./scripts/lint
