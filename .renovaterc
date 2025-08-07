@@ -39,5 +39,12 @@
       "datasourceTemplate": "github-releases"
     }
   ],
+  "packageRules": [
+    {
+      "matchDatasources": ["helm"],
+      "matchManagers": ["helmv3"],
+      "matchFileNames": ["kubernetes/**/Chart.yaml"]
+    }
+  ],
   "gitIgnoredAuthors": ["github-actions[bot]@users.noreply.github.com"]
 }
