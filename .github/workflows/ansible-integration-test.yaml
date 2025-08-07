@@ -14,12 +14,26 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
 
+    - name: Check for Ansible-related changes
+      uses: dorny/paths-filter@v3
+      id: changes
+      with:
+        filters: |
+          ansible:
+            - 'ansible/**'
+            - 'flake.nix'
+            - 'flake.lock'
+            - 'Dockerfile.ansible'
+            - '.github/workflows/ansible-integration-test.yaml'
+
     - name: Set up Docker Buildx
+      if: steps.changes.outputs.ansible == 'true'
       uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435  # v3
       with:
         install: true
 
     - name: Cache Docker layers
+      if: steps.changes.outputs.ansible == 'true'
       uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4
       with:
         path: /tmp/.buildx-cache
@@ -28,11 +42,13 @@ jobs:
           ${{ runner.os }}-buildx-
 
     - name: Write vault password file
+      if: steps.changes.outputs.ansible == 'true'
       run: echo "$ANSIBLE_VAULT_PASSWORD" > ansible/ansible-vault-password
       env:
         ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
 
     - name: Run Ansible integration test
+      if: steps.changes.outputs.ansible == 'true'
       run: |-
         docker build --load \
           --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \

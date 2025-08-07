@@ -28,12 +28,25 @@ jobs:
         persist-credentials: false
         ref: ${{ github.event.pull_request.head.ref || github.ref }}
 
+    - name: Check for Kubernetes/Helm-related changes
+      uses: dorny/paths-filter@v3
+      id: changes
+      with:
+        filters: |
+          need-render-helm:
+            - 'kubernetes/**'
+            - 'flake.nix'
+            - 'flake.lock'
+            - '.github/workflows/render-helm.yaml'
+
     - name: Install Nix
+      if: steps.changes.outputs.need-render-helm == 'true'
       uses: cachix/install-nix-action@c134e4c9e34bac6cab09cf239815f9339aaaf84e  # v31
       with:
         github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Cache pre-commit
+      if: steps.changes.outputs.need-render-helm == 'true'
       uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4
       with:
         path: ~/.cache/pre-commit
@@ -42,9 +55,11 @@ jobs:
           ${{ runner.os }}-precommit-
 
     - name: Install pre-commit hooks
+      if: steps.changes.outputs.need-render-helm == 'true'
       run: nix develop --command pre-commit install
 
     - name: Render changed charts
+      if: steps.changes.outputs.need-render-helm == 'true'
       run: |
         if [ "${{ github.event_name }}" = "pull_request" ]; then
           BASE_SHA=${{ github.event.pull_request.base.sha }}
@@ -69,7 +84,7 @@ jobs:
             done
 
     - name: Check for changes
-      if: github.ref == 'refs/heads/main'
+      if: steps.changes.outputs.need-render-helm == 'true' && github.ref == 'refs/heads/main'
       run: |
         if ! git diff --quiet; then
           echo "Helm manifests need to be regenerated on main branch!"
@@ -78,7 +93,7 @@ jobs:
         fi
 
     - name: Commit regenerated manifests
-      if: github.event_name == 'pull_request'
+      if: steps.changes.outputs.need-render-helm == 'true' && github.event_name == 'pull_request'
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -88,7 +103,7 @@ jobs:
         fi
 
     - name: Push changes via PAT
-      if: github.event_name == 'pull_request'
+      if: steps.changes.outputs.need-render-helm == 'true' && github.event_name == 'pull_request'
       run: |-
         BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF##*/}}"
         echo "Pushing to branch: $BRANCH_NAME"
