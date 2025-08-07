@@ -48,7 +48,7 @@ lose PV contents.
 
 Backup of etcd and Kubernetes certificates are done twice a day via a
 [Kubernetes
-Cronjob](https://github.com/claytononeill/kubernetes-config/blob/master/cluster-backup.yaml).
+Cronjob](https://github.com/claytono/infra/blob/main/kubernetes/cluster-backup/cronjob.yaml).
 The backups are stored on NFS which is also backed up offsite automatically.
-The backup script can be in my
+The backup script can be found in my
 [kubernetes-backup](https://github.com/claytononeill/kubernetes-backup) repo.

@@ -9,9 +9,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/claytono/kubernetes-config.git
+    repoURL: https://github.com/claytono/infra.git
     targetRevision: main
-    path: tautulli
+    path: kubernetes/tautulli
   destination:
     server: https://kubernetes.default.svc
     namespace: default
