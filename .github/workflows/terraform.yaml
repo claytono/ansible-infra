@@ -1,0 +1,50 @@
+---
+name: Terraform checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  terraform:
+    name: Terraform checks
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
+
+    - name: Check for Terraform-related changes
+      uses: dorny/paths-filter@v3
+      id: changes
+      with:
+        filters: |
+          terraform:
+            - 'opentofu/**'
+            - 'flake.nix'
+            - 'flake.lock'
+            - '.pre-commit-config.yaml'
+            - '.github/workflows/terraform.yaml'
+
+    - name: Install Nix
+      if: steps.changes.outputs.terraform == 'true'
+      uses: cachix/install-nix-action@c134e4c9e34bac6cab09cf239815f9339aaaf84e  # v31
+      with:
+        github_access_token: ${{ github.token }}
+
+    - name: Cache pre-commit
+      if: steps.changes.outputs.terraform == 'true'
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4
+      with:
+        path: ~/.cache/pre-commit
+        key: precommit-terraform-${{ hashFiles('.pre-commit-config.yaml') }}
+        restore-keys: |
+          precommit-terraform-
+          precommit-
+
+    - name: Run terraform checks
+      if: steps.changes.outputs.terraform == 'true'
+      run: |
+        nix develop --command pre-commit run terraform_trivy --all-files
+        nix develop --command pre-commit run terraform_providers_lock --all-files
