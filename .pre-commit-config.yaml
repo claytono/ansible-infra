@@ -1,5 +1,6 @@
 ---
 exclude: ^ansible/galaxy/|^kubernetes/.*/helm/
+
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v5.0.0
@@ -29,7 +30,6 @@ repos:
   hooks:
   - id: prettier
     types_or: [json, markdown]
-    files: ^kubernetes/  # TODO: Extend prettier to entire repo later
 
 - repo: local
   hooks:

@@ -93,7 +93,8 @@ jobs:
         fi
 
     - name: Commit regenerated manifests
-      if: steps.changes.outputs.need-render-helm == 'true' && github.event_name == 'pull_request'
+      if: steps.changes.outputs.need-render-helm == 'true' && github.event_name ==
+        'pull_request'
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -103,7 +104,8 @@ jobs:
         fi
 
     - name: Push changes via PAT
-      if: steps.changes.outputs.need-render-helm == 'true' && github.event_name == 'pull_request'
+      if: steps.changes.outputs.need-render-helm == 'true' && github.event_name ==
+        'pull_request'
       run: |-
         BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF##*/}}"
         echo "Pushing to branch: $BRANCH_NAME"

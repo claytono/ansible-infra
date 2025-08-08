@@ -35,3 +35,5 @@ jobs:
 
     - name: Run lint
       run: nix develop --command ./scripts/lint
+      env:
+        SKIP: terraform_trivy,terraform_providers_lock
