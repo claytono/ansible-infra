@@ -45,6 +45,6 @@ jobs:
 
     - name: Run terraform checks
       if: steps.changes.outputs.terraform == 'true'
-      run: |
+      run: |-
         nix develop --command pre-commit run terraform_trivy --all-files
         nix develop --command pre-commit run terraform_providers_lock --all-files
