@@ -57,7 +57,6 @@ repos:
   hooks:
   - id: shfmt
     args: [-i, '2', -ci]
-    files: ^kubernetes/.*\.sh$
 
 - repo: https://github.com/igorshubovych/markdownlint-cli
   rev: v0.45.0
